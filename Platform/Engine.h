@@ -44,7 +44,9 @@ public:
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
 				ImGui::ShowDemoWindow(); // Show demo window! :)
+
 				isRunning = animation();
+				
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			}
@@ -71,7 +73,7 @@ public:
 
 	virtual bool animation() { 
 
-
+		p_renderingDevice->clearScreen();
 		p_renderingDevice->present();
 		return true;
 	
