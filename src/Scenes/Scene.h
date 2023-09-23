@@ -1,16 +1,26 @@
 #pragma once
+
+#include "../../Graphics/Renderer.h"
+
 #include <vector>
+#include <functional>
+#include <string>
 
 class Scene {
+public:
+	virtual ~Scene() = default;
+	Scene() = default;
 
 	virtual void onRender() = 0;
 	virtual void onUpdate(float deltaTime) = 0;
+	virtual void onImGuiRender() = 0;
 
 
 
 };
 
-
+using SceneBuildFn = std::function<Scene* ()>;
+using SceneBuilder = std::pair<std::string, SceneBuildFn>;
 
 
 class SceneManager
@@ -18,18 +28,23 @@ class SceneManager
 
 public:
 
-	template<class _Scene>
-		requires (std::derived_from<_Scene, Scene>)
-	static void addScene() {
-		m_scenes.push_back(new _Scene);
-	}
+	static void onUpdate(float deltaTime);
+	static void onRender();
+	static void onImGuiRender();
 
-	static void changeScene() {}
+	static void registerScene(const std::string& name, SceneBuildFn provider);
+
+	template<class _SceneInstance>
+		requires (std::derived_from<_SceneInstance, Scene>)
+	static void registerScene(const std::string& name) { registerScene(name, []() { return new _SceneInstance; }); }
+
+	static void switchToScene(size_t index);
 
 private:
 
-	static std::vector<Scene*> m_scenes;
-
+	static std::vector<SceneBuilder> s_availableScenes;
+	static size_t s_activeSceneIndex;
+	static Scene* s_activeScene;
 
 
 };

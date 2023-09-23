@@ -9,6 +9,9 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+#include "../src/Scenes/Scene.h"
+#include "../src/Scenes/AllScenes.h"
+
 namespace MS
 {
 
@@ -40,15 +43,10 @@ public:
 			// appeler la fonction d'animation
 			if (isRunning)
 			{
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
-				ImGui::ShowDemoWindow(); // Show demo window! :)
 
 				isRunning = animation();
 				
-				ImGui::Render();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 			}
 
 		}
@@ -68,12 +66,19 @@ public:
 		//   préparation de la première image
 		initAnimation();
 
+		loadScenes();
+		SceneManager::switchToScene(0);
+			
+
 		return 0;
 	}
 
 	virtual bool animation() { 
 
-		p_renderingDevice->clearScreen();
+		SceneManager::onRender();
+		SceneManager::onImGuiRender();
+
+
 		p_renderingDevice->present();
 		return true;
 	
@@ -109,8 +114,6 @@ protected:
 	virtual void beginRenderScenePlatform() = 0;
 	virtual void endRenderScenePlatform() = 0;
 
-
-
 	// Gets the time using platform specific calls
 	virtual Timer::value_type getTimePlatform() const = 0;
 
@@ -120,6 +123,15 @@ protected:
 	Timer::value_type m_previousTime;
 
 	_RenderingDevice* p_renderingDevice; // This will store a Graphics() on windows
+
+private:
+
+	void loadScenes() {
+
+		SceneManager::registerScene<TestScene>("TEST");
+		SceneManager::registerScene<Scene2>("Scene2");
+	}
+
 };
 
 

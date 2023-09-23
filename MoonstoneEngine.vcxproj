@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
@@ -156,7 +157,10 @@
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\Scenes\Scene2.h" />
+    <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\vendor\imgui\imconfig.h" />

@@ -4,11 +4,31 @@
 #include "Platform/WindowsEngine.h"
 #include "Graphics/Renderer.h"
 
+#include "Graphics/Rendering_impl/direct3D11_impl.h"
+
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
 using namespace MS;
+
+void initImgui(HWND hWnd, Graphics& gfx) {
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplWin32_Init(hWnd);
+	ImGui_ImplDX11_Init(gfx.getDevice(), gfx.getImmediateContext());
+}
+
+void shutdownImgui(){
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+}
 
 int APIENTRY _tWinMain(
 	HINSTANCE hInstance,
@@ -25,30 +45,18 @@ int APIENTRY _tWinMain(
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
 
 
-		Renderer::setImplementation<direct3D11_impl>();
 
 		rMoteur.SetWindowsAppInstance(hInstance);
-
 		rMoteur.init();
+
+		Renderer::setImplementation<direct3D11_impl>();
 		Graphics& gfx = rMoteur.getGraphics();
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-		// Setup Platform/Renderer backends
-		ImGui_ImplWin32_Init(rMoteur.getHwnd());
-		ImGui_ImplDX11_Init(gfx.getDevice(), gfx.getImmediateContext());
-
+		initImgui(rMoteur.getHwnd(), gfx);
 		rMoteur.run();
-		/*
-		*/
 		
-		ImGui_ImplDX11_Shutdown();
-		ImGui_ImplWin32_Shutdown();
-		ImGui::DestroyContext();
+
+		shutdownImgui();
 		return 1;
 	}
 

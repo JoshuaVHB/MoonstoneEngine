@@ -9,7 +9,7 @@
 #define CALL_IMPL(fnName)\
 static auto fnName(auto&& ...args)\
 {\
-	return implementation->foo(std::forward<decltype(args)>(args)...);\
+	return implementation->##fnName(std::forward<decltype(args)>(args)...);\
 }
 class Renderer 
 {
@@ -21,15 +21,17 @@ public:
 		friend class Renderer;
 	
 	protected:
-		virtual int foo(int, int) = 0;
-		virtual void bar() = 0;
+
+
+
+		virtual void clearScreen(float, float, float, float) = 0;
+		virtual void clearScreen() = 0;
 
 	};
 
 
 
-	CALL_IMPL(foo) ;
-	CALL_IMPL(bar) ;
+	CALL_IMPL(clearScreen) ;
 
 	
 
@@ -48,7 +50,4 @@ private:
 
 };
 
-std::unique_ptr<Renderer::_Impl> Renderer::implementation = nullptr;
-
-#include "Rendering_impl/direct3D11_impl.h"
 

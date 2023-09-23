@@ -101,15 +101,6 @@ public:
 		DX_RELEASE(m_device);
 	}
 
-	void clearScreen() {
-
-		const FLOAT rgba[4] = {
-			0,1,1,1
-		};
-		m_context->ClearRenderTargetView(m_rtv, rgba);
-
-	}
-
 
 	void present() 
 	{
