@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <functional>
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 namespace MS
 {
 
@@ -25,6 +29,7 @@ class Engine : public Singleton<_Platform>
 public:
 	virtual void run()
 	{
+
 		bool isRunning = true;
 
 		while (isRunning)
@@ -35,8 +40,15 @@ public:
 			// appeler la fonction d'animation
 			if (isRunning)
 			{
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplWin32_NewFrame();
+				ImGui::NewFrame();
+				ImGui::ShowDemoWindow(); // Show demo window! :)
 				isRunning = animation();
+				ImGui::Render();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			}
+
 		}
 	}
 

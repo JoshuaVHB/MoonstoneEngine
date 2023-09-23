@@ -107,6 +107,8 @@ public:
 		m_swapChain->Present(1, 0);
 	}
 
+	ID3D11Device* getDevice() const { return m_device; }
+	IDXGISwapChain* getSwapChain() const { return m_swapChain; }
 	ID3D11DeviceContext* getImmediateContext() const { return m_context; }
 	ID3D11RenderTargetView* getRenderTargetView() const { return m_rtv; }
 

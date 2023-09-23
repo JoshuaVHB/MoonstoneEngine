@@ -4,6 +4,9 @@
 #include "Platform/WindowsEngine.h"
 #include "Graphics/Renderer.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
 
 using namespace MS;
 
@@ -19,19 +22,33 @@ int APIENTRY _tWinMain(
 
 	try
 	{
-
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
+
+
 		Renderer::setImplementation<direct3D11_impl>();
 
-		/*
 		rMoteur.SetWindowsAppInstance(hInstance);
 
 		rMoteur.init();
+		Graphics& gfx = rMoteur.getGraphics();
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+		// Setup Platform/Renderer backends
+		ImGui_ImplWin32_Init(rMoteur.getHwnd());
+		ImGui_ImplDX11_Init(gfx.getDevice(), gfx.getImmediateContext());
 
 		rMoteur.run();
+		/*
 		*/
 		
-
+		ImGui_ImplDX11_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
 		return 1;
 	}
 

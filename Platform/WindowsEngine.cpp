@@ -2,6 +2,10 @@
 #include "../resource.h"
 #include "WindowsEngine.h"
 
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 namespace MS
 {
 
@@ -165,6 +169,9 @@ int WindowsEngine::initPlatform()
 //
 LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+		return true;
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;

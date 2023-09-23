@@ -48,7 +48,8 @@ private:
 	Timer m_clock;
 
 // =========================== WINDOWS STUFF =========================== //
-
+public:
+	HWND getHwnd() const { return hMainWnd; }
 private:
 	bool InitAppInstance();
 	ATOM MyRegisterClass(HINSTANCE hInstance);
