@@ -2,6 +2,8 @@
 
 #include "Utils/vendor/stdafx.h"
 #include "Platform/WindowsEngine.h"
+#include "Graphics/Renderer.h"
+
 
 using namespace MS;
 
@@ -19,13 +21,15 @@ int APIENTRY _tWinMain(
 	{
 
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
+		Renderer::setImplementation<direct3D11_impl>();
 
-		
+		/*
 		rMoteur.SetWindowsAppInstance(hInstance);
 
 		rMoteur.init();
 
 		rMoteur.run();
+		*/
 		
 
 		return 1;
