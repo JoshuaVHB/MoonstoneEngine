@@ -24,6 +24,8 @@ void SceneManager::onImGuiRender()
     ImGui::NewFrame();
     ImGui::ShowDemoWindow(); // Show demo window! :)
 
+    s_activeScene->onImGuiRender();
+
     ImGui::Begin("Scenes");
     for (size_t i = 0; i < s_availableScenes.size(); i++) {
         auto& [name, provider] = s_availableScenes[i];

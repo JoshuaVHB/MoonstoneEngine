@@ -5,7 +5,10 @@
 #include <tuple>
 #include <memory>
 
+#include "World/Mesh.h"
 
+// Creates static function for the renderer 
+// that calls the implementation function of the same name
 #define CALL_IMPL(fnName)\
 static auto fnName(auto&& ...args)\
 {\
@@ -22,7 +25,7 @@ public:
 	
 	protected:
 
-
+		//virtual void renderMesh(const Mesh& mesh);
 
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
@@ -32,6 +35,7 @@ public:
 
 
 	CALL_IMPL(clearScreen) ;
+	//CALL_IMPL(renderMesh) ;
 
 	
 

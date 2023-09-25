@@ -129,7 +129,7 @@ private:
 	void loadScenes() {
 
 		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Scene2>("Scene2");
+		//SceneManager::registerScene<Scene2>("Scene2");
 	}
 
 };

@@ -5,6 +5,7 @@
 #include "Graphics/Renderer.h"
 
 #include "Graphics/Rendering_impl/direct3D11_impl.h"
+#include "Graphics/World/Cube.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -43,7 +44,7 @@ int APIENTRY _tWinMain(
 	try
 	{
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
-
+		
 
 
 		rMoteur.SetWindowsAppInstance(hInstance);
