@@ -54,17 +54,16 @@
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\abstraction\VertexBufferLayout.cpp">
+    <ClCompile Include="Graphics\abstraction\Camera.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\abstraction\Camera.cpp">
+    <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Downloads\DirectX_11_Ateliers.pdf" />
     <None Include="README.md" />
-    <None Include="res\shaders\VS1.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Platform\Engine.h">
@@ -139,13 +138,19 @@
     <ClInclude Include="Graphics\abstraction\Vertex.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\abstraction\VertexBufferLayout.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\abstraction\Camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\World\Mesh.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\abstraction\IndexBuffer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\abstraction\Shaders.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\abstraction\ConstantBuffer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -153,8 +158,5 @@
     <ResourceCompile Include="MoonstoneEngine.rc">
       <Filter>Fichiers de ressources</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="res\shaders\PS1.hlsl" />
   </ItemGroup>
 </Project>

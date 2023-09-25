@@ -148,7 +148,6 @@
     <ClCompile Include="Utils\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Utils\vendor\stdafx.cpp" />
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
-    <ClCompile Include="Graphics\abstraction\VertexBufferLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Downloads\DirectX_11_Ateliers.pdf" />
@@ -156,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\Camera.h" />
+    <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\abstraction\Shaders.h" />
     <ClInclude Include="Graphics\abstraction\Vertex.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Renderer.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="Utils\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="Utils\vendor\stdafx.h" />
     <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
-    <ClInclude Include="Graphics\abstraction\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc" />

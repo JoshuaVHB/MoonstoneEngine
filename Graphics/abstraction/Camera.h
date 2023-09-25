@@ -78,8 +78,8 @@ private:
 	Vec m_target{0,0,0,1};
 	Vec m_UP{0,1,0,1};
 
-	float m_pitch = 0.f;
-	float m_yaw = 0.f;
+	double m_pitch = 0.f;
+	double m_yaw = 0.f;
 
 public:
 
@@ -141,7 +141,7 @@ public:
 	
 			float cy = cos(m_yaw), sy = sin(m_yaw);
 			float cp = cos(m_pitch), sp = sin(m_pitch);
-			return { -sy * cp, sp, -cy * cp };
+			return { - sy * cp, sp, -cy * cp};
 	}
 
 };

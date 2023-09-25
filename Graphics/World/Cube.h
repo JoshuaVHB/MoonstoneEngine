@@ -8,7 +8,7 @@
 
 using namespace DirectX;
 
-struct Vertex {
+struct VertexCube {
 	XMFLOAT3 position;
 	XMFLOAT3 normal;
 };
