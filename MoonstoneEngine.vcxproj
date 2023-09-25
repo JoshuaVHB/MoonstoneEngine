@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
@@ -152,7 +153,6 @@
   <ItemGroup>
     <None Include="..\..\..\Downloads\DirectX_11_Ateliers.pdf" />
     <None Include="README.md" />
-    <None Include="res\shaders\VS1.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\Camera.h" />
@@ -162,6 +162,7 @@
     <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
     <ClInclude Include="Graphics\World\Cube.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
+    <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
@@ -185,14 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="res\shaders\PS1.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

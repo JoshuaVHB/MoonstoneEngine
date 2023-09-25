@@ -1,8 +1,13 @@
 #pragma once
 
-#include <d3d11.h>
+#include "../../Utils/vendor/stdafx.h"
 
-class Vertex 
+using Mat4 = XMFLOAT4X4;
+using Mat = XMMATRIX;
+using Vec = XMVECTOR;
+
+struct Vertex 
 {
+
 
 };

@@ -1,13 +1,14 @@
 #pragma once
 
+#include "../../vendor/stdafx.h"
 #include "../Renderer.h"
 #include "../../Platform/WindowsEngine.h"
 
 #include "../../Debug.h"
 
-#include <d3d11.h>
-#include <directXmath.h>
-#include "../../vendor/stdafx.h"
+#define D3D11_IMPL 1
+
+
 
 struct direct3D11_impl : public Renderer::_Impl {
 
@@ -21,8 +22,6 @@ public:
 		context = gfx.getImmediateContext();
 		swapChain = gfx.getSwapChain();
 		rtv = gfx.getRenderTargetView();
-		/*
-		*/
 	}
 
 
@@ -63,12 +62,13 @@ private:
 	ID3D11VertexShader* pVertexShader;
 	ID3DBlob* pVSBlob = nullptr;
 	ID3DBlob* pPSBlob = nullptr;
-	ID3D11InputLayout** pVertexLayout = nullptr;
+	ID3D11InputLayout* pVertexLayout = nullptr;
 	ID3D11Buffer* pConstantBuffer;
 
 	XMMATRIX matWorld = XMMatrixIdentity();
 
-	D3D11_INPUT_ELEMENT_DESC layout[] =
+
+	D3D11_INPUT_ELEMENT_DESC layout[2] =
 	{ 
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
@@ -149,54 +149,93 @@ private:
 		sommets[23] = Vertex(point[2], n5);
 
 
-
-
+		// -- Vertex buffer
 		ZeroMemory(&bd, sizeof(bd));
+
 		bd.Usage = D3D11_USAGE_IMMUTABLE;
 		bd.ByteWidth = sizeof(sommets);
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.CPUAccessFlags = 0;
 
+		D3D11_SUBRESOURCE_DATA InitData;
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = sommets;
-		DX_TRY_CODE(device->CreateBuffer(&bd, &InitData, &pVertexBuffer), -5);
 
+		DX_TRY(device->CreateBuffer(&bd, &InitData, &pVertexBuffer));
+
+		// -- Index buffer
 
 		ZeroMemory(&bd, sizeof(bd));
+
 		bd.Usage = D3D11_USAGE_IMMUTABLE;
 		bd.ByteWidth = sizeof(index_bloc);
 		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		bd.CPUAccessFlags = 0;
+
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = index_bloc;
-		DX_TRY(device->CreateBuffer(&bd, &InitData, &pIndexBuffer), -6);
 
-		DX_TRY_CODE(D3DCompileFromFile(L"vs1.hlsl", nullptr, nullptr, "VS1", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &pVSBlob, nullptr),
-			-7);
+		DX_TRY(device->CreateBuffer(&bd, &InitData, &pIndexBuffer));
 
-		DX_TRY_CODE(device->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &pVertexShader),
-			-8);
+		//---------- Shaders
 
-		DX_TRY_CODE(device->CreateInputLayout(CSommetBloc::layout, 24, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &pVertexLayout), -9);
-		pVSBlob->Release();
+		DX_TRY_CODE(D3DCompileFromFile(L"res/shaders/VS1.hlsl",
+			nullptr, nullptr,
+			"VS1",
+			"vs_5_0",
+			D3DCOMPILE_ENABLE_STRICTNESS,
+			0,
+			&pVSBlob, nullptr), 7);
 
-		D3D11_BUFFER_DESC bd; ZeroMemory(&bd, sizeof(bd)); 
-		bd.Usage = D3D11_USAGE_DEFAULT; 
+		DX_TRY_CODE(device->CreateVertexShader(pVSBlob->GetBufferPointer(),
+			pVSBlob->GetBufferSize(),
+			nullptr,
+			&pVertexShader),
+			6);
+
+		// Créer l'organisation des sommets
+		pVertexLayout = nullptr;
+		DX_TRY_CODE(device->CreateInputLayout(layout,
+			2,
+			pVSBlob->GetBufferPointer(),
+			pVSBlob->GetBufferSize(),
+			&pVertexLayout),
+			7);
+
+		pVSBlob->Release(); //  On n'a plus besoin du blob
+
+		// Création d'un tampon pour les constantes du VS
+		ZeroMemory(&bd, sizeof(bd));
+
+		bd.Usage = D3D11_USAGE_DEFAULT;
 		bd.ByteWidth = sizeof(matWorld);
 		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		bd.CPUAccessFlags = 0;
 		device->CreateBuffer(&bd, nullptr, &pConstantBuffer);
 
-
 		// Compilation et chargement du pixel shader
-		DX_TRY_CODE(D3DCompileFromFile(L" ps1.hlsl", nullptr, nullptr, "PS1", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &pPSBlob, nullptr),
-			-9); 
-		DX_TRY_CODE(device->CreatePixelShader(
-			pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &pPixelShader), 
-			-10);
-		pPSBlob->Release(); // On n’a plus besoin du blob
+		ID3DBlob* pPSBlob = nullptr;
+		DX_TRY_CODE(D3DCompileFromFile(L"res/shaders/PS1.hlsl",
+			nullptr, nullptr,
+			"PS1",
+			"ps_5_0",
+			D3DCOMPILE_ENABLE_STRICTNESS,
+			0,
+			&pPSBlob,
+			nullptr), 8);
+
+		DX_TRY_CODE(device->CreatePixelShader(pPSBlob->GetBufferPointer(),
+			pPSBlob->GetBufferSize(),
+			nullptr,
+			&pPixelShader),
+			9);
+
+		pPSBlob->Release(); //  On n'a plus besoin du blob
+	
 
 	}
+
+
 
 	void renderCube(Camera& camera) {
 
@@ -210,7 +249,7 @@ private:
 		// Source des index
 		context->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 		// input layout des sommets 
-		context->IASetInputLayout(*pVertexLayout);
+		context->IASetInputLayout(pVertexLayout);
 		// Activer le VS
 		context->VSSetShader(pVertexShader, nullptr, 0);
 		// Initialiser et sélectionner les « constantes » du VS
@@ -221,9 +260,28 @@ private:
 		// Activer le PS 
 		context->PSSetShader(pPixelShader, nullptr, 0);
 		// **** Rendu de l’objet
-		context->DrawIndexed(36, 0, 0);
+		context->DrawIndexed(ARRAYSIZE(index_bloc), 0, 0);
 	}
 	
+
+	virtual void renderMesh(Camera& camera, float deltaTime = 0.f) override {
+		static bool b = false;
+		if (!b)
+		{
+			initCube(); b = true;
+		}
+		updateCube(deltaTime);
+		renderCube(camera);
+	
+	}
+
+	float rotation = 0.F;
+	void updateCube(float deltaTime = 0) {
+
+		rotation = rotation + ((XM_PI * 2.0f) / 3.0f * deltaTime);
+		matWorld = XMMatrixRotationX(rotation);
+		matWorld *= XMMatrixRotationY(rotation);
+	}
 
 
 };

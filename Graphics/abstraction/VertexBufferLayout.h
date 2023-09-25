@@ -5,7 +5,6 @@
 
 class VertexBufferLayout
 {
-	static D3D11_INPUT_ELEMENT_DESC layout[];
 
 
 

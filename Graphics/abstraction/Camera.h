@@ -19,7 +19,7 @@ protected:
 
 struct PerspectiveProjection : Projection
 {
-	float aspectRatio = 1.0f;
+	float aspectRatio = 2.0f;
 	float FOV = XM_PI / 4;
 
 	float znear = 2.0f, zfar = 20.F;
@@ -38,7 +38,7 @@ struct PerspectiveProjection : Projection
 };
 
 
-struct OrthographicProjection : Projection 
+struct OrthographicProjection : public Projection 
 {
 	float left, right;
 	float top, bot;
@@ -74,8 +74,9 @@ private:
 
 	std::unique_ptr<Projection> m_projection;
 
-	Vec m_position = {0,0,0,0};
-	Vec m_target;
+	Vec m_position = {0,0,-10.f,1.0f};
+	Vec m_target{0,0,0,1};
+	Vec m_UP{0,1,0,1};
 
 	float m_pitch = 0.f;
 	float m_yaw = 0.f;
@@ -85,11 +86,19 @@ public:
 
 
 	void computeVPMatrix() {
+		
+		/*
+		computeViewMatrix();
+		m_viewMatrix = XMMatrixLookAtLH(XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f),
+			XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
+			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
-		m_viewProjMatrix = getProjMatrix() * m_viewMatrix;
+		*/
+		lookAt();
+		m_viewProjMatrix =  m_viewMatrix * m_projection->getProjMatrix();
 
 	}
-
+	
 	void computeViewMatrix() {
 
 		m_viewMatrix = XMMatrixIdentity() * XMMatrixRotationAxis({ 1,0,0,0 }, -m_pitch);
@@ -101,11 +110,17 @@ public:
 	void lookAt(Vec target) 
 	{
 		m_target = target;
-		m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, { 0,1,0,0 });
+		m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, m_UP);
+	}
+
+	void lookAt()
+	{
+		m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, m_UP);
 	}
 
 
 	Mat getVPMatrix() {
+		computeVPMatrix();
 		return m_viewProjMatrix;
 	}
 
@@ -113,7 +128,7 @@ public:
 		return m_projection->getProjMatrix();
 	}
 	
-	template<class _proj=OrthographicProjection>
+	template<class _proj=PerspectiveProjection>
 	requires (std::derived_from<_proj, Projection>)
 	void setProjection(const _proj& proj)
 	{

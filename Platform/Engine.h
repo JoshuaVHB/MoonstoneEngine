@@ -75,6 +75,10 @@ public:
 
 	virtual bool animation() { 
 
+		m_nextTime = m_clock.getTimeCount();
+		float deltaTime = static_cast<float>(m_clock.getTimeBetweenCounts(m_previousTime, m_nextTime));
+		m_previousTime = m_nextTime;
+		SceneManager::onUpdate(deltaTime);
 		SceneManager::onRender();
 		SceneManager::onImGuiRender();
 
@@ -119,8 +123,9 @@ protected:
 
 protected:
 	// Variables pour le temps de l’animation
-	Timer::value_type m_nextTime;
-	Timer::value_type m_previousTime;
+	Timer::count_type m_nextTime;
+	Timer::count_type m_previousTime;
+	Timer m_clock;
 
 	_RenderingDevice* p_renderingDevice; // This will store a Graphics() on windows
 

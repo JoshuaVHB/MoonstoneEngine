@@ -13,19 +13,26 @@ private:
 	
 	Camera camera;
 
+	float dt = 0;
+	float elapsed = 0;
+
 public:
 
 	TestScene() {
-		camera.setProjection<OrthographicProjection>({0,1,0,1,.1f, 10.f});
-	
+		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
 	}
 
 
-	virtual void onUpdate(float deltaTime) override {}
+	virtual void onUpdate(float deltaTime) override 
+	{
+		dt = deltaTime;
+		elapsed+= deltaTime;
+	}
+
 	virtual void onRender() override {
 	
-		//Renderer::renderMesh();
 		Renderer::clearScreen(1.f,1.f,0.f,1.f);
+		Renderer::renderMesh(camera, dt);
 	}
 	virtual void onImGuiRender()override {}
 

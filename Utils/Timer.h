@@ -19,7 +19,12 @@ namespace MS {
 			m_secPerCount = 1.0 / static_cast<value_type>(counterFrequency.QuadPart);
 		}
 
-		count_type getTimeCount() const { return m_timeCount; }
+		count_type getTimeCount() const { 
+			LARGE_INTEGER countNumber;
+			::QueryPerformanceCounter(&countNumber);
+			return countNumber.QuadPart;
+			;
+		}
 
 		value_type getSecPerCount() const { return m_secPerCount;  }
 		value_type getTimeBetweenCounts(count_type start, count_type stop) const { 	
@@ -28,7 +33,6 @@ namespace MS {
 
 	private:
 
-		count_type m_timeCount{};
 		value_type m_secPerCount{};
 
 	};

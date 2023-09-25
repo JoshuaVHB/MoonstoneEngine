@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "World/Mesh.h"
+#include "abstraction/Camera.h"
 
 // Creates static function for the renderer 
 // that calls the implementation function of the same name
@@ -26,7 +27,8 @@ public:
 	protected:
 
 		//virtual void renderMesh(const Mesh& mesh);
-
+		//virtual void renderMesh(Camera& camera) = 0;
+		virtual void renderMesh(Camera& , float dt=0) = 0;
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
 
@@ -35,7 +37,7 @@ public:
 
 
 	CALL_IMPL(clearScreen) ;
-	//CALL_IMPL(renderMesh) ;
+	CALL_IMPL(renderMesh) ;
 
 	
 
