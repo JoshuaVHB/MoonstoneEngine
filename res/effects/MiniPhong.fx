@@ -10,11 +10,11 @@ cbuffer param
     float4 vDEcl; // la valeur diffuse de l’éclairage
     float4 vDMat; // la valeur diffuse du matériau 
 }
-    struct VS_Sortie { 
-        float4 Pos : SV_Position; 
-        float3 Norm : TEXCOORD0; 
-        float3 vDirLum : TEXCOORD1; 
-        float3 vDirCam : TEXCOORD2; 
+struct VS_Sortie { 
+    float4 Pos : SV_Position; 
+    float3 Norm : TEXCOORD0; 
+    float3 vDirLum : TEXCOORD1; 
+    float3 vDirCam : TEXCOORD2; 
  }; 
 
 VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL) 
@@ -40,7 +40,7 @@ float4 MiniPhongPS(VS_Sortie vs) : SV_Target
     float3 diff = saturate(dot(N, L)); // R = 2 * (N.L) * N – L 
     float3 R = normalize(2 * diff * N - L); 
     // Puissance de 4 - pour l’exemple
-    float S = pow(saturate(dot(R, V)), 4.0f); 
+    float S = pow(saturate(dot(R, L)), 4.f); 
     // I = A + D * N.L + (R.V)n 
     couleur = vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff; 
     couleur += S;

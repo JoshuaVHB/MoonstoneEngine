@@ -10,6 +10,8 @@
 #include "../abstraction/IndexBuffer.h"
 #include "../abstraction/Shaders.h"
 
+#include "../../Platform/IO/FileReader.h"
+
 #include <vector>
 
 #define D3D11_IMPL 1
@@ -70,10 +72,11 @@ private:
 
 	XMMATRIX matWorld = XMMatrixIdentity();
 
-
+	Mesh m;
 	Shader vs, ps;
 
 	void initCube() {
+		/*
 		float dx = 1, dy = 1, dz = 1;
 		
 		XMVECTOR n0{ 0.0f, 0.0f, -1.0f }; // devant
@@ -126,19 +129,24 @@ private:
 			20,21,22, // droite 
 			20,22,23 // droite 
 		};
+		*/
 
-		vbo = VertexBuffer(device, context, vertices);
-		ibo = IndexBuffer(device, context, indices);
+
+		auto mesh = readMeshFromObj("res/mesh/test.obj");
+		m = Mesh(device, context, mesh.first, mesh.second);
+
+		std::vector<Vertex> vertices;
+		std::vector<uint16_t> indices;
+
+		vbo = VertexBuffer(device, context, mesh.first);
+		ibo = IndexBuffer(device, context, mesh.second);
+		/*
+		*/
 		//---------- Shaders
 		
 		effect = Effect(device, context);
 		effect.loadEffectFromFile("res/effects/MiniPhong.fx");
-		/*
-		vs = Shader(device, context);
-		ps = Shader(device, context);
-		vs.loadShaderFromFile("res/shaders/VS1.hlsl", Shader::ShaderType::VertexShader);
-		ps.loadShaderFromFile("res/shaders/PS1.hlsl", Shader::ShaderType::PixelShader);
-		*/
+		
 
 		// Création d'un tampon pour les constantes du VS
 		ZeroMemory(&bd, sizeof(bd));
@@ -157,8 +165,11 @@ private:
 	void renderCube(Camera& camera) {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		vbo.bind();
-		ibo.bind();
+
+		//vbo.bind();
+		//ibo.bind();
+		m.draw();
+		
 		context->IASetInputLayout(effect.m_vertexLayout);
 		//vs.bind();
 		//ps.bind();
