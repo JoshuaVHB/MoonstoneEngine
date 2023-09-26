@@ -66,6 +66,7 @@ private:
 	VertexBuffer vbo;
 	D3D11_BUFFER_DESC bd;
 	ID3D11Buffer* pConstantBuffer;
+	Effect effect;
 
 	XMMATRIX matWorld = XMMatrixIdentity();
 
@@ -128,14 +129,16 @@ private:
 
 		vbo = VertexBuffer(device, context, vertices);
 		ibo = IndexBuffer(device, context, indices);
+		//---------- Shaders
+		
+		effect = Effect(device, context);
+		effect.loadEffectFromFile("res/effects/MiniPhong.fx");
+		/*
 		vs = Shader(device, context);
 		ps = Shader(device, context);
-
-		//---------- Shaders
-
-
 		vs.loadShaderFromFile("res/shaders/VS1.hlsl", Shader::ShaderType::VertexShader);
 		ps.loadShaderFromFile("res/shaders/PS1.hlsl", Shader::ShaderType::PixelShader);
+		*/
 
 		// Création d'un tampon pour les constantes du VS
 		ZeroMemory(&bd, sizeof(bd));
@@ -156,13 +159,28 @@ private:
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		vbo.bind();
 		ibo.bind();
-		vs.bind();
-		ps.bind();
+		context->IASetInputLayout(effect.m_vertexLayout);
+		//vs.bind();
+		//ps.bind();
 		// Initialiser et sélectionner les « constantes » du VS
 		const XMMATRIX viewProj = camera.getVPMatrix();
 		const XMMATRIX matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-		context->UpdateSubresource(pConstantBuffer, 0, nullptr, &matWorldViewProj, 0, 0);
-		context->VSSetConstantBuffers(0, 1, &pConstantBuffer);
+
+		ShadersParams sp;
+		sp.matWorldViewProj = matWorldViewProj;
+		sp.matWorld = matWorld;
+
+		sp.vLumiere = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f); 
+		sp.vCamera = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f); 
+		sp.vAEcl = XMVectorSet(1.f, 0.2f, 0.2f, 1.0f); // WHAT ?
+		sp.vAMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); 
+		sp.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
+		sp.vDMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
+		context->UpdateSubresource(pConstantBuffer, 0, nullptr, &sp, 0, 0);
+
+		ID3DX11EffectConstantBuffer* pCB = effect.m_effect->GetConstantBufferByName("param");
+		pCB->SetConstantBuffer(pConstantBuffer); // **** Rendu de l’objet
+		effect.m_pass->Apply(0, context);
 
 		// -- Draw call
 		context->DrawIndexed(ibo.getBufferSize(), 0, 0);

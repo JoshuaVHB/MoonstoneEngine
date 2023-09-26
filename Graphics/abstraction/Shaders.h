@@ -4,10 +4,24 @@
 #include <filesystem>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <effects.h>
 
 #include "../../Utils/Debug.h"
 
+#include "../../d3dx11effect.h"
+
 namespace fs = std::filesystem;
+struct ShadersParams {
+	// la matrice totale 
+	XMMATRIX matWorldViewProj; 
+	XMMATRIX matWorld; // matrice de transformation dans le monde
+	XMVECTOR vLumiere; // la position de la source d’éclairage (Point)
+	XMVECTOR vCamera; // la position de la caméra 
+	XMVECTOR vAEcl; // la valeur ambiante de l’éclairage
+	XMVECTOR vAMat; // la valeur ambiante du matériau 
+	XMVECTOR vDEcl; // la valeur diffuse de l’éclairage 
+	XMVECTOR vDMat; // la valeur diffuse du matériau 
+};
 
 struct ShaderLayout 
 {
@@ -146,6 +160,63 @@ public:
 
 class Effect 
 {
+private:
 
+	ID3D11Device* m_device;
+	ID3D11DeviceContext* m_context;
+
+	ID3DX11EffectTechnique* m_technique; 
+
+
+	D3D11_INPUT_ELEMENT_DESC layout[2] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+public:
+	ID3DX11EffectPass* m_pass;
+	ID3D11InputLayout* m_vertexLayout = nullptr;
+
+	ID3DX11Effect* m_effect;
+	Effect() {}
+
+	Effect(ID3D11Device* device,
+		ID3D11DeviceContext* context)
+	{
+		m_device = device;
+		m_context = context;
+	}
+
+	void loadEffectFromFile(const fs::path& pathToEffect) {
+
+		ID3DBlob* blob = nullptr;
+
+		DX_TRY_CODE	(D3DCompileFromFile(pathToEffect.c_str(),
+			0, 0, 0, "fx_5_0", 0, 0, &blob, 0),
+			11);
+
+		D3DX11CreateEffectFromMemory(
+			blob->GetBufferPointer(), blob->GetBufferSize(), 0, m_device, &m_effect);
+
+		blob->Release();
+
+		m_technique = m_effect->GetTechniqueByIndex(0); 
+		m_pass = m_technique->GetPassByIndex(0);
+
+		// Créer l’organisation des sommets pour le VS de notre effet 
+		D3DX11_PASS_SHADER_DESC effectVSDesc; 
+		m_pass->GetVertexShaderDesc(&effectVSDesc);
+		D3DX11_EFFECT_SHADER_DESC effectVSDesc2; 
+
+		effectVSDesc.pShaderVariable->GetShaderDesc(effectVSDesc.ShaderIndex, &effectVSDesc2); 
+		const void *vsCodePtr = effectVSDesc2.pBytecode; 
+		unsigned vsCodeLen = effectVSDesc2.BytecodeLength; 
+		m_vertexLayout = NULL;
+		DX_TRY_CODE( m_device->CreateInputLayout(layout, 2, vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
+
+
+
+	}
 
 };
