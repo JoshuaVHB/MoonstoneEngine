@@ -172,14 +172,14 @@ private:
 
 		sp.vLumiere = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f); 
 		sp.vCamera = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f); 
-		sp.vAEcl = XMVectorSet(1.f, 0.2f, 0.2f, 1.0f); // WHAT ?
+		sp.vAEcl = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f); // WHAT ?
 		sp.vAMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); 
 		sp.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
 		sp.vDMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
-		context->UpdateSubresource(pConstantBuffer, 0, nullptr, &sp, 0, 0);
+		context->UpdateSubresource(effect.pConstantBuffer, 0, nullptr, &sp, 0, 0);
 
 		ID3DX11EffectConstantBuffer* pCB = effect.m_effect->GetConstantBufferByName("param");
-		pCB->SetConstantBuffer(pConstantBuffer); // **** Rendu de l’objet
+		pCB->SetConstantBuffer(effect.pConstantBuffer); // **** Rendu de l’objet
 		effect.m_pass->Apply(0, context);
 
 		// -- Draw call

@@ -44,7 +44,7 @@ float4 MiniPhongPS(VS_Sortie vs) : SV_Target
     // I = A + D * N.L + (R.V)n 
     couleur = vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff; 
     couleur += S;
-    return float4(vAEcl.rgb, 1.0f);
+    return float4(couleur, 1.0f);
 }
 
 technique11 MiniPhong

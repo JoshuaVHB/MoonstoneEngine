@@ -177,7 +177,7 @@ private:
 public:
 	ID3DX11EffectPass* m_pass;
 	ID3D11InputLayout* m_vertexLayout = nullptr;
-
+	ID3D11Buffer* pConstantBuffer;
 	ID3DX11Effect* m_effect;
 	Effect() {}
 
@@ -189,6 +189,15 @@ public:
 	}
 
 	void loadEffectFromFile(const fs::path& pathToEffect) {
+
+		// Création d’un tampon pour les constantes du VS 
+		D3D11_BUFFER_DESC bd; 
+		ZeroMemory( &bd, sizeof(bd) );
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(ShadersParams); 
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0; 
+		m_device->CreateBuffer( &bd, NULL, &pConstantBuffer );
 
 		ID3DBlob* blob = nullptr;
 
@@ -214,7 +223,6 @@ public:
 		unsigned vsCodeLen = effectVSDesc2.BytecodeLength; 
 		m_vertexLayout = NULL;
 		DX_TRY_CODE( m_device->CreateInputLayout(layout, 2, vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
-
 
 
 	}
