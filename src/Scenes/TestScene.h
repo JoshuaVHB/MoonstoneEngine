@@ -25,13 +25,13 @@ private:
 	float elapsed = 0;
 
 	bool render = true;
+	bool tmp = true;
 
 public:
 
 	TestScene() {
 		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
 		//WindowsEngine& rMoteur = WindowsEngine::getInstance();
-		bool a = wKbd->isKeyPressed(VK_SPACE);
 	}
 
 
@@ -41,7 +41,25 @@ public:
 		elapsed += deltaTime;
 		camera.setPosition(delta);
 		camera.updateCam(deltaTime);
-		if (wKbd->readKey(VK_SPACE).isPress()) render = !render;
+		Keyboard::Event e = wKbd->readKey();
+		if (e.isPress() && e.getCode()==VK_SPACE)
+			render = !render;
+
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q'))) {
+			delta.vector4_f32[0] -= 0.5f;
+		}
+
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d'))) {
+			delta.vector4_f32[0] += 0.5f;
+		}
+
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z'))) {
+			delta.vector4_f32[2] += 0.5f;
+		}
+
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s'))) {
+			delta.vector4_f32[2] -= 0.5f;
+		}
 	}
 
 	virtual void onRender() override {
@@ -54,6 +72,7 @@ public:
 
 		ImGui::Text(std::to_string(render).c_str());
 		ImGui::Text(std::to_string(wKbd->isKeyPressed(VK_SPACE)).c_str());
+		ImGui::Text(std::to_string(tmp).c_str());
 		ImGui::DragFloat4("delta", &delta.vector4_f32[0]);
 		ImGui::End();
 

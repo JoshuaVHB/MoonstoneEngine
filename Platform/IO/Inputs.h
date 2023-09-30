@@ -10,6 +10,10 @@ class Keyboard {
 
 public:
 
+	static unsigned char letterCodeFromChar(const char c) {
+		return 0x41 + (c-'a');
+	}
+
 	class Event 
 	{
 	public:
@@ -33,9 +37,10 @@ public:
 	Keyboard(const Keyboard&) = delete;
 	Keyboard& operator=(const Keyboard&) = delete;
 
+
 	enum {KEY_COUNT=256u};
 	bool isKeyPressed(const char keyCode) const noexcept { return m_keyStates[keyCode]; }
-	Event readKey(const char keyCode) {
+	Event readKey() {
 		if (m_keyBuffer.size() == 0) return Keyboard::Event();
 		Keyboard::Event e = m_keyBuffer.front();
 		m_keyBuffer.pop();
