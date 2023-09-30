@@ -22,7 +22,7 @@ struct PerspectiveProjection : Projection
 	float aspectRatio = 2.0f;
 	float FOV = XM_PI / 4;
 
-	float znear = 2.0f, zfar = 20.F;
+	float znear = 0.10f, zfar = 1000.F;
 
 	PerspectiveProjection() {
 		projMat = XMMatrixPerspectiveFovLH(FOV, aspectRatio, znear, zfar);
@@ -81,20 +81,26 @@ private:
 	double m_pitch = 0.f;
 	double m_yaw = 0.f;
 
+	float t = 0;
+
 public:
 
+	void updateCam(float deltaTime = 0) 
+	{
+		computeVPMatrix();
+	}
 
+	void move(Vec delta) {
+		m_position += delta;
+	}
+
+	void setPosition(Vec pos) {
+		m_position = pos;
+	}
 
 	void computeVPMatrix() {
-		
-		/*
-		computeViewMatrix();
-		m_viewMatrix = XMMatrixLookAtLH(XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f),
-			XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f),
-			XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f));
 
-		*/
-		lookAt();
+		computeViewMatrix();
 		m_viewProjMatrix =  m_viewMatrix * m_projection->getProjMatrix();
 
 	}

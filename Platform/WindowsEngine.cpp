@@ -5,6 +5,12 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include <memory>
+#include <iostream>
+
+
+
+std::unique_ptr<Keyboard> wKbd = std::make_unique<Keyboard>();
 
 namespace MS
 {
@@ -179,6 +185,23 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 	switch (message)
 	{
 	
+	/**********************************************************************/
+	case WM_KEYUP:
+		wKbd->onKeyReleased(static_cast<unsigned char>(wParam));
+		break;
+	case WM_CHAR:
+		wKbd->onChar(static_cast<char>(wParam));
+		break;
+	case WM_KEYDOWN:
+		if (!(lParam & 0x40000000) || wKbd->autorepeatIsEnable()) {
+ 			wKbd->onKeyPressed(static_cast<unsigned char>(wParam));
+		}
+		break;
+	case WM_KILLFOCUS:
+		wKbd->clearStates();
+		break;
+	/**********************************************************************/
+
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 		// Évitez d'ajouter du code ici...

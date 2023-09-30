@@ -166,6 +166,7 @@
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\IO\FileReader.h" />
+    <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />

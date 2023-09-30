@@ -156,6 +156,9 @@
     <ClInclude Include="Platform\IO\FileReader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Platform\IO\Inputs.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc">

@@ -2,8 +2,12 @@
 
 #include "Engine.h"
 #include "../Graphics/Graphics.h"
+#include "IO/Inputs.h"
+#include <memory>
+
 
 #define MAX_LOADSTRING 100
+extern std::unique_ptr<Keyboard> wKbd;
 
 namespace MS
 {
@@ -12,6 +16,7 @@ class WindowsEngine final : public Engine<WindowsEngine, Graphics>
 {
 public:
 	void SetWindowsAppInstance(HINSTANCE hInstance);
+
 
 	Graphics& getGraphics() const { return *m_graphics; }
 
@@ -46,6 +51,7 @@ private:
 
 	std::unique_ptr<Graphics> m_graphics;
 	Timer m_clock;
+
 
 // =========================== WINDOWS STUFF =========================== //
 public:
