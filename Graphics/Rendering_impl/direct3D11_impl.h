@@ -77,7 +77,7 @@ private:
 
 	void initCube() {
 
-		auto mesh = readMeshFromObj("res/mesh/test.obj");
+		auto mesh = readMeshFromObj("res/mesh/hello.obj");
 		m = Mesh(device, context, mesh.first, mesh.second);
 
 		std::vector<Vertex> vertices;
@@ -88,6 +88,7 @@ private:
 		
 		effect = Effect(device, context);
 		effect.loadEffectFromFile("res/effects/MiniPhong.fx");
+		matWorld *= XMMatrixRotationX(XM_PI/2.F);
 		
 
 		// Création d'un tampon pour les constantes du VS
@@ -146,7 +147,7 @@ private:
 		{
 			initCube(); b = true;
 		}
-		updateCube(deltaTime);
+		//updateCube(deltaTime);
 		renderCube(camera);
 	
 	}
@@ -156,7 +157,7 @@ private:
 
 		rotation = rotation + ((XM_PI * 2.0f) / 3.0f * deltaTime);
 		matWorld = XMMatrixRotationX(rotation);
-		matWorld *= XMMatrixRotationY(rotation);
+		//matWorld *= XMMatrixRotationY(rotation);
 	}
 
 

@@ -150,5 +150,8 @@ public:
 			return { - sy * cp, sp, -cy * cp};
 	}
 
+
+	void setYaw(float yaw) { m_yaw = yaw; }
+	void setPitch(float pitch) { m_pitch = pitch; }
 };
 

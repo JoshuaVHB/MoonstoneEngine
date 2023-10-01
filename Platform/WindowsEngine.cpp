@@ -11,10 +11,12 @@
 
 
 std::unique_ptr<Keyboard> wKbd = std::make_unique<Keyboard>();
+std::unique_ptr<Mouse> wMouse = std::make_unique<Mouse>();
 
 namespace MS
 {
 
+bool WindowsEngine::imguiInit = false;
 HINSTANCE WindowsEngine::hAppInstance;	// handle Windows de l'instance actuelle de l'application
 
 //   FONCTION : SetWindowsAppInstance(HANDLE, int)
@@ -178,6 +180,11 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
 		return true;
+
+	if (imguiInit && (ImGui::GetIO().WantCaptureKeyboard || ImGui::GetIO().WantCaptureMouse))
+		return true;
+
+
 	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -201,6 +208,41 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 	case WM_KILLFOCUS:
 		wKbd->clearStates();
 		break;
+	/**********************************************************************/
+	case WM_MOUSEMOVE:
+	{
+
+		const POINTS pt = MAKEPOINTS(lParam);
+		wMouse->onMouseMoved(pt.x, pt.y);
+		break; }
+	case WM_LBUTTONDOWN:
+		{
+		const POINTS pt = MAKEPOINTS(lParam);
+		wMouse->onLeftPress(pt.x, pt.y);
+		break; }
+	case WM_LBUTTONUP:
+		{
+		const POINTS pt = MAKEPOINTS(lParam);
+		wMouse->onLeftRelease(pt.x, pt.y);
+		break; }
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		wMouse->onRightPress(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONUP:
+		{
+		const POINTS pt = MAKEPOINTS(lParam);
+		wMouse->onRightRelease(pt.x, pt.y);
+		break; }
+	case WM_MOUSEWHEEL:
+		{
+		const POINTS pt = MAKEPOINTS(lParam);
+		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) wMouse->onWheelUp(pt.x, pt.y);
+		else									wMouse->onWheelDown(pt.x, pt.y);
+		break; }
+
 	/**********************************************************************/
 
 	case WM_PAINT:

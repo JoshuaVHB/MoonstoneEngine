@@ -23,6 +23,8 @@ void initImgui(HWND hWnd, Graphics& gfx) {
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(gfx.getDevice(), gfx.getImmediateContext());
+	WindowsEngine& rMoteur = WindowsEngine::getInstance();
+	rMoteur.imguiInit = true;
 }
 
 void shutdownImgui(){

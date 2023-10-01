@@ -7,9 +7,11 @@
 #include "../../Graphics/abstraction/Camera.h"
 
 #include "../../Platform/IO/Inputs.h"
+#include <iostream>
 #include <memory>
 
 extern std::unique_ptr<Keyboard> wKbd;
+extern std::unique_ptr<Mouse> wMouse;
 
 using namespace MS;
 class TestScene : public Scene {
@@ -26,6 +28,8 @@ private:
 
 	bool render = true;
 	bool tmp = true;
+	char text[500];
+
 
 public:
 
@@ -41,6 +45,18 @@ public:
 		elapsed += deltaTime;
 		camera.setPosition(delta);
 		camera.updateCam(deltaTime);
+
+		Mouse::Event me = wMouse->read();
+		if (me.leftIsPressed())
+			std::cout << me.getPosX() << "|" << me.getPosY() << std::endl;
+
+			/*
+		glm::vec2 rotationMotion = Inputs::getMouseDelta() / Inputs::getInputRange() * Mathf::PI;
+
+		m_camera.setYaw(m_camera.getYaw() - rotationMotion.x);
+		m_camera.setPitch(std::max(-Mathf::PI * .499f, std::min(+Mathf::PI * .499f, m_camera.getPitch() + rotationMotion.y)));
+			*/
+
 		Keyboard::Event e = wKbd->readKey();
 		if (e.isPress() && e.getCode()==VK_SPACE)
 			render = !render;
@@ -74,6 +90,7 @@ public:
 		ImGui::Text(std::to_string(wKbd->isKeyPressed(VK_SPACE)).c_str());
 		ImGui::Text(std::to_string(tmp).c_str());
 		ImGui::DragFloat4("delta", &delta.vector4_f32[0]);
+		ImGui::InputText("coucou", text, 500);
 		ImGui::End();
 
 	}

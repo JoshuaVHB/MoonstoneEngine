@@ -8,6 +8,7 @@
 
 #define MAX_LOADSTRING 100
 extern std::unique_ptr<Keyboard> wKbd;
+extern std::unique_ptr<Mouse> wMouse;
 
 namespace MS
 {
@@ -52,10 +53,10 @@ private:
 	std::unique_ptr<Graphics> m_graphics;
 	Timer m_clock;
 
-
 // =========================== WINDOWS STUFF =========================== //
 public:
 	HWND getHwnd() const { return hMainWnd; }
+	static bool imguiInit;
 private:
 	bool InitAppInstance();
 	ATOM MyRegisterClass(HINSTANCE hInstance);
