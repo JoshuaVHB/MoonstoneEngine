@@ -11,7 +11,8 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
-using namespace MS;
+#include "src/Scenes/AllScenes.h"
+
 
 void initImgui(HWND hWnd, Graphics& gfx) {
 	IMGUI_CHECKVERSION();
@@ -56,6 +57,10 @@ int main() {
 		Graphics& gfx = rMoteur.getGraphics();
 
 		initImgui(rMoteur.getHwnd(), gfx);
+		SceneManager::registerScene<TestScene>("TEST");
+		SceneManager::switchToScene(0);
+
+
 		rMoteur.run();
 		
 
@@ -76,7 +81,7 @@ int main() {
 		return 99;
 	}
 
-	catch (int err)
+	catch (...)/*int err*/
 	{
 		wchar_t szErrMsg[MAX_LOADSTRING];// Un message d'erreur selon le code
 		//::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);

@@ -24,7 +24,7 @@ public:
 
 	direct3D11_impl() 
 	{
-		MS::WindowsEngine& engine = MS::WindowsEngine::getInstance();
+		WindowsEngine& engine = WindowsEngine::getInstance();
 		Graphics& gfx = engine.getGraphics();
 		device = gfx.getDevice();
 		context = gfx.getImmediateContext();
@@ -108,14 +108,8 @@ private:
 	void renderCube(Camera& camera) {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		//vbo.bind();
-		//ibo.bind();
 		m.draw();
-		
 		context->IASetInputLayout(effect.m_vertexLayout);
-		//vs.bind();
-		//ps.bind();
 		// Initialiser et sélectionner les « constantes » du VS
 		const XMMATRIX viewProj = camera.getVPMatrix();
 		const XMMATRIX matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
@@ -137,7 +131,7 @@ private:
 		effect.m_pass->Apply(0, context);
 
 		// -- Draw call
-		context->DrawIndexed(ibo.getBufferSize(), 0, 0);
+		context->DrawIndexed(static_cast<UINT>(ibo.getBufferSize()), 0, 0);
 	}
 	
 

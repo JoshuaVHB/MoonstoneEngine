@@ -2,18 +2,45 @@
 
 #include "Scene.h"
 
-#include "../../Platform/WindowsEngine.h"
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
 
 #include "../../Platform/IO/Inputs.h"
+#include "../../Platform/WindowsEngine.h"
 #include <iostream>
 #include <memory>
+
 
 extern std::unique_ptr<Keyboard> wKbd;
 extern std::unique_ptr<Mouse> wMouse;
 
-using namespace MS;
+
+struct Vec2 {
+
+	union {
+		struct { float x, y; };
+		float body[2];
+	};
+
+	Vec2() : body{} {}
+	Vec2(float _x, float _y) : x(_x), y(_y) {}
+
+	template<typename _type> requires (std::convertible_to<_type, float>)
+		Vec2(const std::pair<_type, _type>& p) { x = p.first; y = p.second; }
+
+	Vec2 operator+(const Vec2& other) { return Vec2{ x + other.x, y + other.y }; }
+	Vec2 operator-(const Vec2& other) { return Vec2{ x - other.x, y - other.y }; }
+	Vec2 operator/(const Vec2& other) { return Vec2{ x / other.x, y / other.y }; }
+	Vec2 operator*(const Vec2& other) { return Vec2{ x * other.x, y * other.y }; }
+	Vec2 operator*(float scalar) { return Vec2{ x * scalar, y * scalar }; }
+
+};
+
+inline std::ostream& operator<<(std::ostream& os, const Vec2& v) {
+	os << "(" << (v.x) << "," << v.y << ")";
+	return os;
+}
+
 class TestScene : public Scene {
 
 private:
@@ -28,14 +55,20 @@ private:
 
 	bool render = true;
 	bool tmp = true;
-	char text[500];
+	char text[500] = {};
 
+	Vec2 mousePose;
+	Vec2 mouseDelta;
+
+	std::pair<int, int> winSize{};
 
 public:
 
-	TestScene() {
+	TestScene() 
+	{
 		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
-		//WindowsEngine& rMoteur = WindowsEngine::getInstance();
+		winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
+
 	}
 
 
@@ -43,19 +76,29 @@ public:
 	{
 		dt = deltaTime;
 		elapsed += deltaTime;
-		camera.setPosition(delta);
-		camera.updateCam(deltaTime);
 
 		Mouse::Event me = wMouse->read();
-		if (me.leftIsPressed())
-			std::cout << me.getPosX() << "|" << me.getPosY() << std::endl;
 
-			/*
-		glm::vec2 rotationMotion = Inputs::getMouseDelta() / Inputs::getInputRange() * Mathf::PI;
+		if (me.isValid()) {
 
-		m_camera.setYaw(m_camera.getYaw() - rotationMotion.x);
-		m_camera.setPitch(std::max(-Mathf::PI * .499f, std::min(+Mathf::PI * .499f, m_camera.getPitch() + rotationMotion.y)));
-			*/
+			mouseDelta = Vec2(me.getPos()) - mousePose;
+			mousePose = Vec2(me.getPos());
+
+			Vec2 rotationMotion = (mouseDelta / Vec2(winSize)) * 3.1415926f;
+			std::cout << mousePose << "|" << rotationMotion << std::endl;
+			float yaw = camera.getYaw() + rotationMotion.x;
+
+			float pitch = max(-3.1415926f * .499f,
+				min(3.1415926f * .499f,
+					camera.getPitch() + rotationMotion.y
+				)
+			);
+			std::cout << pitch << " ---- " << yaw << std::endl;
+			camera.setYaw(yaw);
+			camera.setPitch(pitch);
+		}
+		camera.setPosition(delta);
+		camera.updateCam(deltaTime);
 
 		Keyboard::Event e = wKbd->readKey();
 		if (e.isPress() && e.getCode()==VK_SPACE)

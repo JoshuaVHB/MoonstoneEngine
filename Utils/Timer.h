@@ -2,7 +2,6 @@
 #include <cstdint>
 #include "vendor/stdafx.h"
 
-namespace MS {
 
 	class Timer
 	{
@@ -37,4 +36,3 @@ namespace MS {
 
 	};
 
-} // -- END NAMESPACE MS

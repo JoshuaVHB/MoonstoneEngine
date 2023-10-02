@@ -10,10 +10,8 @@
 #include "imgui_impl_dx11.h"
 
 #include "../src/Scenes/Scene.h"
-#include "../src/Scenes/AllScenes.h"
 
-namespace MS
-{
+
 
 constexpr Timer::count_type FPS_COUNT = 60;
 constexpr Timer::value_type FRAME_TIME = 1.0 / static_cast<Timer::value_type>(FPS_COUNT);
@@ -66,8 +64,6 @@ public:
 		//   préparation de la première image
 		initAnimation();
 
-		loadScenes();
-		SceneManager::switchToScene(0);
 			
 
 		return 0;
@@ -90,7 +86,7 @@ public:
 
 	virtual int initAnimation()
 	{
-		m_nextTime = getTimePlatform();
+		m_nextTime = static_cast<Timer::count_type>(getTimePlatform()); // not sure about this cast
 		m_previousTime = m_nextTime;
 		// première Image
 		renderScene();
@@ -133,12 +129,9 @@ private:
 
 	void loadScenes() {
 
-		SceneManager::registerScene<TestScene>("TEST");
 		//SceneManager::registerScene<Scene2>("Scene2");
 	}
 
 };
 
 
-
-} // namespace PM3D

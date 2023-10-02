@@ -28,8 +28,8 @@ public:
 #if _DEBUG
 		deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif;
-		int width;
-		int height;
+		int width = 0;
+		int height = 0;
 ;		// Setup the descriptor
 		DXGI_SWAP_CHAIN_DESC sd{};
 		ZeroMemory(&sd, sizeof(sd));
@@ -79,15 +79,16 @@ public:
 
 		m_context->OMSetRenderTargets(1, &m_rtv, nullptr);
 
-		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)width;
-		vp.Height = (FLOAT)height;
+		D3D11_VIEWPORT vp{};
+		vp.Width = (FLOAT)(width);
+		vp.Height = (FLOAT)(height);
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 		m_context->RSSetViewports(1, &vp);
-
+		m_width = width;
+		m_height = height;
 	}
 
 	Graphics(const Graphics&) = delete;
@@ -111,6 +112,7 @@ public:
 	IDXGISwapChain* getSwapChain() const { return m_swapChain; }
 	ID3D11DeviceContext* getImmediateContext() const { return m_context; }
 	ID3D11RenderTargetView* getRenderTargetView() const { return m_rtv; }
+	std::pair<int, int> getWinSize() const noexcept { return {m_width, m_height}; }
 
 
 
@@ -123,7 +125,7 @@ private:
 	// methods that don't really change over versions
 	IDXGISwapChain*			m_swapChain = nullptr; // Flips buffers
 	ID3D11RenderTargetView* m_rtv = nullptr; // Framebuffer
-
+	int m_width{}, m_height{};
 
 private:
 

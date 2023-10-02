@@ -13,8 +13,6 @@
 std::unique_ptr<Keyboard> wKbd = std::make_unique<Keyboard>();
 std::unique_ptr<Mouse> wMouse = std::make_unique<Mouse>();
 
-namespace MS
-{
 
 bool WindowsEngine::imguiInit = false;
 HINSTANCE WindowsEngine::hAppInstance;	// handle Windows de l'instance actuelle de l'application
@@ -185,7 +183,7 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 		return true;
 
 
-	int wmId, wmEvent;
+	int wmId = 0, wmEvent = 0;
 	PAINTSTRUCT ps;
 	HDC hdc;
 
@@ -278,5 +276,3 @@ INT_PTR CALLBACK WindowsEngine::About(HWND hDlg, UINT message, WPARAM wParam, LP
 	}
 	return (INT_PTR)FALSE;
 }
-
-} // namespace PM3D

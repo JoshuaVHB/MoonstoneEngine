@@ -18,14 +18,13 @@ class VertexBuffer
 	std::vector<Vertex> m_vertices;
 
 	// -- Object creation
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_context;
+	ID3D11Device* m_device			= nullptr;
+	ID3D11DeviceContext* m_context	= nullptr;
 
 	// -- Buffer stuff
-
-	D3D11_BUFFER_DESC m_descriptor;
-	ID3D11Buffer* m_vbo;
-	D3D11_SUBRESOURCE_DATA m_initData;
+	ID3D11Buffer* m_vbo				= nullptr;
+	D3D11_BUFFER_DESC m_descriptor{};
+	D3D11_SUBRESOURCE_DATA m_initData{};
 
 public:
 
@@ -42,7 +41,7 @@ public:
 		ZeroMemory(&m_descriptor, sizeof(m_descriptor));
 
 		m_descriptor.Usage = D3D11_USAGE_IMMUTABLE;
-		m_descriptor.ByteWidth = sizeof(Vertex)*vertices.size();
+		m_descriptor.ByteWidth = static_cast<UINT>(vertices.size()) * sizeof(Vertex);
 		m_descriptor.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		m_descriptor.CPUAccessFlags = 0;
 

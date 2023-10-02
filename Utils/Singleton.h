@@ -1,8 +1,5 @@
 #pragma once
 
-namespace MS
-{
-
 	template <class T> 
 	class Singleton
 	{
@@ -26,4 +23,3 @@ namespace MS
 
   
 	};
-}

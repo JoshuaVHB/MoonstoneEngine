@@ -10,9 +10,6 @@
 extern std::unique_ptr<Keyboard> wKbd;
 extern std::unique_ptr<Mouse> wMouse;
 
-namespace MS
-{
-
 class WindowsEngine final : public Engine<WindowsEngine, Graphics>
 {
 public:
@@ -73,4 +70,4 @@ private:
 	TCHAR szWindowClass[MAX_LOADSTRING];	// le nom de la classe de fenêtre principale
 };
 
-} // namespace MS
+

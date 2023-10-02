@@ -78,8 +78,8 @@ private:
 	Vec m_target{0,0,0,1};
 	Vec m_UP{0,1,0,1};
 
-	double m_pitch = 0.f;
-	double m_yaw = 0.f;
+	float m_pitch = 0.f;
+	float m_yaw = 0.f;
 
 	float t = 0;
 
@@ -107,9 +107,12 @@ public:
 	
 	void computeViewMatrix() {
 
-		m_viewMatrix = XMMatrixIdentity() * XMMatrixRotationAxis({ 1,0,0,0 }, -m_pitch);
-		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,1,0,0 }, -m_yaw);
+
+
+		m_viewMatrix = XMMatrixIdentity();
 		m_viewMatrix = m_viewMatrix * XMMatrixTranslationFromVector(-m_position);
+		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,1,0,1 }, -m_yaw);
+		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 1,0,0,1 }, -m_pitch);
 	}
 
 
@@ -135,7 +138,7 @@ public:
 	}
 	
 	template<class _proj=PerspectiveProjection>
-	requires (std::derived_from<_proj, Projection>)
+		requires (std::derived_from<_proj, Projection>)
 	void setProjection(const _proj& proj)
 	{
 		m_projection = std::make_unique<_proj>(proj);
@@ -145,13 +148,15 @@ public:
 
 	Vec getForward() const noexcept { 	
 	
-			float cy = cos(m_yaw), sy = sin(m_yaw);
-			float cp = cos(m_pitch), sp = sin(m_pitch);
-			return { - sy * cp, sp, -cy * cp};
+			double cy = cos(m_yaw), sy = sin(m_yaw);
+			double cp = cos(m_pitch), sp = sin(m_pitch);
+			return { - static_cast<float>(sy * cp), static_cast<float>(sp), static_cast<float> ( - cy * cp)};
 	}
 
 
 	void setYaw(float yaw) { m_yaw = yaw; }
 	void setPitch(float pitch) { m_pitch = pitch; }
+	float getPitch() const noexcept {return m_pitch ; }
+	float getYaw() const noexcept { return m_yaw; }
 };
 
