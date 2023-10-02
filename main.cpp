@@ -58,6 +58,7 @@ int main() {
 
 		initImgui(rMoteur.getHwnd(), gfx);
 		SceneManager::registerScene<TestScene>("TEST");
+		SceneManager::registerScene<Scene2>("Scene2");
 		SceneManager::switchToScene(0);
 
 

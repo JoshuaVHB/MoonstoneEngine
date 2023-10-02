@@ -26,6 +26,12 @@ static std::pair<std::vector<Vertex>, std::vector<uint16_t>> readMeshFromObj(con
 {
 
 	std::ifstream modelFile{ path };
+
+    /*
+    if (!modelFile.is_open())
+        WARNING("The model file " << path << " has not been found.")
+        return { {},{} };
+    */
 	constexpr size_t bufSize = 100;
 	char lineBuffer[bufSize];
 
@@ -71,11 +77,12 @@ static std::pair<std::vector<Vertex>, std::vector<uint16_t>> readMeshFromObj(con
                 skipStreamText(ss, "/");
                 if (ss.peek() != '/') ss >> i2; // read optional uv
                 skipStreamText(ss, "/");
-                ss >> i3;                      // read normal
+                if (ss.peek() != '/') ss >> i3; // read optional uv
+                //ss >> i3;                      // read normal
                 std::tuple<int, int, int> cacheKey{ i1, i2, i3 };
                 auto inCacheIndex = std::find(cachedVertices.begin(), cachedVertices.end(), cacheKey);
                 if (inCacheIndex == cachedVertices.end()) {
-                    vertices.emplace_back(Vertex{ positions[i1-1], normals[i3-1] });
+                    vertices.emplace_back(Vertex{ positions[i1 - 1], normals[i3 - 1] });
                     indices.push_back(previousCachedVertices + (unsigned int)cachedVertices.size());
                     cachedVertices.push_back(cacheKey);
                 }

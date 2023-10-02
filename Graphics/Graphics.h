@@ -77,7 +77,9 @@ public:
 		DX_TRY_CODE(m_device->CreateRenderTargetView(pBackBuffer, nullptr, &m_rtv), -2);
 		pBackBuffer->Release();
 
-		m_context->OMSetRenderTargets(1, &m_rtv, nullptr);
+		//initDepthBuffer();
+
+		m_context->OMSetRenderTargets(1, &m_rtv, m_depthStencil);
 
 		D3D11_VIEWPORT vp{};
 		vp.Width = (FLOAT)(width);
@@ -89,6 +91,10 @@ public:
 		m_context->RSSetViewports(1, &vp);
 		m_width = width;
 		m_height = height;
+
+
+
+
 	}
 
 	Graphics(const Graphics&) = delete;
@@ -96,23 +102,37 @@ public:
 
 	~Graphics() {
 
+		DX_RELEASE(m_depthStencil);
+		DX_RELEASE(m_depthTexture);
 		DX_RELEASE(m_rtv);
 		DX_RELEASE(m_context);
 		DX_RELEASE(m_swapChain);
 		DX_RELEASE(m_device);
 	}
 
+	void clearDepth() {
+
+		//m_context->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	}
+
+	void clearFramebuffer() {
+
+
+		static constexpr FLOAT rgba[4] = {0,1,1,1};
+		m_context->ClearRenderTargetView(m_rtv, rgba);
+	}
 
 	void present() 
 	{
 		m_swapChain->Present(1, 0);
 	}
 
-	ID3D11Device* getDevice() const { return m_device; }
-	IDXGISwapChain* getSwapChain() const { return m_swapChain; }
-	ID3D11DeviceContext* getImmediateContext() const { return m_context; }
-	ID3D11RenderTargetView* getRenderTargetView() const { return m_rtv; }
-	std::pair<int, int> getWinSize() const noexcept { return {m_width, m_height}; }
+	ID3D11Device* getDevice()						const noexcept { return m_device; }
+	IDXGISwapChain* getSwapChain()					const noexcept { return m_swapChain; }
+	ID3D11DeviceContext* getImmediateContext()		const noexcept { return m_context; }
+	ID3D11RenderTargetView* getRenderTargetView()	const noexcept { return m_rtv; }
+	ID3D11DepthStencilView* getDepthBuffer()		const noexcept { return m_depthStencil; }
+	std::pair<int, int> getWinSize()				const noexcept { return {m_width, m_height}; }
 
 
 
@@ -125,6 +145,13 @@ private:
 	// methods that don't really change over versions
 	IDXGISwapChain*			m_swapChain = nullptr; // Flips buffers
 	ID3D11RenderTargetView* m_rtv = nullptr; // Framebuffer
+	
+	ID3D11Texture2D* m_depthTexture;
+	ID3D11DepthStencilView* m_depthStencil;
+
+
+
+
 	int m_width{}, m_height{};
 
 private:
@@ -132,5 +159,35 @@ private:
 	GRAPHICS_MODE m_cdsMode = GRAPHICS_MODE::WINDOWED;
 
 
+	void initDepthBuffer()
+	{
+
+			D3D11_TEXTURE2D_DESC depthTextureDesc;
+			ZeroMemory(&depthTextureDesc, sizeof(depthTextureDesc));
+			depthTextureDesc.Width = m_width;
+			depthTextureDesc.Height = m_height;
+			depthTextureDesc.MipLevels = 1;
+
+
+			depthTextureDesc.ArraySize = 1;
+			depthTextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthTextureDesc.SampleDesc.Count = 1;
+			depthTextureDesc.SampleDesc.Quality = 0;
+			depthTextureDesc.Usage = D3D11_USAGE_DEFAULT;
+			depthTextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthTextureDesc.CPUAccessFlags = 0;
+			depthTextureDesc.MiscFlags = 0;
+			DX_TRY_CODE(m_device->CreateTexture2D(&depthTextureDesc,	NULL, &m_depthTexture),	115);
+			// Création de la vue du tampon de profondeur (ou de stencil)
+			
+			
+			D3D11_DEPTH_STENCIL_VIEW_DESC descDSView;
+			ZeroMemory(&descDSView, sizeof(descDSView));
+			descDSView.Format = depthTextureDesc.Format;
+			descDSView.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+			descDSView.Texture2D.MipSlice = 0;
+			DX_TRY_CODE(m_device->CreateDepthStencilView(m_depthTexture,&descDSView,&m_depthStencil),	116);
+
+	}
 
 };

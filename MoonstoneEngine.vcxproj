@@ -144,6 +144,7 @@
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
+    <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
@@ -156,13 +157,14 @@
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Downloads\DirectX_11_Ateliers.pdf" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
     <ClInclude Include="Graphics\abstraction\Shaders.h" />
+    <ClInclude Include="Graphics\abstraction\Texture.h" />
     <ClInclude Include="Graphics\abstraction\Vertex.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Renderer.h" />
@@ -170,6 +172,10 @@
     <ClInclude Include="Graphics\World\Cube.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
+    <ClInclude Include="Graphics\World\Player.h" />
+    <ClInclude Include="Graphics\World\RessourcesManager.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\Terrain.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\IO\FileReader.h" />
     <ClInclude Include="Platform\IO\Inputs.h" />
@@ -179,6 +185,7 @@
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\Scene2.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
+    <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\vendor\imgui\imconfig.h" />

@@ -9,6 +9,28 @@ using Mat4 = XMFLOAT4X4;
 using Mat = XMMATRIX;
 using Vec = XMVECTOR;
 
+struct Vec2 {
+
+	union {
+		struct { float x, y; };
+		float body[2];
+	};
+
+	Vec2() : body{} {}
+	Vec2(float _x, float _y) : x(_x), y(_y) {}
+
+	template<typename _type> requires (std::convertible_to<_type, float>)
+		Vec2(const std::pair<_type, _type>& p) { x = p.first; y = p.second; }
+
+	Vec2 operator+(const Vec2& other) { return Vec2{ x + other.x, y + other.y }; }
+	Vec2 operator-(const Vec2& other) { return Vec2{ x - other.x, y - other.y }; }
+	Vec2 operator/(const Vec2& other) { return Vec2{ x / other.x, y / other.y }; }
+	Vec2 operator*(const Vec2& other) { return Vec2{ x * other.x, y * other.y }; }
+	Vec2 operator*(float scalar) { return Vec2{ x * scalar, y * scalar }; }
+	Vec2 operator/(float scalar) { float inv = 1.f / scalar; return Vec2{ x,y }*inv; }
+
+};
+
 struct Projection {
 
 	Mat projMat;
@@ -77,6 +99,7 @@ private:
 	Vec m_position = {0,0,-10.f,1.0f};
 	Vec m_target{0,0,0,1};
 	Vec m_UP{0,1,0,1};
+	Vec m_left{1,0,0,1};
 
 	float m_pitch = 0.f;
 	float m_yaw = 0.f;
@@ -152,6 +175,16 @@ public:
 			double cp = cos(m_pitch), sp = sin(m_pitch);
 			return { - static_cast<float>(sy * cp), static_cast<float>(sp), static_cast<float> ( - cy * cp)};
 	}
+
+	Vec getHorizontalDir() const noexcept {
+
+		return XMVector4Normalize(XMVector3Cross(getForwardDir(), m_UP));
+	}
+
+	Vec getForwardDir() const noexcept {
+		return XMVector4Normalize(getForward());
+	}
+
 
 
 	void setYaw(float yaw) { m_yaw = yaw; }

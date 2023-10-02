@@ -41,14 +41,15 @@ private:
 	ID3D11DeviceContext* context = nullptr; // Issues rendering command + actual drawing
 	IDXGISwapChain* swapChain = nullptr; // Flips buffers
 	ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
+
 	
 
 	virtual void clearScreen() override final {
 
-		const FLOAT rgba[4] = {
-		0,1,1,1
-		};
-		context->ClearRenderTargetView(rtv, rgba);
+		
+		Graphics& gfx = WindowsEngine::getInstance().getGraphics();
+		//gfx.clearDepth();
+		gfx.clearFramebuffer();
 
 	}
 
@@ -77,7 +78,8 @@ private:
 
 	void initCube() {
 
-		auto mesh = readMeshFromObj("res/mesh/hello.obj");
+		auto mesh = readMeshFromObj("res/mesh/mesh.obj");
+		if (mesh.first.size() == 0) throw;
 		m = Mesh(device, context, mesh.first, mesh.second);
 
 		std::vector<Vertex> vertices;
@@ -151,7 +153,7 @@ private:
 
 		rotation = rotation + ((XM_PI * 2.0f) / 3.0f * deltaTime);
 		matWorld = XMMatrixRotationX(rotation);
-		//matWorld *= XMMatrixRotationY(rotation);
+		matWorld *= XMMatrixRotationY(rotation);
 	}
 
 

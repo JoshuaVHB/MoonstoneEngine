@@ -73,13 +73,19 @@ public:
 
 		m_nextTime = m_clock.getTimeCount();
 		float deltaTime = static_cast<float>(m_clock.getTimeBetweenCounts(m_previousTime, m_nextTime));
-		m_previousTime = m_nextTime;
-		SceneManager::onUpdate(deltaTime);
-		SceneManager::onRender();
-		SceneManager::onImGuiRender();
+
+		if (deltaTime >= 0.01666) {
 
 
-		p_renderingDevice->present();
+			SceneManager::onUpdate(deltaTime);
+			SceneManager::onRender();
+			SceneManager::onImGuiRender();
+			p_renderingDevice->present();
+			m_previousTime = m_nextTime;
+
+		}
+
+
 		return true;
 	
 	}
