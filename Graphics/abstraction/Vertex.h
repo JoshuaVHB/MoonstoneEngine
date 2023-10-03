@@ -11,4 +11,5 @@ struct Vertex
 {
 	XMVECTOR position;
 	XMVECTOR normal;
+	XMVECTOR uv;
 };

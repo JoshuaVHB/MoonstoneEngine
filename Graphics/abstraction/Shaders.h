@@ -168,10 +168,11 @@ private:
 	ID3DX11EffectTechnique* m_technique; 
 
 
-	D3D11_INPUT_ELEMENT_DESC layout[2] =
+	D3D11_INPUT_ELEMENT_DESC layout[3] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,		12,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	24,		D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 public:
@@ -222,7 +223,7 @@ public:
 		const void *vsCodePtr = effectVSDesc2.pBytecode; 
 		unsigned vsCodeLen = effectVSDesc2.BytecodeLength; 
 		m_vertexLayout = NULL;
-		DX_TRY_CODE( m_device->CreateInputLayout(layout, 2, vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
+		DX_TRY_CODE( m_device->CreateInputLayout(layout, ARRAYSIZE(layout), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
 
 
 	}

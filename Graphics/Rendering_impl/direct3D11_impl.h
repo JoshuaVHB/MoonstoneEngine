@@ -11,6 +11,7 @@
 #include "../abstraction/Shaders.h"
 
 #include "../../Platform/IO/FileReader.h"
+#include "../World/Cube.h"
 
 #include <vector>
 
@@ -73,7 +74,7 @@ private:
 
 	XMMATRIX matWorld = XMMatrixIdentity();
 
-	Mesh m;
+	Mesh m, cube;
 	Shader vs, ps;
 
 	void initCube() {
@@ -82,12 +83,11 @@ private:
 		if (mesh.first.size() == 0) throw;
 		m = Mesh(device, context, mesh.first, mesh.second);
 
-		std::vector<Vertex> vertices;
-		std::vector<uint16_t> indices;
-
-		vbo = VertexBuffer(device, context, mesh.first);
-		ibo = IndexBuffer(device, context, mesh.second);
 		
+		
+		
+		cube = Cube::getCubeMesh(device, context);
+
 		effect = Effect(device, context);
 		effect.loadEffectFromFile("res/effects/MiniPhong.fx");
 		matWorld *= XMMatrixRotationX(XM_PI/2.F);
@@ -110,7 +110,7 @@ private:
 	void renderCube(Camera& camera) {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m.draw();
+
 		context->IASetInputLayout(effect.m_vertexLayout);
 		// Initialiser et sélectionner les « constantes » du VS
 		const XMMATRIX viewProj = camera.getVPMatrix();
@@ -133,7 +133,9 @@ private:
 		effect.m_pass->Apply(0, context);
 
 		// -- Draw call
-		context->DrawIndexed(static_cast<UINT>(ibo.getBufferSize()), 0, 0);
+		m.draw();
+		//context->DrawIndexed(static_cast<UINT>(ibo.getBufferSize()), 0, 0);
+		cube.draw();
 	}
 	
 

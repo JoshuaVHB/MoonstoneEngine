@@ -28,6 +28,7 @@ public:
 
 
 	Mesh() = default;
+
 	Mesh(
 		ID3D11Device* device,
 		ID3D11DeviceContext* context,
@@ -46,7 +47,7 @@ public:
 
 		m_vbo.bind();
 		m_ibo.bind();
-
+		m_context->DrawIndexed(static_cast<UINT>(m_ibo.getBufferSize()), 0, 0);
 	}
 
 
