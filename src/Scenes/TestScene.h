@@ -9,6 +9,7 @@
 #include "../../Platform/WindowsEngine.h"
 #include <iostream>
 #include <memory>
+#include <directXmath.h>
 
 
 extern std::unique_ptr<Keyboard> wKbd;
@@ -81,20 +82,32 @@ public:
 		Vec camHorizontal = camera.getHorizontalDir();
 
 		Keyboard::Event e = wKbd->readKey();
-		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q'))) {
-			delta -= camHorizontal;
+
+		if (wKbd->isKeyPressed(VK_SPACE)) {
+			delta = XMVectorSetY(delta, XMVectorGetY(delta) + 0.5f);
+		}
+		else if (wKbd->isKeyPressed(VK_SHIFT)) {
+			delta = XMVectorSetY(delta, XMVectorGetY(delta) - 0.5f);
 		}
 
-		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d'))) {
-			delta += camHorizontal;
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q'))) {
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camHorizontal));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camHorizontal));
+		} 
+
+		else if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d'))) {
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(camHorizontal));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(camHorizontal));
 		}
 
 		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z'))) {
-			delta -= camForward;
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camForward));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camForward));
 		}
 
-		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s'))) {
-			delta += camForward;
+		else if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s'))) {
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(camForward));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(camForward));
 		}
 
 
@@ -104,7 +117,7 @@ public:
 
 	virtual void onRender() override {
 	
-		Renderer::clearScreen(1.f,1.f,0.f,1.f);
+		Renderer::clearScreen();
 		Renderer::renderMesh(camera, dt);
 	}
 	virtual void onImGuiRender()override {

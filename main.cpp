@@ -34,16 +34,16 @@ void shutdownImgui(){
 	ImGui::DestroyContext();
 }
 
-//int APIENTRY _tWinMain(
-//	HINSTANCE hInstance,
-//	HINSTANCE hPrevInstance,
-//	LPTSTR    lpCmdLine,
-//	int       nCmdShow)
-//{
-//	UNREFERENCED_PARAMETER(hPrevInstance);
-//	UNREFERENCED_PARAMETER(lpCmdLine);
-//	UNREFERENCED_PARAMETER(nCmdShow);
-int main() {
+int APIENTRY _tWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPTSTR    lpCmdLine,
+	int       nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(nCmdShow);
+//int main() {
 	try
 	{
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
@@ -82,10 +82,10 @@ int main() {
 		return 99;
 	}
 
-	catch (...)/*int err*/
+	catch (int err)/*int err*/
 	{
 		wchar_t szErrMsg[MAX_LOADSTRING];// Un message d'erreur selon le code
-		//::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
+		::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
 		::MessageBox(nullptr, szErrMsg, L"Erreur", MB_ICONWARNING);
 		return (int)99; // POURQUOI 99???
 	}

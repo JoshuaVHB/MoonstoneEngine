@@ -48,7 +48,7 @@ private:
 
 		
 		Graphics& gfx = WindowsEngine::getInstance().getGraphics();
-		//gfx.clearDepth();
+		gfx.clearDepth();
 		gfx.clearFramebuffer();
 
 	}
