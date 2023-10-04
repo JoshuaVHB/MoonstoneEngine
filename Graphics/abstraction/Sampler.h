@@ -5,19 +5,25 @@
 
 #include "../../Utils/Debug.h"
 
+// TODO create multiple fixed samplers
+
 class Sampler {
 
-	ID3D11Device* m_device = nullptr;
-	ID3D11DeviceContext* m_context = nullptr;
+private:
+
+#ifdef D3D11_IMPL
+	Graphics::RenderingContext m_renderContext;
+	ID3D11SamplerState* pSampleState;
+#endif
+
 
 public:
 
-	Sampler(ID3D11Device* device = nullptr,
-	ID3D11DeviceContext* context = nullptr) {
+	Sampler() 
+	{
 
-
-		m_device = device;
-		m_context = context;
+#ifdef D3D11_IMPL
+		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 		D3D11_SAMPLER_DESC samplerDesc;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -33,23 +39,12 @@ public:
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		// Création de l’état de sampling
-		m_device->CreateSamplerState(&samplerDesc, &pSampleState);
-
+		m_renderContext.device->CreateSamplerState(&samplerDesc, &pSampleState);
+#endif
 	}
-
 
 	void bind() {
 
 
 	}
-
-private:
-
-	ID3D11ShaderResourceView* pTextureD3D;
-	ID3D11SamplerState* pSampleState;
-
-
-
-
-
 };

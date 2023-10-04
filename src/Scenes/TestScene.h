@@ -4,6 +4,9 @@
 
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
+#include "../../Graphics/abstraction/Shaders.h"
+#include "../../Graphics/World/Mesh.h"
+#include "../../Graphics/World/Cube.h"
 
 #include "../../Platform/IO/Inputs.h"
 #include "../../Platform/WindowsEngine.h"
@@ -43,13 +46,19 @@ private:
 
 	std::pair<int, int> winSize{};
 
+	Mesh terrainMesh, cube;
+	Effect renderShader;
+	Texture breadbug = Texture(L"res/textures/breadbug.dds");
+
 public:
 
 	TestScene() 
 	{
 		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
 		winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
-
+		terrainMesh = Renderer::loadMeshFromFile("res/mesh/mesh.obj");
+		renderShader.loadEffectFromFile("res/effects/MiniPhong.fx");
+		cube = Cube::getCubeMesh();
 	}
 
 
@@ -118,9 +127,12 @@ public:
 	virtual void onRender() override {
 	
 		Renderer::clearScreen();
-		Renderer::renderMesh(camera, dt);
+		renderShader.bindTexture("textureEntree", breadbug.getTexture());
+		Renderer::renderMesh(camera, terrainMesh, renderShader);
+		Renderer::renderMesh(camera, cube, renderShader);
+
 	}
-	virtual void onImGuiRender()override {
+	virtual void onImGuiRender() override {
 		ImGui::Begin("Debug");
 
 		ImGui::Text(std::to_string(wKbd->isKeyPressed(VK_SPACE)).c_str());

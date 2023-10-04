@@ -6,9 +6,8 @@
 #include <type_traits>
 #include <tuple>
 #include <memory>
+#include <filesystem>
 
-#include "World/Mesh.h"
-#include "abstraction/Camera.h"
 
 
 // Creates static function for the renderer 
@@ -18,6 +17,23 @@ static auto fnName(auto&& ...args)\
 {\
 	return implementation->##fnName(std::forward<decltype(args)>(args)...);\
 }
+
+// Forward declars
+
+
+class Mesh;
+class Effect;
+class Camera;
+
+
+/// Renderer class :
+/// 
+/// It simply is an interface. It has a pointer to some implementation. All methods are static and call the 
+/// method of the same name of the implementation.
+/// 
+/// Add new pure virtual methods in the _Impl struct, and don't forget to add CALL_IMPL in the Renderer class.
+/// Set an implementation in main.cpp, such as d3d11_impl before calling Renderer:: functions
+ 
 class Renderer 
 {
 
@@ -31,9 +47,9 @@ public:
 	
 	protected:
 
-		//virtual void renderMesh(const Mesh& mesh);
-		//virtual void renderMesh(Camera& camera) = 0;
-		virtual void renderMesh(Camera& , float dt=0) = 0;
+		virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) = 0;
+		virtual Mesh loadMeshFromFile(const std::filesystem::path& path) = 0;
+		virtual void renderMesh(Camera&, const Mesh&, const Effect&) = 0;
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
 
@@ -43,12 +59,12 @@ public:
 
 	};
 
-
+	CALL_IMPL(drawIndexed) ;
 	CALL_IMPL(clearScreen) ;
 	CALL_IMPL(renderMesh) ;
+	CALL_IMPL(loadMeshFromFile) ;
 
 	
-
 	/////////////////////////////////////////////////////////////////////////////
 	template<typename _RenderingImplementation>
 		requires (std::derived_from<_RenderingImplementation, _Impl>)
@@ -61,9 +77,6 @@ public:
 private:
 
 	static std::unique_ptr<_Impl> implementation;
-
-
-
 
 };
 

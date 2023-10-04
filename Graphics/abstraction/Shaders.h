@@ -79,6 +79,8 @@ public:
 		bd.CPUAccessFlags = 0; 
 		m_renderContext.device->CreateBuffer( &bd, NULL, &pConstantBuffer );
 
+
+
 		ID3DBlob* blob = nullptr;
 
 
@@ -110,7 +112,10 @@ public:
 		m_vertexLayout = NULL;
 		DX_TRY_CODE( m_renderContext.device->CreateInputLayout(layout, ARRAYSIZE(layout), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
 
+
+		////////////////
 		CreateDDSTextureFromFile(m_renderContext.device, L"res/textures/breadbug.dds", nullptr, &pTextureD3D);
+
 		D3D11_SAMPLER_DESC samplerDesc;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -132,20 +137,20 @@ public:
 		
 	}
 
-	void apply() {
+	void apply() const {
 
 		m_pass->Apply(0, m_renderContext.context);
-		ID3DX11EffectShaderResourceVariable* variableTexture;
-		variableTexture = m_effect->GetVariableByName("textureEntree")->AsShaderResource();
-		variableTexture->SetResource(pTextureD3D);
-		/*
-		// Le sampler state
-		*/
+
 		ID3DX11EffectSamplerVariable* variableSampler;
 		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
 		//variableSampler = tmp->AsSampler();
 		variableSampler->SetSampler(0, pSampleState);
 
+	}
+
+	void bindTexture(std::string uniformName, ID3D11ShaderResourceView* tex)
+	{
+		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
 	}
 
 

@@ -10,16 +10,15 @@
 
 using namespace DirectX;
 
-class Cube : Mesh {
+using Vec = XMVECTOR;
+
+struct Cube : public Mesh {
 
 
 public:
 
 
-	static Mesh getCubeMesh(
-		ID3D11Device* device,
-		ID3D11DeviceContext* context 
-		) 
+	static Mesh getCubeMesh() 
 	
 	{
 		float dx = 1, dy = 1, dz = 1;
@@ -97,7 +96,7 @@ public:
 		};
 	
 
-		return Mesh(device, context, vertices, indices);
+		return Mesh(vertices, indices);
 
 	}
 

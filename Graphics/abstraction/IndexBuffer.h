@@ -59,7 +59,7 @@ public:
 
 	size_t getBufferSize() const { return m_indices.size(); }
 
-	void bind() 
+	void bind() const
 	{
 #ifdef D3D11_IMPL
 		m_renderContext.context->IASetIndexBuffer(m_ibo, DXGI_FORMAT_R16_UINT, 0);

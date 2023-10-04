@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <vector>
 
+#include "../Renderer.h"
 #include "../abstraction/IndexBuffer.h"
 #include "../abstraction/VertexBuffer.h"
 
@@ -13,14 +14,9 @@ class Mesh
 {
 private:
 
-
-
 	VertexBuffer m_vbo;
 	IndexBuffer m_ibo;
 
-
-	ID3D11Device* m_device;
-	ID3D11DeviceContext* m_context;
 
 public:
 	
@@ -29,25 +25,17 @@ public:
 
 	Mesh() = default;
 
-	Mesh(
-		ID3D11Device* device,
-		ID3D11DeviceContext* context,
-		std::vector<Vertex> vertices, std::vector<uint16_t> indices
-	) 
+	Mesh(std::vector<Vertex> vertices, std::vector<uint16_t> indices) 
 	{
-		m_device = device;
-		m_context = context;
-
 		m_vbo = VertexBuffer(vertices);
 		m_ibo = IndexBuffer(indices);
-
 	};
 
-	void draw() {
+	void draw() const {
 
 		m_vbo.bind();
 		m_ibo.bind();
-		m_context->DrawIndexed(static_cast<UINT>(m_ibo.getBufferSize()), 0, 0);
+		Renderer::drawIndexed(m_ibo.getBufferSize(), 0, 0);
 	}
 
 
