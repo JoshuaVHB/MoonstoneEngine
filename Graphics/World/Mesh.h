@@ -38,8 +38,8 @@ public:
 		m_device = device;
 		m_context = context;
 
-		m_vbo = VertexBuffer(device, context, vertices);
-		m_ibo = IndexBuffer(device, context, indices);
+		m_vbo = VertexBuffer(vertices);
+		m_ibo = IndexBuffer(indices);
 
 	};
 

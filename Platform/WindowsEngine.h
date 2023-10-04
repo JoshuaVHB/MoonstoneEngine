@@ -18,6 +18,7 @@ public:
 
 	Graphics& getGraphics() const { return *m_graphics; }
 
+
 protected:
 	virtual Timer::value_type getTimePlatform() const override;
 	virtual Graphics* createRenderingDevicePlatform(GRAPHICS_MODE cdsMode) override;

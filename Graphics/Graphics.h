@@ -6,13 +6,21 @@
 
 enum class GRAPHICS_MODE {WINDOWED, FULLSCREEN};
 
-
-/*
-
-EMBEDDED GRAPHICS
-
-*/
 class Graphics {
+public:
+
+	struct RenderingContext 
+	{
+		ID3D11Device* device = nullptr; 
+		ID3D11DeviceContext* context = nullptr; 
+		IDXGISwapChain* swapChain = nullptr; // Flips buffers
+		ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
+	};
+
+	RenderingContext getContext() const 
+	{ 
+		return { m_device, m_context, m_swapChain, m_rtv };
+	}
 
 public:
 	Graphics(HWND hWnd, GRAPHICS_MODE mode=GRAPHICS_MODE::WINDOWED)

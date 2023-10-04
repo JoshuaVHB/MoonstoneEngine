@@ -9,7 +9,7 @@
 #include "Vertex.h"
 
 #include "../../Utils/Debug.h"
-
+#include "../../Platform/WindowsEngine.h"
 
 
 
@@ -26,17 +26,19 @@ class VertexBuffer
 	D3D11_BUFFER_DESC m_descriptor{};
 	D3D11_SUBRESOURCE_DATA m_initData{};
 
+#ifdef D3D11_IMPL
+	Graphics::RenderingContext m_renderContext;
+#endif
+
 public:
 
 	VertexBuffer() {}
 
-	VertexBuffer(ID3D11Device* device,
-		ID3D11DeviceContext* context,
-		const std::vector<Vertex>& vertices)
+	VertexBuffer(const std::vector<Vertex>& vertices)
 	{
+#ifdef D3D11_IMPL
+		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 		m_vertices = vertices;
-		m_device = device;
-		m_context = context;
 		// -- Vertex buffer
 		ZeroMemory(&m_descriptor, sizeof(m_descriptor));
 
@@ -48,15 +50,18 @@ public:
 		ZeroMemory(&m_initData, sizeof(m_initData));
 		m_initData.pSysMem = &vertices[0];
 
-		DX_TRY(device->CreateBuffer(&m_descriptor, &m_initData, &m_vbo));
-
+		DX_TRY(m_renderContext.device->CreateBuffer(&m_descriptor, &m_initData, &m_vbo));
+#endif
 	}
 
 	void bind()
 	{
 		const UINT stride = sizeof(Vertex);
 		const UINT offset = 0;
-		m_context->IASetVertexBuffers(0, 1, &m_vbo, &stride, &offset);
+		//m_context->IASetVertexBuffers(0, 1, &m_vbo, &stride, &offset);
+#ifdef D3D11_IMPL
+		m_renderContext.context->IASetVertexBuffers(0, 1, &m_vbo, &stride, &offset);
+#endif
 	}
 
 

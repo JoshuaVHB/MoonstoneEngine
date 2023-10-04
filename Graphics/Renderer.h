@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning( disable : 4244 ) 
+
 #include <concepts>
 #include <type_traits>
 #include <tuple>
@@ -7,6 +9,7 @@
 
 #include "World/Mesh.h"
 #include "abstraction/Camera.h"
+
 
 // Creates static function for the renderer 
 // that calls the implementation function of the same name

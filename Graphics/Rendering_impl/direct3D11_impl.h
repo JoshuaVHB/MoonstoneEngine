@@ -72,7 +72,6 @@ private:
 	XMMATRIX matWorld = XMMatrixIdentity();
 
 	Mesh m, cube;
-	Shader vs, ps;
 
 	void initCube() {
 
@@ -85,7 +84,7 @@ private:
 		
 		cube = Cube::getCubeMesh(device, context);
 
-		effect = Effect(device, context);
+		effect = Effect();
 		effect.loadEffectFromFile("res/effects/MiniPhong.fx");
 		matWorld *= XMMatrixRotationX(XM_PI/2.F);
 		

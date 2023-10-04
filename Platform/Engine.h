@@ -131,13 +131,6 @@ protected:
 
 	_RenderingDevice* p_renderingDevice; // This will store a Graphics() on windows
 
-private:
-
-	void loadScenes() {
-
-		//SceneManager::registerScene<Scene2>("Scene2");
-	}
-
 };
 
 

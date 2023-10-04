@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../Graphics/Renderer.h"
 
 #include <vector>
 #include <functional>

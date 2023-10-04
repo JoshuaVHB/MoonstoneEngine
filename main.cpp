@@ -88,9 +88,11 @@ int main() {
 
 	catch (int err)/*int err*/
 	{
+
 		wchar_t szErrMsg[MAX_LOADSTRING];// Un message d'erreur selon le code
 		///::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
 		::MessageBox(nullptr, szErrMsg, L"Erreur", MB_ICONWARNING);
+		(void)err;
 		return (int)99; // POURQUOI 99???
 	}
 
