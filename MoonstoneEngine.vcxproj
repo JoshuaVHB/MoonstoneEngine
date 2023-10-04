@@ -143,6 +143,7 @@
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
@@ -163,12 +164,14 @@
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\abstraction\Sampler.h" />
     <ClInclude Include="Graphics\abstraction\Shaders.h" />
     <ClInclude Include="Graphics\abstraction\Texture.h" />
     <ClInclude Include="Graphics\abstraction\Vertex.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
+    <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h" />
     <ClInclude Include="Graphics\World\Cube.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Terrain.h" />
     <ClInclude Include="Platform\Engine.h" />
+    <ClInclude Include="Platform\IO\DDSTextureLoader11.h" />
     <ClInclude Include="Platform\IO\FileReader.h" />
     <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
@@ -183,6 +187,7 @@
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\Scene2.h" />
+    <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />

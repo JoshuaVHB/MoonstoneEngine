@@ -11,13 +11,10 @@
 #include "../abstraction/Shaders.h"
 
 #include "../../Platform/IO/FileReader.h"
+#include "../../Graphics/World/RessourcesManager.h"
 #include "../World/Cube.h"
 
 #include <vector>
-
-#define D3D11_IMPL 1
-
-
 
 struct direct3D11_impl : public Renderer::_Impl {
 
@@ -84,7 +81,7 @@ private:
 		m = Mesh(device, context, mesh.first, mesh.second);
 
 		
-		
+		//Texture m_tex = Texture(device, context, L"res/textures/breadbug.dds");
 		
 		cube = Cube::getCubeMesh(device, context);
 
@@ -123,15 +120,15 @@ private:
 		sp.vLumiere = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f); 
 		sp.vCamera = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f); 
 		sp.vAEcl = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f); // WHAT ?
-		sp.vAMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f); 
+		sp.vAMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
 		sp.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
-		sp.vDMat = XMVectorSet(1.0f, 0.0f, 0.0f, 1.0f);
+		sp.vDMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		context->UpdateSubresource(effect.pConstantBuffer, 0, nullptr, &sp, 0, 0);
 
 		ID3DX11EffectConstantBuffer* pCB = effect.m_effect->GetConstantBufferByName("param");
 		pCB->SetConstantBuffer(effect.pConstantBuffer); // **** Rendu de l’objet
-		effect.m_pass->Apply(0, context);
-
+		//effect.m_pass->Apply(0, context);
+		effect.apply();
 		// -- Draw call
 		m.draw();
 		//context->DrawIndexed(static_cast<UINT>(ibo.getBufferSize()), 0, 0);

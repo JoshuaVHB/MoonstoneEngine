@@ -9,6 +9,10 @@
 #include "../../Utils/Debug.h"
 
 #include "../../d3dx11effect.h"
+#include "Sampler.h"
+#include "Texture.h"
+#include <unordered_set>
+#include "../../Platform/IO/DDSTextureLoader11.h"
 
 namespace fs = std::filesystem;
 struct ShadersParams {
@@ -52,10 +56,11 @@ private:
 	ID3D11Device* m_device;
 	ID3D11DeviceContext* m_context;
 
-	D3D11_INPUT_ELEMENT_DESC layout[2] =
+	D3D11_INPUT_ELEMENT_DESC layout[3] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORDS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 public:
@@ -171,8 +176,8 @@ private:
 	D3D11_INPUT_ELEMENT_DESC layout[3] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,		12,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	24,		D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,		16,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,	32,		D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 public:
@@ -180,6 +185,13 @@ public:
 	ID3D11InputLayout* m_vertexLayout = nullptr;
 	ID3D11Buffer* pConstantBuffer;
 	ID3DX11Effect* m_effect;
+
+	// tmp
+	ID3D11SamplerState* pSampleState;
+	ID3D11ShaderResourceView* pTextureD3D;
+
+	std::unordered_map<std::string, Sampler> m_samplers;
+
 	Effect() {}
 
 	Effect(ID3D11Device* device,
@@ -202,10 +214,16 @@ public:
 
 		ID3DBlob* blob = nullptr;
 
-		DX_TRY_CODE	(D3DCompileFromFile(pathToEffect.c_str(),
-			0, 0, 0, "fx_5_0", 0, 0, &blob, 0),
-			11);
 
+		ID3DBlob* compilationErrorMessage;
+		HRESULT hr = D3DCompileFromFile(pathToEffect.c_str(),
+			0, 0, 0, "fx_5_0", 0, 0, &blob, &compilationErrorMessage);
+
+		if (hr != S_OK) {
+			const void* errorBuffer = compilationErrorMessage->GetBufferPointer();
+			const char* errorMessage = reinterpret_cast<const char*>(errorBuffer);
+			throw std::runtime_error(errorMessage);
+		}
 		D3DX11CreateEffectFromMemory(
 			blob->GetBufferPointer(), blob->GetBufferSize(), 0, m_device, &m_effect);
 
@@ -225,7 +243,44 @@ public:
 		m_vertexLayout = NULL;
 		DX_TRY_CODE( m_device->CreateInputLayout(layout, ARRAYSIZE(layout), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
 
+		CreateDDSTextureFromFile(m_device, L"res/textures/breadbug.dds", nullptr, &pTextureD3D);
+		D3D11_SAMPLER_DESC samplerDesc;
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		samplerDesc.BorderColor[0] = 0;
+		samplerDesc.BorderColor[1] = 0;
+		samplerDesc.BorderColor[2] = 0;
+		samplerDesc.BorderColor[3] = 0;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		// Création de l’état de sampling
+		m_device->CreateSamplerState(&samplerDesc, &pSampleState);
+
+		
+	}
+
+	void apply() {
+
+		m_pass->Apply(0, m_context);
+		ID3DX11EffectShaderResourceVariable* variableTexture;
+		variableTexture = m_effect->GetVariableByName("textureEntree")->AsShaderResource();
+		variableTexture->SetResource(pTextureD3D);
+		/*
+		// Le sampler state
+		*/
+		ID3DX11EffectSamplerVariable* variableSampler;
+		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
+		//variableSampler = tmp->AsSampler();
+		variableSampler->SetSampler(0, pSampleState);
 
 	}
+
+
 
 };

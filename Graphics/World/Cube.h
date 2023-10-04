@@ -45,14 +45,35 @@ public:
 
 		std::vector<Vertex> vertices =
 		{
-			{point[0], n0},	{point[1], n0},	{point[2], n0},
-			{point[3], n0},	{point[4], n1},	{point[5], n1},
-			{point[6], n1},	{point[7], n1},	{point[3], n2},
-			{point[2], n2},	{point[6], n2}, {point[5], n2},
-			{point[0], n3},	{point[4], n3},	{point[7], n3},
-			{point[1], n3},	{point[0], n4},	{point[3], n4},
-			{point[5], n4},	{point[4], n4},	{point[1], n5},
-			{point[7], n5},	{point[6], n5},	{point[2], n5},
+
+			// Front
+			{point[0], n0, Vec{0.0f, 0.0f}},	{point[1], n0, Vec{1.0f, 0.0f}},
+			{point[2], n0, Vec{1.0f, 1.0f}},	{point[3], n0, Vec{0.0f, 1.0f}},
+			
+
+			//Back
+			{point[4], n1, Vec{0.0f, 1.0f}},	{point[5], n1, Vec{0.0f, 0.0f}},
+			{point[6], n1, Vec{1.0f, 0.0f}},	{point[7], n1, Vec{1.0f, 1.0f}},
+			
+
+			// down
+			{point[3], n2, Vec{0.0f, 0.0f}},	{point[2], n2, Vec{1.0f, 0.0f}},
+			{point[6], n2, Vec{1.0f, 1.0f}},	{point[5], n2, Vec{0.0f, 1.0f}},
+
+
+			// up
+			{point[0], n3, Vec{0.0f, 1.0f}},	{point[4], n3, Vec{0.0f, 0.0f}},
+			{point[7], n3, Vec{1.0f, 0.0f}},	{point[1], n3, Vec{1.0f, 1.0f}},
+			
+
+			// left
+			{point[0], n4, Vec{0.0f, 0.0f}},	{point[3], n4, Vec{1.0f, 0.0f}},
+			{point[5], n4, Vec{1.0f, 1.0f}},	{point[4], n4, Vec{0.0f, 1.0f}},
+			
+
+			// right
+			{point[1], n5, Vec{0.0f, 0.0f}},	{point[7], n5, Vec{1.0f, 0.0f}},
+			{point[6], n5, Vec{1.0f, 1.0f}},	{point[2], n5, Vec{0.0f, 1.0f}},
 		};
 		std::vector<uint16_t> indices
 		{

@@ -1,3 +1,8 @@
+
+Texture2D textureEntree; // la texture
+SamplerState SampleState; // l’état de sampling
+
+
 cbuffer param
 {
     float4x4 matWorldViewProj; // la matrice totale 
@@ -15,9 +20,12 @@ struct VS_Sortie {
     float3 Norm : TEXCOORD0; 
     float3 vDirLum : TEXCOORD1; 
     float3 vDirCam : TEXCOORD2; 
- }; 
+    float2 coordTex : TEXCOORD3;
+}; 
 
-VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL) 
+
+
+VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOORD) 
     { 
     VS_Sortie sortie = (VS_Sortie)0; 
     sortie.Pos = mul(Pos, matWorldViewProj); 
@@ -25,6 +33,8 @@ VS_Sortie MiniPhongVS(float4 Pos : POSITION, float3 Normale : NORMAL)
     float3 PosWorld = mul(Pos, matWorld).xyz;
     sortie.vDirLum = vLumiere.xyz - PosWorld;
     sortie.vDirCam = vCamera.xyz - PosWorld; 
+    
+    sortie.coordTex = uv;
     return sortie; 
  }
 
@@ -41,8 +51,12 @@ float4 MiniPhongPS(VS_Sortie vs) : SV_Target
     float3 R = normalize(2 * diff * N - L); 
     // Puissance de 4 - pour l’exemple
     float S = pow(saturate(dot(R, L)), 4.f); 
+    
+    // Échantillonner la couleur du pixel à partir de la texture
+    float3 couleurTexture = textureEntree.Sample(SampleState, vs.coordTex).rgb;
+    
     // I = A + D * N.L + (R.V)n 
-    couleur = vAEcl.rgb * vAMat.rgb + vDEcl.rgb * vDMat.rgb * diff; 
+    couleur = couleurTexture * vAEcl.rgb * vAMat.rgb + couleurTexture * vDEcl.rgb * vDMat.rgb * diff;
     couleur += S;
     return float4(couleur, 1.0f);
 }

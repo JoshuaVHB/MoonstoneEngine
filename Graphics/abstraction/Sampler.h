@@ -4,35 +4,20 @@
 #include <d3d11.h>
 
 #include "../../Utils/Debug.h"
-#include "../../Platform/IO/DDSTextureLoader11.h"
 
-
-namespace fs = std::filesystem;
-class Texture 
-
-{
-
-private:
-
-	std::wstring m_path;
-	ID3D11ShaderResourceView* m_texture;
+class Sampler {
 
 	ID3D11Device* m_device = nullptr;
 	ID3D11DeviceContext* m_context = nullptr;
 
 public:
 
-	Texture() {}
+	Sampler(ID3D11Device* device = nullptr,
+	ID3D11DeviceContext* context = nullptr) {
 
-	Texture(
-		ID3D11Device* device,
-		ID3D11DeviceContext* context,
-		const std::wstring& path
-	) 
-		: m_path(path), m_texture(nullptr)
-	{
-	
-		CreateDDSTextureFromFile(device, path.c_str(), nullptr, &m_texture);
+
+		m_device = device;
+		m_context = context;
 		D3D11_SAMPLER_DESC samplerDesc;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -48,15 +33,23 @@ public:
 		samplerDesc.MinLOD = 0;
 		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		// Création de l’état de sampling
-	//	device->CreateSamplerState(&samplerDesc, &pSampleState);
+		m_device->CreateSamplerState(&samplerDesc, &pSampleState);
+
 	}
 
 
-	~Texture() {
+	void bind() {
 
-		DX_RELEASE(m_texture);
+
 	}
 
-	ID3D11ShaderResourceView* getTexture() const { return m_texture; }
+private:
+
+	ID3D11ShaderResourceView* pTextureD3D;
+	ID3D11SamplerState* pSampleState;
+
+
+
+
 
 };

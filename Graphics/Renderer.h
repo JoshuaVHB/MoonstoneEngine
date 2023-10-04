@@ -23,6 +23,8 @@ public:
 	struct _Impl 
 	{
 		friend class Renderer;
+	public:
+
 	
 	protected:
 
@@ -32,8 +34,11 @@ public:
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
 
-	};
 
+	private:
+
+
+	};
 
 
 	CALL_IMPL(clearScreen) ;
@@ -53,6 +58,9 @@ public:
 private:
 
 	static std::unique_ptr<_Impl> implementation;
+
+
+
 
 };
 

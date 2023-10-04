@@ -5,6 +5,9 @@
 #include "Graphics/Renderer.h"
 
 #include "Graphics/Rendering_impl/direct3D11_impl.h"
+#include "Graphics/Rendering_impl/Rendering_impl.h"
+
+
 #include "Graphics/World/Cube.h"
 
 #include "imgui.h"
@@ -55,10 +58,11 @@ int main() {
 
 		Renderer::setImplementation<direct3D11_impl>();
 		Graphics& gfx = rMoteur.getGraphics();
-
 		initImgui(rMoteur.getHwnd(), gfx);
+
 		SceneManager::registerScene<TestScene>("TEST");
 		SceneManager::registerScene<Scene2>("Scene2");
+		SceneManager::registerScene<Sponza>("Sponza");
 		SceneManager::switchToScene(0);
 
 
