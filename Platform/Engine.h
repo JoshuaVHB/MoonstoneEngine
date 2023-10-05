@@ -1,7 +1,7 @@
 #pragma once
 #include "../Utils/Singleton.h"
 #include "../Utils/Timer.h"
-#include "../Graphics/Graphics.h"
+#include "../Graphics/d3d11_graphics.h"
 #include <cstdint>
 #include <functional>
 
@@ -16,14 +16,14 @@
 constexpr Timer::count_type FPS_COUNT = 60;
 constexpr Timer::value_type FRAME_TIME = 1.0 / static_cast<Timer::value_type>(FPS_COUNT);
 
-template<class _RenderingDevice=Graphics>
+template<class _RenderingDevice= d3d11_graphics>
 concept canRender = requires (_RenderingDevice gfx) {
 
 	{gfx.present()} -> std::same_as<void>;
 
 };
 
-template <class _Platform, class _RenderingDevice=Graphics> 
+template <class _Platform, class _RenderingDevice= d3d11_graphics>
 	requires canRender<_RenderingDevice>
 class Engine : public Singleton<_Platform>
 {

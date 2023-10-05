@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine.h"
-#include "../Graphics/Graphics.h"
+#include "../Graphics/d3d11_graphics.h"
 #include "IO/Inputs.h"
 #include <memory>
 
@@ -10,18 +10,19 @@
 extern std::unique_ptr<Keyboard> wKbd;
 extern std::unique_ptr<Mouse> wMouse;
 
-class WindowsEngine final : public Engine<WindowsEngine, Graphics>
+class WindowsEngine final : public Engine<WindowsEngine, d3d11_graphics>
 {
 public:
 	void SetWindowsAppInstance(HINSTANCE hInstance);
 
 
-	Graphics& getGraphics() const { return *m_graphics; }
+	d3d11_graphics& getGraphics() const { return *m_graphics; }
 
 
 protected:
 	virtual Timer::value_type getTimePlatform() const override;
-	virtual Graphics* createRenderingDevicePlatform(GRAPHICS_MODE cdsMode) override;
+
+	virtual d3d11_graphics* createRenderingDevicePlatform(GRAPHICS_MODE cdsMode) override;
 
 	Timer::value_type getTimeIntervalInSeconds(
 		Timer::count_type  start,
@@ -48,7 +49,7 @@ protected:
 
 private:
 
-	std::unique_ptr<Graphics> m_graphics;
+	std::unique_ptr<d3d11_graphics> m_graphics;
 	Timer m_clock;
 
 // =========================== WINDOWS STUFF =========================== //

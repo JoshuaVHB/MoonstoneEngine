@@ -167,8 +167,9 @@
     <ClInclude Include="Graphics\abstraction\Sampler.h" />
     <ClInclude Include="Graphics\abstraction\Shaders.h" />
     <ClInclude Include="Graphics\abstraction\Texture.h" />
+    <ClInclude Include="Graphics\abstraction\TextureCube.h" />
     <ClInclude Include="Graphics\abstraction\Vertex.h" />
-    <ClInclude Include="Graphics\Graphics.h" />
+    <ClInclude Include="Graphics\d3d11_graphics.h" />
     <ClInclude Include="Graphics\Renderer.h" />
     <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
     <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h" />

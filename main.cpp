@@ -17,7 +17,7 @@
 #include "src/Scenes/AllScenes.h"
 
 
-void initImgui(HWND hWnd, Graphics& gfx) {
+void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -57,7 +57,7 @@ int main() {
 		rMoteur.init();
 
 		Renderer::setImplementation<direct3D11_impl>();
-		Graphics& gfx = rMoteur.getGraphics();
+		d3d11_graphics& gfx = rMoteur.getGraphics();
 		initImgui(rMoteur.getHwnd(), gfx);
 
 		SceneManager::registerScene<TestScene>("TEST");

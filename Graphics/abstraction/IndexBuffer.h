@@ -18,7 +18,7 @@ private:
 	// -- Buffer stuff
 
 #ifdef D3D11_IMPL
-	Graphics::RenderingContext m_renderContext;
+	d3d11_graphics::RenderingContext m_renderContext;
 	ID3D11Buffer* m_ibo				= nullptr;
 #endif
 

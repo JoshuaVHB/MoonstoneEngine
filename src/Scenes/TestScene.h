@@ -7,6 +7,7 @@
 #include "../../Graphics/abstraction/Shaders.h"
 #include "../../Graphics/World/Mesh.h"
 #include "../../Graphics/World/Cube.h"
+#include "../../Graphics/World/WorldRendering/Skybox.h"
 
 #include "../../Platform/IO/Inputs.h"
 #include "../../Platform/WindowsEngine.h"
@@ -29,7 +30,6 @@ class TestScene : public Scene {
 
 private:
 
-	Cube c;
 	
 	Camera camera;
 	Vec delta = camera.getPosition();
@@ -49,6 +49,26 @@ private:
 	Mesh terrainMesh, cube;
 	Effect renderShader;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
+//	Skybox box;
+
+	struct worldParams {
+		// la matrice totale 
+		XMMATRIX viewProj;
+		XMVECTOR lightPos; // la position de la source d’éclairage (Point)
+		XMVECTOR cameraPos; // la position de la caméra 
+		XMVECTOR ambiantLight; // la valeur ambiante de l’éclairage
+		XMVECTOR diffuseLight; // la valeur ambiante du matériau 
+		XMVECTOR ambiantMat; // la valeur diffuse de l’éclairage 
+		XMVECTOR diffuseMat; // la valeur diffuse du matériau 
+	};
+
+	struct meshParams {
+
+		XMMATRIX worldMat;
+		XMMATRIX u_MVP;
+	};
+
+
 
 public:
 
@@ -57,8 +77,15 @@ public:
 		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
 		winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
 		terrainMesh = Renderer::loadMeshFromFile("res/mesh/mesh.obj");
-		renderShader.loadEffectFromFile("res/effects/MiniPhong.fx");
+		terrainMesh.m_worldMat = XMMatrixRotationX(3.141592f / 2.f);
+		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		cube = Cube::getCubeMesh();
+
+		renderShader.addNewCBuffer("worldParams", sizeof(worldParams));
+		renderShader.addNewCBuffer("meshParams", sizeof(meshParams));
+
+
+
 	}
 
 
@@ -122,13 +149,50 @@ public:
 
 		camera.setPosition(delta);
 		camera.updateCam(deltaTime);
+
+		worldParams sp;
+
+		sp.viewProj = XMMatrixTranspose(camera.getVPMatrix());
+		sp.lightPos = XMVectorSet(-10.0f * cos(elapsed), 10.0f * sin(elapsed), -10.0f, 1.0f);
+		sp.cameraPos = camera.getPosition();
+		sp.ambiantLight = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f);
+		sp.diffuseLight = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.ambiantMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.diffuseMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+
+		renderShader.updateSubresource(sp, "worldParams");
+		renderShader.sendCBufferToGPU("worldParams");
+
 	}
 
 	virtual void onRender() override {
 	
 		Renderer::clearScreen();
 		renderShader.bindTexture("textureEntree", breadbug.getTexture());
+
+
+
+
+		renderShader.updateSubresource(
+			meshParams{ XMMatrixTranspose(terrainMesh.m_worldMat),terrainMesh.m_worldMat * XMMatrixTranspose( camera.getVPMatrix()) }
+		, "meshParams"); // TODO make this more flexible
+
+
+		renderShader.sendCBufferToGPU("meshParams");
 		Renderer::renderMesh(camera, terrainMesh, renderShader);
+
+
+
+
+
+
+		renderShader.updateSubresource(
+			meshParams{ XMMatrixTranspose(cube.m_worldMat), cube.m_worldMat * XMMatrixTranspose( camera.getVPMatrix()) }
+		, "meshParams"); // TODO make this more flexible
+
+
+		renderShader.sendCBufferToGPU("meshParams");
+
 		Renderer::renderMesh(camera, cube, renderShader);
 
 	}

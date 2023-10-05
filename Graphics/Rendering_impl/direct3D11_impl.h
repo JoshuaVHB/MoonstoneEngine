@@ -24,7 +24,7 @@ public:
 	direct3D11_impl() 
 	{
 		WindowsEngine& engine = WindowsEngine::getInstance();
-		Graphics& gfx = engine.getGraphics();
+		d3d11_graphics& gfx = engine.getGraphics();
 		device = gfx.getDevice();
 		context = gfx.getImmediateContext();
 		swapChain = gfx.getSwapChain();
@@ -45,7 +45,7 @@ private:
 
 	virtual void clearScreen() override final {
 				
-		Graphics& gfx = WindowsEngine::getInstance().getGraphics();
+		d3d11_graphics& gfx = WindowsEngine::getInstance().getGraphics();
 		gfx.clearDepth();
 		gfx.clearFramebuffer();
 
@@ -62,64 +62,13 @@ private:
 	}
 
 
-	//void renderCube(Camera& camera) {
-
-	//	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//	context->IASetInputLayout(effect.m_vertexLayout);
-	//	// Initialiser et sélectionner les « constantes » du VS
-	//	const XMMATRIX viewProj = camera.getVPMatrix();
-	//	const XMMATRIX matWorldViewProj = XMMatrixTranspose(matWorld * viewProj);
-
-	//	ShadersParams sp;
-	//	sp.matWorldViewProj = matWorldViewProj;
-	//	sp.matWorld = matWorld;
-
-	//	sp.vLumiere = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f); 
-	//	sp.vCamera = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f); 
-	//	sp.vAEcl = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f); // WHAT ?
-	//	sp.vAMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
-	//	sp.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f); 
-	//	sp.vDMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	//	context->UpdateSubresource(effect.pConstantBuffer, 0, nullptr, &sp, 0, 0);
-
-	//	ID3DX11EffectConstantBuffer* pCB = effect.m_effect->GetConstantBufferByName("param");
-	//	pCB->SetConstantBuffer(effect.pConstantBuffer); // **** Rendu de l’objet
-	//	//effect.m_pass->Apply(0, context);
-	//	effect.apply();
-	//	// -- Draw call
-	//	m.draw();
-	//	//context->DrawIndexed(static_cast<UINT>(ibo.getBufferSize()), 0, 0);
-	//	cube.draw();
-	//}
-	
-
 	virtual void renderMesh(Camera& camera, const Mesh& mesh, const Effect& effect) override {
-
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->IASetInputLayout(effect.m_vertexLayout);
 
-		XMMATRIX viewProj = camera.getVPMatrix();
-		XMMATRIX matWorldViewProj = XMMatrixTranspose(mesh.m_worldMat * viewProj);
-
-		ShadersParams sp;
-
-
-		sp.matWorldViewProj = matWorldViewProj;
-		sp.matWorld = mesh.m_worldMat;
-
-		sp.vLumiere = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f);
-		sp.vCamera = XMVectorSet(0.0f, 0.0f, -10.0f, 1.0f);
-		sp.vAEcl = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f); // WHAT ?
-		sp.vAMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		sp.vDEcl = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-		sp.vDMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-
-		context->UpdateSubresource(effect.pConstantBuffer, 0, nullptr, &sp, 0, 0);
-
-		ID3DX11EffectConstantBuffer* pCB = effect.m_effect->GetConstantBufferByName("param");
-		pCB->SetConstantBuffer(effect.pConstantBuffer); // **** Rendu de l’objet
+		//effect.updateSubresource(mesh.m_worldMat, "meshParams"); // TODO make this more flexible
+		//effect.sendCBufferToGPU("meshParams");
 		effect.apply();
 		mesh.draw();
 	}

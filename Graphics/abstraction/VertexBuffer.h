@@ -22,7 +22,7 @@ class VertexBuffer
 
 
 #ifdef D3D11_IMPL
-	Graphics::RenderingContext m_renderContext;
+	d3d11_graphics::RenderingContext m_renderContext;
 #endif
 
 public:

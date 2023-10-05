@@ -16,7 +16,7 @@ private:
 
 #ifdef D3D11_IMPL
 	ID3D11ShaderResourceView* m_texture;
-	Graphics::RenderingContext m_renderContext;
+	d3d11_graphics::RenderingContext m_renderContext;
 #endif
 
 public:
@@ -30,7 +30,7 @@ public:
 	{
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-		CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
+		DirectX::CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
 #endif
 	}
 

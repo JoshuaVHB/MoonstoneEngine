@@ -12,7 +12,7 @@ class Sampler {
 private:
 
 #ifdef D3D11_IMPL
-	Graphics::RenderingContext m_renderContext;
+	d3d11_graphics::RenderingContext m_renderContext;
 	ID3D11SamplerState* pSampleState;
 #endif
 

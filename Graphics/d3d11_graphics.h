@@ -6,7 +6,7 @@
 
 enum class GRAPHICS_MODE {WINDOWED, FULLSCREEN};
 
-class Graphics {
+class d3d11_graphics {
 public:
 
 	struct RenderingContext 
@@ -17,13 +17,10 @@ public:
 		ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
 	};
 
-	RenderingContext getContext() const 
-	{ 
-		return { m_device, m_context, m_swapChain, m_rtv };
-	}
+	RenderingContext getContext() const { return m_context; }
 
 public:
-	Graphics(HWND hWnd, GRAPHICS_MODE mode=GRAPHICS_MODE::WINDOWED)
+	d3d11_graphics(HWND hWnd, GRAPHICS_MODE mode=GRAPHICS_MODE::WINDOWED)
 	{
 		m_cdsMode = mode;
 
@@ -75,21 +72,21 @@ public:
 			ARRAYSIZE(featureLevels),
 			D3D11_SDK_VERSION,
 			&sd, // descriptor
-			&m_swapChain,
-			&m_device,
+			&m_context.swapChain,
+			&m_context.device,
 			nullptr, // output, fills with the actual flags (useless)
-			&m_context
+			&m_context.context
 		), FAIL);
 
 		ID3D11Texture2D* pBackBuffer;
-		DX_TRY_CODE(m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer), -2);
+		DX_TRY_CODE(m_context.swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer), -2);
 
-		DX_TRY_CODE(m_device->CreateRenderTargetView(pBackBuffer, nullptr, &m_rtv), -2);
+		DX_TRY_CODE(m_context.device->CreateRenderTargetView(pBackBuffer, nullptr, &m_context.rtv), -2);
 		pBackBuffer->Release();
 
 		initDepthBuffer();
 
-		m_context->OMSetDepthStencilState(pDSState, 1);
+		m_context.context->OMSetDepthStencilState(pDSState, 1);
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSView;
 		ZeroMemory(&descDSView, sizeof(descDSView));
@@ -97,9 +94,9 @@ public:
 		descDSView.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		descDSView.Texture2D.MipSlice = 0;
 
-		auto hr = m_device->CreateDepthStencilView(m_depthTexture, &descDSView, &m_depthStencil);
+		auto hr = m_context.device->CreateDepthStencilView(m_depthTexture, &descDSView, &m_depthStencil);
 
-		m_context->OMSetRenderTargets(1, &m_rtv, m_depthStencil);
+		m_context.context->OMSetRenderTargets(1, &m_context.rtv, m_depthStencil);
 
 		D3D11_VIEWPORT vp{};
 		vp.Width = (FLOAT)(width);
@@ -108,47 +105,47 @@ public:
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
-		m_context->RSSetViewports(1, &vp);
+		m_context.context->RSSetViewports(1, &vp);
 	
 
 
 
 	}
 
-	Graphics(const Graphics&) = delete;
-	Graphics& operator=(const Graphics&) = delete;
+	d3d11_graphics(const d3d11_graphics&) = delete;
+	d3d11_graphics& operator=(const d3d11_graphics&) = delete;
 
-	~Graphics() {
+	~d3d11_graphics() {
 
 		DX_RELEASE(m_depthStencil);
 		DX_RELEASE(m_depthTexture);
-		DX_RELEASE(m_rtv);
-		DX_RELEASE(m_context);
-		DX_RELEASE(m_swapChain);
-		DX_RELEASE(m_device);
+		DX_RELEASE(m_context.rtv);
+		DX_RELEASE(m_context.context);
+		DX_RELEASE(m_context.swapChain);
+		DX_RELEASE(m_context.device);
 	}
 
 	void clearDepth() {
 		if (m_depthStencil)
-			m_context->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
+			m_context.context->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
 
 	void clearFramebuffer() {
 
 
 		static constexpr FLOAT rgba[4] = {0,1,1,1};
-		m_context->ClearRenderTargetView(m_rtv, rgba);
+		m_context.context->ClearRenderTargetView(m_context.rtv, rgba);
 	}
 
 	void present() 
 	{
-		m_swapChain->Present(1, 0);
+		m_context.swapChain->Present(1, 0);
 	}
 
-	ID3D11Device* getDevice()						const noexcept { return m_device; }
-	IDXGISwapChain* getSwapChain()					const noexcept { return m_swapChain; }
-	ID3D11DeviceContext* getImmediateContext()		const noexcept { return m_context; }
-	ID3D11RenderTargetView* getRenderTargetView()	const noexcept { return m_rtv; }
+	ID3D11Device* getDevice()						const noexcept { return m_context.device; }
+	IDXGISwapChain* getSwapChain()					const noexcept { return m_context.swapChain; }
+	ID3D11DeviceContext* getImmediateContext()		const noexcept { return m_context.context; }
+	ID3D11RenderTargetView* getRenderTargetView()	const noexcept { return m_context.rtv; }
 	ID3D11DepthStencilView* getDepthBuffer()		const noexcept { return m_depthStencil; }
 	std::pair<int, int> getWinSize()				const noexcept { return {m_width, m_height}; }
 
@@ -156,14 +153,9 @@ public:
 
 private:
 
-	ID3D11Device*			m_device	= nullptr; // Used to create objects on the GPU
-	ID3D11DeviceContext*	m_context	= nullptr; // Issues rendering command + actual drawing
 
-	// DXGI is a lower-level framework that gets updated less often than D3D, because it contains
-	// methods that don't really change over versions
-	IDXGISwapChain*			m_swapChain = nullptr; // Flips buffers
-	ID3D11RenderTargetView* m_rtv = nullptr; // Framebuffer
-	
+	RenderingContext m_context;
+
 	ID3D11Texture2D* m_depthTexture;
 	ID3D11DepthStencilView* m_depthStencil;
 	ID3D11DepthStencilState* pDSState;
@@ -196,7 +188,7 @@ private:
 			depthTextureDesc.CPUAccessFlags = 0;
 			depthTextureDesc.MiscFlags = 0;
 
-			DX_TRY_CODE(m_device->CreateTexture2D(&depthTextureDesc,	NULL, &m_depthTexture),	115);
+			DX_TRY_CODE(m_context.device->CreateTexture2D(&depthTextureDesc,	NULL, &m_depthTexture),	115);
 			// Création de la vue du tampon de profondeur (ou de stencil)
 
 			D3D11_DEPTH_STENCIL_DESC dsDesc;
@@ -204,7 +196,7 @@ private:
 			// Depth test parameters
 			dsDesc.DepthEnable = true;
 			dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-			dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+			dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 			// Stencil test parameters
 			dsDesc.StencilEnable = true;
@@ -225,7 +217,7 @@ private:
 
 			// Create depth stencil state
 
-			auto hr = m_device->CreateDepthStencilState(&dsDesc, &pDSState);
+			auto hr = m_context.device->CreateDepthStencilState(&dsDesc, &pDSState);
 
 
 	}

@@ -11,7 +11,8 @@
 #include "../../d3dx11effect.h"
 #include "Sampler.h"
 #include "Texture.h"
-#include <unordered_set>
+#include <unordered_map>
+#include <map>
 #include "../../Platform/IO/DDSTextureLoader11.h"
 #include "../../Platform/WindowsEngine.h"
 
@@ -39,7 +40,7 @@ class Effect
 {
 private:
 
-	Graphics::RenderingContext m_renderContext;
+	d3d11_graphics::RenderingContext m_renderContext;
 	ID3DX11EffectTechnique* m_technique; 
 
 	D3D11_INPUT_ELEMENT_DESC layout[3] =
@@ -50,14 +51,18 @@ private:
 	};
 
 public:
+
+
+	std::map < std::string, ID3D11Buffer* > m_constantBuffers;
+
 	ID3DX11EffectPass* m_pass;
 	ID3D11InputLayout* m_vertexLayout = nullptr;
-	ID3D11Buffer* pConstantBuffer;
+
+
 	ID3DX11Effect* m_effect;
 
 	// tmp
 	ID3D11SamplerState* pSampleState;
-	ID3D11ShaderResourceView* pTextureD3D;
 
 	std::unordered_map<std::string, Sampler> m_samplers;
 
@@ -69,16 +74,6 @@ public:
 	}
 
 	void loadEffectFromFile(const fs::path& pathToEffect) {
-
-		// Création d’un tampon pour les constantes du VS 
-		D3D11_BUFFER_DESC bd; 
-		ZeroMemory( &bd, sizeof(bd) );
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(ShadersParams); 
-		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		bd.CPUAccessFlags = 0; 
-		m_renderContext.device->CreateBuffer( &bd, NULL, &pConstantBuffer );
-
 
 
 		ID3DBlob* blob = nullptr;
@@ -93,6 +88,7 @@ public:
 			const char* errorMessage = reinterpret_cast<const char*>(errorBuffer);
 			throw std::runtime_error(errorMessage);
 		}
+
 		D3DX11CreateEffectFromMemory(
 			blob->GetBufferPointer(), blob->GetBufferSize(), 0, m_renderContext.device, &m_effect);
 
@@ -113,9 +109,6 @@ public:
 		DX_TRY_CODE( m_renderContext.device->CreateInputLayout(layout, ARRAYSIZE(layout), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
 
 
-		////////////////
-		CreateDDSTextureFromFile(m_renderContext.device, L"res/textures/breadbug.dds", nullptr, &pTextureD3D);
-
 		D3D11_SAMPLER_DESC samplerDesc;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -133,8 +126,24 @@ public:
 
 		// Création de l’état de sampling
 		m_renderContext.device->CreateSamplerState(&samplerDesc, &pSampleState);
-
 		
+	}
+
+	// Returns the slot number of the newly created cbuffer
+	void addNewCBuffer(const std::string& name, uint32_t structSize )
+	{
+		ID3D11Buffer* constBuffer;
+
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = structSize;
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		m_renderContext.device->CreateBuffer(&bd, NULL, &constBuffer);
+		m_constantBuffers[name] = constBuffer;
+
+
 	}
 
 	void apply() const {
@@ -153,6 +162,19 @@ public:
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
 	}
 
+
+	template<class ShaderParam>
+	void updateSubresource(const ShaderParam& sp, const std::string& cbuffName) const
+	{
+		if (!m_constantBuffers.contains(cbuffName)) throw;
+		m_renderContext.context->UpdateSubresource(m_constantBuffers.at(cbuffName), 0, nullptr, &sp, 0, 0);
+	}
+
+	void sendCBufferToGPU(const std::string& cbuffName) const 
+	{
+		ID3DX11EffectConstantBuffer* pCB = m_effect->GetConstantBufferByName(cbuffName.c_str());
+		pCB->SetConstantBuffer(m_constantBuffers.at(cbuffName)); // **** Rendu de l’objet
+	}
 
 
 };

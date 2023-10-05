@@ -57,8 +57,8 @@ bool WindowsEngine::InitAppInstance()
 	return true;
 }
 
-Graphics* WindowsEngine::createRenderingDevicePlatform(GRAPHICS_MODE cdsMode) {
-	m_graphics = std::make_unique<Graphics>(hMainWnd, cdsMode);
+d3d11_graphics* WindowsEngine::createRenderingDevicePlatform(GRAPHICS_MODE cdsMode) {
+	m_graphics = std::make_unique<d3d11_graphics>(hMainWnd, cdsMode);
 	return m_graphics.get();
 }
 
