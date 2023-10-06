@@ -50,6 +50,7 @@ public:
 		virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) = 0;
 		virtual Mesh loadMeshFromFile(const std::filesystem::path& path) = 0;
 		virtual void renderMesh(Camera&, const Mesh&, const Effect&) = 0;
+		virtual void renderCubemap(Camera&, const Mesh&, const Effect&) = 0;
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
 
@@ -61,7 +62,10 @@ public:
 
 	CALL_IMPL(drawIndexed) ;
 	CALL_IMPL(clearScreen) ;
+
+	// Camera&, const Mesh&, const Effect&
 	CALL_IMPL(renderMesh) ;
+	CALL_IMPL(renderCubemap) ;
 	CALL_IMPL(loadMeshFromFile) ;
 
 	

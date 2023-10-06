@@ -58,6 +58,7 @@ private:
 	}
 
 	virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) override {
+
 		context->DrawIndexed(static_cast<UINT>(count), startIndexLocation, baseVertexLocation);
 	}
 
@@ -67,8 +68,18 @@ private:
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->IASetInputLayout(effect.m_vertexLayout);
 
-		//effect.updateSubresource(mesh.m_worldMat, "meshParams"); // TODO make this more flexible
-		//effect.sendCBufferToGPU("meshParams");
+		effect.updateSubresource(XMMatrixTranspose(mesh.m_worldMat), "meshParams"); // TODO make this more flexible
+		effect.sendCBufferToGPU("meshParams");
+
+		effect.apply();
+		mesh.draw();
+	}
+
+	// todo make this more clear
+	virtual void renderCubemap(Camera& camera, const Mesh& mesh, const Effect& effect) override {
+
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		context->IASetInputLayout(effect.m_vertexLayout);
 		effect.apply();
 		mesh.draw();
 	}

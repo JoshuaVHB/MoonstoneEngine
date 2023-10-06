@@ -10,10 +10,11 @@ cbuffer SkyboxCbuffer
     
 };
 
+
 struct VSOut
 {
     float3 worldPos : Position;
-    float4 pos : SV_Position;
+    float4 outpos : SV_Position;
     
 };
 
@@ -22,14 +23,13 @@ VSOut skyboxVS(float3 pos: POSITION)
 {
     VSOut vso;
     vso.worldPos = pos;
-    vso.pos = mul(float4(pos, 0.0f), viewProj); // nullify translation by removing w component
-    vso.pos.z = vso.pos.w; // z stays at 1 after w division
+    vso.outpos = mul(float4(pos, 0.0f), viewProj); // nullify translation by removing w component
+    vso.outpos.z = vso.outpos.w; // z stays at 1 after w division
     return vso;
     
 }
 
-
-float4 skyboxFS(float3 worldPos : SV_POSITION) : SV_TARGET
+float4 skyboxFS(float3 worldPos : POSITION) : SV_TARGET
 {
     return tex.Sample(sam, worldPos);
 }

@@ -75,7 +75,7 @@ int main() {
 
 	catch (const std::exception& E)
 	{
-		const int BufferSize = 128;
+		const int BufferSize = 1024;
 		wchar_t message[BufferSize];
 
 		size_t numCharacterConverted;

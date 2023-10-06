@@ -49,7 +49,7 @@ private:
 	Mesh terrainMesh, cube;
 	Effect renderShader;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
-//	Skybox box;
+	Skybox box;
 
 	struct worldParams {
 		// la matrice totale 
@@ -76,7 +76,7 @@ public:
 	{
 		camera.setProjection<PerspectiveProjection>(PerspectiveProjection());	
 		winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
-		terrainMesh = Renderer::loadMeshFromFile("res/mesh/mesh.obj");
+		terrainMesh = Renderer::loadMeshFromFile("res/mesh/hello.obj");
 		terrainMesh.m_worldMat = XMMatrixRotationX(3.141592f / 2.f);
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		cube = Cube::getCubeMesh();
@@ -84,7 +84,13 @@ public:
 		renderShader.addNewCBuffer("worldParams", sizeof(worldParams));
 		renderShader.addNewCBuffer("meshParams", sizeof(meshParams));
 
+		InputLayout testlayout;
+		testlayout.pushBack<3>(InputLayout::Semantic::Position);
+		testlayout.pushBack<3>(InputLayout::Semantic::Normal);
+		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
+		auto tmplayout = testlayout.asInputDesc();
 
+		renderShader.bindInputLayout(testlayout);
 
 	}
 
@@ -170,30 +176,11 @@ public:
 		Renderer::clearScreen();
 		renderShader.bindTexture("textureEntree", breadbug.getTexture());
 
-
-
-
-		renderShader.updateSubresource(
-			meshParams{ XMMatrixTranspose(terrainMesh.m_worldMat),terrainMesh.m_worldMat * XMMatrixTranspose( camera.getVPMatrix()) }
-		, "meshParams"); // TODO make this more flexible
-
-
-		renderShader.sendCBufferToGPU("meshParams");
 		Renderer::renderMesh(camera, terrainMesh, renderShader);
 
-
-
-
-
-
-		renderShader.updateSubresource(
-			meshParams{ XMMatrixTranspose(cube.m_worldMat), cube.m_worldMat * XMMatrixTranspose( camera.getVPMatrix()) }
-		, "meshParams"); // TODO make this more flexible
-
-
-		renderShader.sendCBufferToGPU("meshParams");
-
 		Renderer::renderMesh(camera, cube, renderShader);
+
+		//box.renderSkybox(camera);
 
 	}
 	virtual void onImGuiRender() override {

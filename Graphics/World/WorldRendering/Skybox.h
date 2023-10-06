@@ -6,6 +6,8 @@
 #include "../../abstraction/Camera.h"
 #include "../../abstraction/TextureCube.h"
 
+#include "../../Renderer.h"
+
 #include <string>
 
 class Skybox {
@@ -29,16 +31,18 @@ public:
 		m_skyboxPass.loadEffectFromFile("res/effects/skybox.fx");
 		
 		m_skyboxPass.addNewCBuffer("SkyboxCbuffer", sizeof(SkyboxParam));
+		m_mesh.m_worldMat = XMMatrixTranslationFromVector({ 1,0,0 });
 	}
 
 
 	void renderSkybox(Camera& camera) 
 	{
-		m_params.viewProj = camera.getVPMatrix();
 		m_skyboxPass.apply();
+		m_params.viewProj = XMMatrixTranspose(camera.getVPMatrix());
 		m_skyboxPass.updateSubresource(m_params, "SkyboxCbuffer");
 		m_skyboxPass.sendCBufferToGPU("SkyboxCbuffer");
-		//Renderer::drawIndexed()
+		
+		Renderer::renderCubemap(camera, m_mesh, m_skyboxPass);
 	}
 
 };

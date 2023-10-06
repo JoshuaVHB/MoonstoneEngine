@@ -16,9 +16,9 @@ private:
 	std::string m_path;
 
 #ifdef D3D11_IMPL
-	ID3D11ShaderResourceView* m_texture;
+	ID3D11ShaderResourceView* m_srv;
+	ID3D11Texture2D* m_tex;
 	d3d11_graphics::RenderingContext m_renderContext;
-	std::array<ID3D11ShaderResourceView*, 6> m_texs;
 #endif
 
 public:
@@ -26,52 +26,19 @@ public:
 	TextureCube() {}
 
 	TextureCube(const std::string& path)
-		: m_path(path), m_texture(nullptr)
+		: m_path(path), m_srv(nullptr)
 	{
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-		//CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
-
-
-		for (int i = 0; i < 6; i++) 
-		{
-			std::wstring p = L"res/textures/" + std::to_wstring(i) + L".dds";
-			DirectX::CreateDDSTextureFromFile(m_renderContext.device, p.c_str(), nullptr, &m_texs[i]);
-		}
-
-		D3D11_TEXTURE2D_DESC desc{};
-
-		desc.Width = 450;
-		desc.Height= 450;
-		desc.MipLevels= 1;
-		desc.ArraySize= 6;
-		desc.Format= DXGI_FORMAT_B8G8R8A8_UNORM;
-		desc.SampleDesc.Count = 1;
-		desc.SampleDesc.Quality = 0;
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = 0;
-		desc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-
-		D3D11_SUBRESOURCE_DATA data[6];
-
-		for (int i = 0; i < 6; i++) {
-
-			data[i].pSysMem = m_texs[i];
-			data[i].SysMemPitch = 0; // TODO
-			data[i].SysMemSlicePitch= 0;
-		}
-
-		ID3D11Texture2D* ptex;
-		m_renderContext.device->CreateTexture2D(&desc, data, &ptex);
+		DirectX::CreateDDSTextureFromFile(m_renderContext.device, L"res/textures/skybox.dds", nullptr, &m_srv);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 
-		srvDesc.Format = desc.Format;
+		srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		srvDesc.Texture2D.MipLevels = 1;
-		m_renderContext.device->CreateShaderResourceView(ptex, &srvDesc, &m_texture);
+		m_renderContext.device->CreateShaderResourceView(m_tex, &srvDesc, &m_srv);
 
 #endif
 	}

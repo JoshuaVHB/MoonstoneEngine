@@ -2,9 +2,11 @@
 
 #include <iostream>
 #include <filesystem>
+#include <vector>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <effects.h>
+#include <string>
 
 #include "../../Utils/Debug.h"
 
@@ -29,10 +31,85 @@ struct ShadersParams {
 	XMVECTOR vDMat; // la valeur diffuse du matériau 
 };
 
-struct ShaderLayout 
+struct InputLayout 
 {
 
+private:
 
+
+	LPCSTR semantics_str[9] = {
+		"BINORMAL",
+		"BLENDINDICES",
+		"BLENDWEIGHT",
+		"NORMAL",
+		"POSITION",
+		"POSITIONT",
+		"PSIZE",
+		"TANGENT",
+		"TEXCOORD"
+	};
+
+	UINT stride = 0;
+
+	const std::vector<DXGI_FORMAT> formats{
+		DXGI_FORMAT_R32_FLOAT,
+		DXGI_FORMAT_R32G32_FLOAT,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		DXGI_FORMAT_R32G32B32A32_FLOAT
+	};
+
+public:
+
+	
+	enum class Semantic {
+		Binormal,
+		BlendIndices,
+		BlendWeight, 
+		Normal,
+		Position,
+		PositionT,
+		PSize,
+		Tangent,
+		Texcoord
+	};
+
+	std::vector<D3D11_INPUT_ELEMENT_DESC> elems;
+
+	D3D11_INPUT_ELEMENT_DESC* desc = nullptr;
+	ID3D11InputLayout* inputLayout = nullptr;
+
+	InputLayout() {}
+
+	D3D11_INPUT_ELEMENT_DESC* asInputDesc() {
+		return elems.data();
+	}
+
+	/*
+	
+	typedef struct D3D11_INPUT_ELEMENT_DESC
+    {
+    LPCSTR SemanticName;
+    UINT SemanticIndex;
+    DXGI_FORMAT Format;
+    UINT InputSlot;
+    UINT AlignedByteOffset;
+    D3D11_INPUT_CLASSIFICATION InputSlotClass;
+    UINT InstanceDataStepRate;
+    } 	D3D11_INPUT_ELEMENT_DESC;
+	*/
+	template<size_t floatCount>
+	void pushBack(Semantic elemType)
+	{
+		elems.push_back(
+			D3D11_INPUT_ELEMENT_DESC{
+				semantics_str[size_t(elemType)], 0,
+				formats[floatCount-1], 
+				0, stride,
+				D3D11_INPUT_PER_VERTEX_DATA, 0
+			}
+		);
+		stride += 16;
+	}
 };
 
 
@@ -45,19 +122,17 @@ private:
 
 	D3D11_INPUT_ELEMENT_DESC layout[3] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	0,			D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,		16,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,	32,		D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,	32,				D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 public:
-
 
 	std::map < std::string, ID3D11Buffer* > m_constantBuffers;
 
 	ID3DX11EffectPass* m_pass;
 	ID3D11InputLayout* m_vertexLayout = nullptr;
-
 
 	ID3DX11Effect* m_effect;
 
@@ -72,6 +147,7 @@ public:
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 #endif
 	}
+
 
 	void loadEffectFromFile(const fs::path& pathToEffect) {
 
@@ -97,18 +173,34 @@ public:
 		m_technique = m_effect->GetTechniqueByIndex(0); 
 		m_pass = m_technique->GetPassByIndex(0);
 
+		//createInputLayout();
+		
+		createSampler();
+
+		
+	}
+
+	void bindInputLayout(InputLayout layout) {
+
 		// Créer l’organisation des sommets pour le VS de notre effet 
-		D3DX11_PASS_SHADER_DESC effectVSDesc; 
-		m_pass->GetVertexShaderDesc(&effectVSDesc);
-		D3DX11_EFFECT_SHADER_DESC effectVSDesc2; 
+		D3DX11_PASS_SHADER_DESC passDesc;
+		D3DX11_EFFECT_SHADER_DESC effectDesc;
 
-		effectVSDesc.pShaderVariable->GetShaderDesc(effectVSDesc.ShaderIndex, &effectVSDesc2); 
-		const void *vsCodePtr = effectVSDesc2.pBytecode; 
-		unsigned vsCodeLen = effectVSDesc2.BytecodeLength; 
+		m_pass->GetVertexShaderDesc(&passDesc);
+
+		passDesc.pShaderVariable->GetShaderDesc(passDesc.ShaderIndex, &effectDesc);
+		const void* vsCodePtr = effectDesc.pBytecode;
+		unsigned vsCodeLen = effectDesc.BytecodeLength;
+
 		m_vertexLayout = NULL;
-		DX_TRY_CODE( m_renderContext.device->CreateInputLayout(layout, ARRAYSIZE(layout), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
+		DX_TRY_CODE(
+			m_renderContext.device->CreateInputLayout(layout.asInputDesc(),
+			layout.elems.size(), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
 
+	}
 
+	void createSampler()
+	{
 		D3D11_SAMPLER_DESC samplerDesc;
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -126,7 +218,6 @@ public:
 
 		// Création de l’état de sampling
 		m_renderContext.device->CreateSamplerState(&samplerDesc, &pSampleState);
-		
 	}
 
 	// Returns the slot number of the newly created cbuffer
