@@ -23,7 +23,7 @@ private:
 	Effect	m_skyboxPass;
 
 
-	TextureCube m_tex{ "" };
+	TextureCube m_tex{ "res/textures/ex.dds" };
 
 
 
@@ -43,7 +43,7 @@ public:
 
 	}
 
-	Mesh getMesh() const { return m_mesh; }
+	const Mesh& getMesh() const { return m_mesh; }
 
 
 	void renderSkybox(Camera& camera) 

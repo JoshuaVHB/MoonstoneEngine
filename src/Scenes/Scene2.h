@@ -2,17 +2,33 @@
 
 #include "Scene.h"
 
+#include <filesystem>
+#include "../../Graphics/World/WorldRendering/Terrain.h"
 
 class Rush2Scene : public Scene {
 private:
 
 
-	Mesh	m_terrainMesh;
+	//Mesh	m_terrainMesh;
+	const std::filesystem::path path_to_map = "res/textures/heightmap.png";
+	Terrain m_terrain{ path_to_map };
+
 	Effect	m_baseMeshEffect;
 	Skybox  m_skybox;
-	Player  m_player; // Basically the camera
+
+	Player  m_player; // Basically the 1st person camera
+	Camera	m_thirdPerson;
+	Camera* currentCamera = &m_thirdPerson;
+
+	float aspectRatio = 5;
+	float left{ 1 }, top{ 1 }, right{ 5 }, bottom{ 5 }, znear{ 0.1 }, zfar{ 1.F };
+	float tx = 0, ty = 30, tz = 15;
 
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
+	
+	// Allows for hot reload of the heightmap
+	std::filesystem::file_time_type ftime = std::filesystem::last_write_time(path_to_map);
+	std::filesystem::file_time_type lastTime;
 
 private:
 
@@ -34,12 +50,6 @@ public:
 
 	Rush2Scene() 
 	{
-		// -- Load .obj file to terrainMesh
-		m_terrainMesh = Renderer::loadMeshFromFile("res/mesh/hello.obj");
-
-		// -- Rotate horizontally (due to different coordinate systems)
-		m_terrainMesh.m_worldMat = XMMatrixRotationX(DirectX::XM_PI / 2.f);
-
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/baseMesh.fx");
 
@@ -56,6 +66,15 @@ public:
 
 		m_baseMeshEffect.bindInputLayout(testlayout);
 
+		// -- Setup the orthographic camera
+		m_thirdPerson.setProjection<OrthographicProjection>(
+			OrthographicProjection{1.f,50.f,1.f,50.f, 0.1f, 100.f}
+		);
+		m_thirdPerson.setPosition({ 0,30,15 });
+		auto p = m_terrain.getParams();
+		Vec centerPoint = { p.width / 2 * p.xyScale, 0.f, p.height / 2 * p.xyScale };
+		m_thirdPerson.lookAt(centerPoint);
+
 
 	}
 
@@ -63,15 +82,15 @@ public:
 	virtual void onUpdate(float deltaTime) override 
 	{
 		// Update the camera and handle inputs
-		m_player.step(deltaTime); 
+		if (currentCamera != &m_thirdPerson) m_player.step(deltaTime);
 
 
 		// -- Send world data to baseMesh effect
 		worldParams sp;
 
-		sp.viewProj		= XMMatrixTranspose(m_player.getCamera().getVPMatrix());
-		sp.lightPos		= XMVectorSet(-10.0f * cos(deltaTime), 10.0f * sin(deltaTime), -10.0f, 1.0f); // spinning sun
-		sp.cameraPos	= m_player.getCamera().getPosition();
+		sp.viewProj		= XMMatrixTranspose(currentCamera->getVPMatrix());
+		sp.lightPos		= XMVectorSet(-100.0f * cos(deltaTime), 100.f, -100.0f * sin(deltaTime), 1.0f); // spinning sun
+		sp.cameraPos	= currentCamera->getPosition();
 		sp.ambiantLight = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f);
 		sp.diffuseLight = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		sp.ambiantMat	= XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
@@ -80,28 +99,71 @@ public:
 		m_baseMeshEffect.updateSubresource(sp, "worldParams");
 		m_baseMeshEffect.sendCBufferToGPU("worldParams");
 
+		// Check for hot reloads
+				// -- Check for map refreshes
+		lastTime = std::filesystem::last_write_time(path_to_map);
+		if (lastTime != ftime) {
+			m_terrain.hotreloadMap();
+			ftime = lastTime;
+		}
+
+
 
 	}
 
 	virtual void onRender() override {
 
 		// Get our target camera
-		Camera& cam = m_player.getCamera();
+		Camera& cam = *currentCamera;
 
 		// Clear and render objects
 		Renderer::clearScreen();
 		m_baseMeshEffect.bindTexture("textureEntree", breadbug.getTexture());
-		Renderer::renderMesh(cam, m_terrainMesh, m_baseMeshEffect);
+		Renderer::renderMesh(cam, m_terrain.getMesh(), m_baseMeshEffect);
 
 		// Render skybox last
-		m_skybox.renderSkybox(cam);	
+		if (currentCamera != &m_thirdPerson) m_skybox.renderSkybox(cam);
 	
 	}
 
 	virtual void onImGuiRender() override 
 	{
 	
+		ImGui::Begin("Rush 2 debug window");
+		if (ImGui::Button("Toggle Third person camera")) {
+
+			if (currentCamera == &m_player.getCamera())
+				currentCamera = &m_thirdPerson;
+			else
+				currentCamera = &m_player.getCamera();
+		}
+
+		if (
+			ImGui::DragFloat("AspectRation : ", &aspectRatio, 1.0f, 1.0f, 200) 
+			)
+		{
+			if (left > right) std::swap(left, right);
+			if (top > bottom) std::swap(top, bottom);
+			m_thirdPerson.setProjection<OrthographicProjection>(OrthographicProjection{ 0, aspectRatio, 0, aspectRatio, 0.1, 100 });
+			auto p = m_terrain.getParams();
+			Vec centerPoint = { p.width / 2 * p.xyScale, 0.f, p.height / 2 * p.xyScale };
+			m_thirdPerson.lookAt(centerPoint);
+		}
+
+
+		if (
+			ImGui::DragFloat("target x : ", &tx, 1.0f, -50.0f, 50) +
+			ImGui::DragFloat("target y : ", &ty, 1.0f, -50.0f, 50) +
+			ImGui::DragFloat("target z : ", &tz, 1.0f, -50,50)
+			)
+		{
+			m_thirdPerson.setPosition({ -tx,-ty,-tz,1.0f });
+
+		}
+
+		ImGui::End();
 		m_player.onImGuiRender();
+		m_terrain.showDebugWindow();
 	
 	}
 

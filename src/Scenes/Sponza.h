@@ -17,7 +17,7 @@ public:
 
 	virtual void onRender() override {
 
-		Renderer::clearScreen(1, 0, 0, 1);
+		Renderer::clearScreen(0, 0, 0, 1);
 
 	}
 

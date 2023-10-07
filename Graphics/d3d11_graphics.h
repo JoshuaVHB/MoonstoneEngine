@@ -124,6 +124,9 @@ public:
 
 	~d3d11_graphics() {
 
+		ID3D11Debug* debugDev = nullptr;
+		m_context.device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debugDev));
+		debugDev->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		DX_RELEASE(m_depthStencil);
 		DX_RELEASE(m_depthTexture);
 		DX_RELEASE(m_context.rtv);
@@ -140,7 +143,7 @@ public:
 	void clearFramebuffer() {
 
 
-		static constexpr FLOAT rgba[4] = {0,1,1,1};
+		static constexpr FLOAT rgba[4] = {0,0,0,1};
 		m_context.context->ClearRenderTargetView(m_context.rtv, rgba);
 	}
 

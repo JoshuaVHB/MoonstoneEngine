@@ -31,7 +31,6 @@ VSOut skyboxVS(float3 pos: POSITION)
 float4 skyboxFS(float3 worldPos : TEXCOORD0) : SV_TARGET
 {
    return tex.Sample(SampleState, worldPos);
-   //return float4(1,0,0,1);
 }
 
 technique11 skybox

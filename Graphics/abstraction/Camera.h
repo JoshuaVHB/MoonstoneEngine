@@ -118,10 +118,6 @@ private:
 	Vec m_UP{0,1,0,1};
 	Vec m_left{1,0,0,1};
 
-	/*
-	float m_pitch = 0.f;
-	float m_yaw = 0.f;
-	*/
 
 	float t = 0;
 	float m_rotationSpeed =1.f;
@@ -173,7 +169,11 @@ public:
 	void lookAt(Vec target) 
 	{
 		m_target = target;
-		m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, m_UP);
+		//m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, m_UP);
+		Vec d = XMVector4Normalize(target - m_position);
+		m_angles.pitch = std::asin(XMVectorGetY(d));
+		m_angles.yaw = std::atan2(-XMVectorGetX(d), -XMVectorGetZ(d));
+		// = glm::atan(-d.x, -d.z);
 	}
 
 	void lookAt()

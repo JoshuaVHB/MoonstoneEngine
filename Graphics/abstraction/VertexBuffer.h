@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <vector>
 #include <cstdint>
+#include <algorithm>
 
 
 #include "Vertex.h"
@@ -60,6 +61,31 @@ public:
 #ifdef D3D11_IMPL
 		m_renderContext.context->IASetVertexBuffers(0, 1, &m_vbo, &stride, &offset);
 #endif
+	}
+
+	void swap(VertexBuffer& other) {
+		std::swap(other.m_vbo, m_vbo);
+		std::swap(other.m_vertices, m_vertices);
+		std::swap(other.m_renderContext, m_renderContext);
+	}
+
+	VertexBuffer(const VertexBuffer&) = delete;
+	VertexBuffer& operator=(const VertexBuffer&) = delete;
+
+	VertexBuffer(VertexBuffer&& other) noexcept
+		: m_renderContext(other.m_renderContext)
+		, m_vbo(std::exchange(other.m_vbo, nullptr))
+		, m_vertices(std::exchange(other.m_vertices, {}))
+	{	}
+	VertexBuffer& operator=(VertexBuffer&& other) noexcept
+	{
+		VertexBuffer{ std::move(other) }.swap(*this);
+		return *this;
+	}
+
+	~VertexBuffer()
+	{
+		DX_RELEASE(m_vbo);
 	}
 
 

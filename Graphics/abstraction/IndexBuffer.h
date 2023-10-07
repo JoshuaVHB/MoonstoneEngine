@@ -3,6 +3,7 @@
 #include <concepts>
 #include <d3d11.h>
 #include <vector>
+#include <algorithm>
 #include <cstdint>
 
 #include "../../Utils/Debug.h"
@@ -52,9 +53,29 @@ public:
 #endif
 	}
 
+	void swap(IndexBuffer& other) {
+		std::swap(other.m_ibo, m_ibo);
+		std::swap(other.m_indices, m_indices);
+		std::swap(other.m_renderContext, m_renderContext);
+	}
+
+	IndexBuffer(const IndexBuffer&) = delete;
+	IndexBuffer& operator=(const IndexBuffer&) = delete;
+
+	IndexBuffer(IndexBuffer&& other) noexcept
+		: m_renderContext(other.m_renderContext)
+		, m_ibo(std::exchange(other.m_ibo, nullptr))
+		, m_indices(std::exchange(other.m_indices, {}))
+	{	}
+	IndexBuffer& operator=(IndexBuffer&& other) noexcept
+	{
+		IndexBuffer{ std::move(other) }.swap(*this);
+		return *this;
+	}
+
 	~IndexBuffer()
 	{
-		//DX_RELEASE(m_ibo);
+		DX_RELEASE(m_ibo);
 	}
 
 	size_t getBufferSize() const { return m_indices.size(); }
