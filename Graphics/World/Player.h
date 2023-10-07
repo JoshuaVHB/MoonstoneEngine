@@ -71,7 +71,7 @@ private:
 			delta = XMVectorSetY(delta, XMVectorGetY(delta) - 0.5f);
 		}
 
-		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q'))) {
+		if ( wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('a'))) {
 			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camHorizontal));
 			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camHorizontal));
 		}
@@ -81,7 +81,8 @@ private:
 			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(camHorizontal));
 		}
 
-		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z'))) {
+		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('w')))
+		{
 			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camForward));
 			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camForward));
 		}
