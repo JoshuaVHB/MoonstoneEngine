@@ -12,7 +12,6 @@ struct TextureManager {
 	Texture* importTexture(const std::wstring& path) {}
 	Texture* getTextureFromName(const std::wstring& name) {}
 
-
 };
 
 

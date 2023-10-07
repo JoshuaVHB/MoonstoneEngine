@@ -2,6 +2,7 @@
 
 #include <bitset>
 #include <queue>
+#include <optional>
 
 
 /*https://www.youtube.com/watch?v=h7HCdEyGRRw&list=PLqCJpWy5Fohd3S7ICFXwUomYW0Wv67pDD&index=9*/
@@ -108,6 +109,7 @@ public:
 class Mouse {
 
 public:
+	struct RawDelta { int x; int y; };
 
 	class Event
 	{
@@ -157,31 +159,81 @@ public:
 		return (m_buffer.pop(), e);
 	}
 
+	[[nodiscard]] std::optional<RawDelta>	readRawdelta()	noexcept {
+		if (m_rawDeltas.empty()) return std::nullopt;
+		RawDelta e = m_rawDeltas.front();
+		return (m_rawDeltas.pop(), e);
+	}
+
 	void flush() noexcept{ m_buffer = std::queue<Event>(); }
 
 private:
 
+
 	static constexpr unsigned short buffSize = 16;
 	std::queue<Event> m_buffer;
+	std::queue<RawDelta> m_rawDeltas;
 	int m_x, m_y;
 	bool m_isLeftPressed, m_isRightPressed;
+	bool m_isHidden = false;
+
 public:
 
-	void onMouseMoved(int x, int y)		{ m_x = x; m_y = y; m_buffer.push(Event(Event::Type::MOVE, *this)); trimBuffer(); }
+	void onMouseMoved	(int x, int y)	{ m_x = x; m_y = y; m_buffer.push(Event(Event::Type::MOVE, *this)); trimBuffer(); }
 	void onLeftPress	(int x, int y)	{ m_isLeftPressed  = true; m_buffer.push(Event(Event::Type::LPRESS, *this)); trimBuffer(); }
-	void onLeftRelease(int x, int y)	{ m_isLeftPressed  = false; m_buffer.push(Event(Event::Type::LRELEASE, *this)); trimBuffer(); }
-	void onRightPress(int x, int y)		{ m_isRightPressed	= true; m_buffer.push(Event(Event::Type::RPRESS, *this)); trimBuffer(); }
-	void onRightRelease(int x, int y)	{ m_isRightPressed	= false; m_buffer.push(Event(Event::Type::RRELEASE, *this)); trimBuffer(); }
+	void onLeftRelease	(int x, int y)	{ m_isLeftPressed  = false; m_buffer.push(Event(Event::Type::LRELEASE, *this)); trimBuffer(); }
+	void onRightPress	(int x, int y)	{ m_isRightPressed	= true; m_buffer.push(Event(Event::Type::RPRESS, *this)); trimBuffer(); }
+	void onRightRelease	(int x, int y)	{ m_isRightPressed	= false; m_buffer.push(Event(Event::Type::RRELEASE, *this)); trimBuffer(); }
 	void onWheelUp		(int x, int y)	{ m_buffer.push(Event(Event::Type::WHEELUP, *this)); trimBuffer();}
 	void onWheelDown	(int x, int y)	{ m_buffer.push(Event(Event::Type::WHEELDOWN, *this)); trimBuffer();}
-	void trimBuffer		(){}
+	void onRawDelta		(int x, int y)	{ m_rawDeltas.push(RawDelta{x,y}); trimBuffer(); }
+	void trimBuffer		(){
+	
+		while (m_buffer.size() > 16)
+			m_buffer.pop();
 
+		while (m_rawDeltas.size() > 16)
+			m_rawDeltas.pop();
+	
+	}
+
+	void enableCursor() { 
+		m_isHidden = true; 
+		while (::ShowCursor(TRUE) < 0);
+		ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+	}
+	void disableCursor() { 
+		m_isHidden = false;
+		while(::ShowCursor(FALSE) >= 0);
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+	}
+
+	void confineCursor(HWND hWnd) {
+		RECT rect;
+		GetClientRect(hWnd, &rect);
+		MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+		ClipCursor(&rect);
+	}
+
+	void freeCursor() {
+		ClipCursor(nullptr);
+	}
+
+
+	/* Confines and hides cursor on first call, frees on the second */
+	void toggleCursorFocus(HWND hWnd) {
+
+
+		if (m_isHidden) {
+			freeCursor();
+			enableCursor();
+		}
+		else {
+			confineCursor(hWnd);
+			disableCursor();
+		}
+
+	}
 
 };
 
-class InputsManager
-{
-
-
-
-};

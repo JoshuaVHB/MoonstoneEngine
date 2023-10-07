@@ -30,7 +30,8 @@ public:
 	{
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-		DirectX::CreateDDSTextureFromFile(m_renderContext.device, L"res/textures/skybox.dds", nullptr, &m_srv);
+		DirectX::CreateDDSTextureFromFile(m_renderContext.device, L"res/textures/ex.dds", nullptr, &m_srv);
+
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 
@@ -42,6 +43,8 @@ public:
 
 #endif
 	}
+
+	ID3D11ShaderResourceView* getResourceView() const { return m_srv; }
 
 
 };

@@ -54,6 +54,15 @@ bool WindowsEngine::InitAppInstance()
 
 	hAccelTable = LoadAccelerators(hAppInstance, MAKEINTRESOURCE(IDC_PETITMOTEUR3D));
 
+
+	RAWINPUTDEVICE rid;
+	rid.usUsagePage = 0x01; //mouse page
+	rid.usUsage = 0x02; //mouse usage
+	rid.hwndTarget = nullptr; //mouse usage
+	rid.dwFlags = 0; //mouse usage
+
+	RegisterRawInputDevices(&rid, 1, sizeof(rid));
+
 	return true;
 }
 
@@ -205,7 +214,36 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 		break;
 	case WM_KILLFOCUS:
 		wKbd->clearStates();
+		wMouse->flush();
+		wMouse->freeCursor();
+		wMouse->enableCursor();
 		break;
+
+	/**********************************************************************/
+	// Raw mouse input
+	case WM_INPUT:
+	{
+
+		static std::vector<char> rawbuffer;
+
+		UINT size;
+		// fill size
+		GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, nullptr, &size, sizeof(RAWINPUTHEADER));
+		// get data
+		rawbuffer.resize(size);
+		GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, rawbuffer.data(), &size, sizeof(RAWINPUTHEADER));
+
+		auto& ri = reinterpret_cast<const RAWINPUT&>(*rawbuffer.data());
+		if ((ri.header.dwType == RIM_TYPEMOUSE) &&
+			(ri.data.mouse.lLastX != 0 || ri.data.mouse.lLastY != 0)
+			)
+			wMouse->onRawDelta(ri.data.mouse.lLastX, ri.data.mouse.lLastY);
+
+		break;
+	}
+
+
+
 	/**********************************************************************/
 	case WM_MOUSEMOVE:
 	{

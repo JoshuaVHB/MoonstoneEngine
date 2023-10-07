@@ -105,9 +105,16 @@ public:
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
+		
 		m_context.context->RSSetViewports(1, &vp);
 	
-
+		ID3D11RasterizerState* pRasterizerState;
+		D3D11_RASTERIZER_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.FillMode = D3D11_FILL_SOLID;
+		desc.CullMode = D3D11_CULL_NONE;
+		m_context.device->CreateRasterizerState(&desc, &pRasterizerState);
+		m_context.context->RSSetState(pRasterizerState);
 
 
 	}
@@ -141,6 +148,12 @@ public:
 	{
 		m_context.swapChain->Present(1, 0);
 	}
+
+
+	void changeCullingMode(bool cullBackfaces=true) {
+		//m_context.context->RSSetState();
+	}
+
 
 	ID3D11Device* getDevice()						const noexcept { return m_context.device; }
 	IDXGISwapChain* getSwapChain()					const noexcept { return m_context.swapChain; }

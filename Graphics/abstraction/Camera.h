@@ -3,6 +3,9 @@
 #include <DirectXMath.h>
 #include <memory>
 #include <concepts>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 
 using namespace DirectX;
 using Mat4 = XMFLOAT4X4;
@@ -31,6 +34,12 @@ struct Vec2 {
 
 };
 
+inline std::ostream& operator<<(std::ostream& os, const Vec2& v) {
+	os << "(" << (v.x) << "," << v.y << ")";
+	return os;
+}
+
+
 struct Projection {
 
 	Mat projMat;
@@ -42,7 +51,7 @@ protected:
 struct PerspectiveProjection : Projection
 {
 	float aspectRatio = 2.0f;
-	float FOV = XM_PI / 4;
+	float FOV = XM_PI / 4.f;
 
 	float znear = 0.10f, zfar = 1000.F;
 
@@ -94,6 +103,14 @@ private:
 	Mat m_viewProjMatrix;
 	Mat m_viewMatrix;
 
+	struct _angles {
+		float yaw = 0.F;
+		float pitch = 0.F;
+		float roll = 0.f;
+
+		XMVECTOR toVec() const { return { -pitch ,-yaw, -roll }; }
+	} m_angles ;
+
 	std::unique_ptr<Projection> m_projection;
 
 	Vec m_position = {0,0,-10.f,1.0f};
@@ -101,14 +118,19 @@ private:
 	Vec m_UP{0,1,0,1};
 	Vec m_left{1,0,0,1};
 
+	/*
 	float m_pitch = 0.f;
 	float m_yaw = 0.f;
+	*/
 
 	float t = 0;
+	float m_rotationSpeed =1.f;
+
+
 
 public:
 
-	void updateCam(float deltaTime = 0) 
+	void updateCam() 
 	{
 		computeVPMatrix();
 	}
@@ -130,12 +152,21 @@ public:
 	
 	void computeViewMatrix() {
 
-
-
 		m_viewMatrix = XMMatrixIdentity();
 		m_viewMatrix = m_viewMatrix * XMMatrixTranslationFromVector(-m_position);
-		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,1,0,1 }, -m_yaw);
-		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 1,0,0,1 }, -m_pitch);
+
+		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,1,0,1 }, -m_angles.yaw);
+		m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 1,0,0,1 }, -m_angles.pitch);
+		//m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,0,1,1 }, -m_angles.roll);
+
+	}
+
+	void rotate(float dx = 0.0F, float dy = 0.0F, float dz = 0.0F) 
+	{
+		m_angles.yaw += dx * m_rotationSpeed;
+		m_angles.pitch = std::clamp(m_angles.pitch + dy, -DirectX::XM_PI * .499f, DirectX::XM_PI * .499f);
+		
+
 	}
 
 
@@ -150,6 +181,7 @@ public:
 		m_viewMatrix = XMMatrixLookAtLH(m_position, m_target, m_UP);
 	}
 
+	XMVECTOR getAngles() const noexcept { return m_angles.toVec(); }
 
 	Mat getVPMatrix() {
 		computeVPMatrix();
@@ -171,8 +203,8 @@ public:
 
 	Vec getForward() const noexcept { 	
 	
-			double cy = cos(m_yaw), sy = sin(m_yaw);
-			double cp = cos(m_pitch), sp = sin(m_pitch);
+			double cy = cos(m_angles.yaw), sy = sin(m_angles.yaw);
+			double cp = cos(m_angles.pitch), sp = sin(m_angles.pitch);
 			return { - static_cast<float>(sy * cp), static_cast<float>(sp), static_cast<float> ( - cy * cp)};
 	}
 
@@ -187,9 +219,13 @@ public:
 
 
 
-	void setYaw(float yaw) { m_yaw = yaw; }
-	void setPitch(float pitch) { m_pitch = pitch; }
-	float getPitch() const noexcept {return m_pitch ; }
-	float getYaw() const noexcept { return m_yaw; }
+	void setYaw(float yaw) { m_angles.yaw = yaw; }
+	void setPitch(float pitch) { m_angles.pitch = pitch; }
+	[[nodiscard]] float getPitch() const noexcept {return m_angles.pitch ; }
+	[[nodiscard]] float getYaw() const noexcept { return m_angles.yaw; }
+
+	[[nodiscard]] float& getRawYaw() { return m_angles.yaw; }
+	[[nodiscard]] float& getRawPitch() { return m_angles.pitch; }
+
 };
 

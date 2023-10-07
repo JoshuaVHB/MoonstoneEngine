@@ -176,6 +176,7 @@
     <ClInclude Include="Graphics\World\Cube.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
+    <ClInclude Include="Graphics\World\Player.h" />
     <ClInclude Include="Graphics\World\RessourcesManager.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Terrain.h" />

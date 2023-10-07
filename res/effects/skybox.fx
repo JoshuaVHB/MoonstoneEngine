@@ -22,7 +22,7 @@ VSOut skyboxVS(float3 pos: POSITION)
 {
     VSOut vso;
     vso.worldPos = pos;
-    vso.outpos = mul(float4(pos+camPos.xyz, 1.0f), viewProj); // nullify translation by removing w component
+    vso.outpos = mul(float4(pos+camPos.xyz, 1.0f), viewProj); // center at campos
     vso.outpos.z = vso.outpos.w; // z stays at 1 after w division
     return vso;
     
@@ -30,8 +30,8 @@ VSOut skyboxVS(float3 pos: POSITION)
 
 float4 skyboxFS(float3 worldPos : TEXCOORD0) : SV_TARGET
 {
-    return tex.Sample(SampleState, worldPos);
-   // return float4(1,0,0,1);
+   return tex.Sample(SampleState, worldPos);
+   //return float4(1,0,0,1);
 }
 
 technique11 skybox

@@ -84,19 +84,6 @@ public:
 		return elems.data();
 	}
 
-	/*
-	
-	typedef struct D3D11_INPUT_ELEMENT_DESC
-    {
-    LPCSTR SemanticName;
-    UINT SemanticIndex;
-    DXGI_FORMAT Format;
-    UINT InputSlot;
-    UINT AlignedByteOffset;
-    D3D11_INPUT_CLASSIFICATION InputSlotClass;
-    UINT InstanceDataStepRate;
-    } 	D3D11_INPUT_ELEMENT_DESC;
-	*/
 	template<size_t floatCount>
 	void pushBack(Semantic elemType)
 	{
@@ -120,12 +107,6 @@ private:
 	d3d11_graphics::RenderingContext m_renderContext;
 	ID3DX11EffectTechnique* m_technique; 
 
-	D3D11_INPUT_ELEMENT_DESC layout[3] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,	0,			D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0,		16,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,	32,				D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
 
 public:
 
@@ -243,7 +224,6 @@ public:
 
 		ID3DX11EffectSamplerVariable* variableSampler;
 		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
-		//variableSampler = tmp->AsSampler();
 		variableSampler->SetSampler(0, pSampleState);
 
 	}
@@ -252,6 +232,7 @@ public:
 	{
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
 	}
+
 
 
 	template<class ShaderParam>
