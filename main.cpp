@@ -61,9 +61,9 @@ int main() {
 		initImgui(rMoteur.getHwnd(), gfx);
 
 		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Scene2>("Scene2");
+		SceneManager::registerScene<Rush2Scene>("RUSH2");
 		SceneManager::registerScene<Sponza>("Sponza");
-		SceneManager::switchToScene(0);
+		SceneManager::switchToScene(1);
 
 
 		rMoteur.run();

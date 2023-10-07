@@ -211,6 +211,10 @@ public:
 	void confineCursor(HWND hWnd) {
 		RECT rect;
 		GetClientRect(hWnd, &rect);
+		rect.left = rect.right / 2;
+		rect.top = rect.bottom / 2;
+		rect.right = rect.left + 1;
+		rect.bottom = rect.top + 1;
 		MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
 		ClipCursor(&rect);
 	}

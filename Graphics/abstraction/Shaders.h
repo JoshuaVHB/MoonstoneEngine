@@ -84,6 +84,7 @@ public:
 		return elems.data();
 	}
 
+	// Works for now, as i'm not sure we will really use anything else than float32(s) formats
 	template<size_t floatCount>
 	void pushBack(Semantic elemType)
 	{

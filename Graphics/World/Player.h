@@ -18,15 +18,7 @@ private:
 
 	Camera		m_camera;
 	XMFLOAT3	m_position;
-
-	Vec2 mousePos;
-	Vec2 mousePreviousPos;
-	Vec2 mouseDelta;
-	Vec2 rotationMotion;
-	Vec2 rotationMotion2;
-	Vec2 sum;
-	Vec2 tmp;
-
+	
 	Vec delta;
 
 	const Vec2 winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
@@ -45,47 +37,28 @@ public:
 
 	void step(float deltaTime)
 	{
-		// Handle mouse events
-		Mouse::Event me;
+		handleMouseEvents();		
+		handleKeyboardEvents();
 
-		while ((me = wMouse->read()).isValid()) 
-		{
-			if (me.getType() == Mouse::Event::Type::RPRESS) {
+		m_camera.updateCam();
 
-				if (isConfined) {
-					wMouse->freeCursor();
-					wMouse->enableCursor();
+	}
 
-				}
-				else {
-					wMouse->confineCursor(hWnd);
-					wMouse->disableCursor();
-				}
+	void onImGuiRender() 
+	{
+		ImGui::Begin("Player debug");
 
-				isConfined = !isConfined;
-			}
-		}
-		
-		wMouse->flush();
-		float dx = 0, dy = 0;
-		while (const auto rawDelta = wMouse->readRawdelta()) {
+		ImGui::SliderAngle("Yaw", &m_camera.getRawYaw());
+		ImGui::SliderAngle("Pitch", &m_camera.getRawPitch());
 
-			if (isConfined) {				
-				dx += rawDelta->x;
-				dy += rawDelta->y;
-			}		
-		}
-		
-		tmp = { dx, dy };
-		float m_dx = (float)dx / (float)winSize.x * DirectX::XM_PI;
-		float m_dy = (float)dy / (float)winSize.y * DirectX::XM_PI;
+		ImGui::End();
 
-		tmp = tmp / winSize * DirectX::XM_PI;
-		rotationMotion2 = { m_dx, m_dy };
-		m_camera.rotate(m_dx, m_dy);
-		
+	}
 
-		// Handle keyboard events
+private:
+
+
+	void handleKeyboardEvents() {
 		Vec camForward = m_camera.getForwardDir();
 		Vec camHorizontal = m_camera.getHorizontalDir();
 
@@ -120,28 +93,42 @@ public:
 
 
 		m_camera.setPosition(delta);
-		m_camera.updateCam();
-
-		sum = sum + (rotationMotion - rotationMotion2);
-
-
 	}
 
-	void onImGuiRender() 
-	{
-		ImGui::Begin("Player debug");
+	void handleMouseEvents() {
+		Mouse::Event me;
 
-		ImGui::SliderAngle("Yaw", &m_camera.getRawYaw());
-		ImGui::SliderAngle("Pitch", &m_camera.getRawPitch());
+		while ((me = wMouse->read()).isValid())
+		{
+			if (me.getType() == Mouse::Event::Type::RPRESS) {
 
-		ImGui::Text("Events normaux : %f , %f", rotationMotion.x, rotationMotion.y);
-		ImGui::Text("MouseDelta     : %f , %f", mouseDelta.x, mouseDelta.y);
-		ImGui::Text("RawDelta       : %f , %f", tmp.x, tmp.y);
-		ImGui::Text("RawInput       : %f , %f", rotationMotion2.x, rotationMotion2.y);
+				if (isConfined) {
+					wMouse->freeCursor();
+					wMouse->enableCursor();
 
-		ImGui::Text("Sum            : %f , %f", sum.x, sum.y);
+				}
+				else {
+					wMouse->confineCursor(hWnd);
+					wMouse->disableCursor();
+				}
 
-		ImGui::End();
+				isConfined = !isConfined;
+			}
+		}
+
+		wMouse->flush();
+		float dx = 0, dy = 0;
+		while (const auto rawDelta = wMouse->readRawdelta()) {
+
+			if (isConfined) {
+				dx += rawDelta->x;
+				dy += rawDelta->y;
+			}
+		}
+
+		float m_dx = (float)dx / (float)winSize.x * DirectX::XM_PI;
+		float m_dy = (float)dy / (float)winSize.y * DirectX::XM_PI;
+		m_camera.rotate(m_dx, m_dy);
 
 	}
 

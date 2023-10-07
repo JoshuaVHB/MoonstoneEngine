@@ -25,7 +25,6 @@ cbuffer worldParams
 cbuffer meshParams
 {
     float4x4 worldMat; // matrice de transformation dans le monde
-    float4x4 u_MVP; // matrice de transformation dans le monde
 };
 
 /////////////////////
