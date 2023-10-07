@@ -81,8 +81,12 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     float3 couleurTexture = textureEntree.Sample(SampleState, vs.uv).rgb;
     
     // I = A + D * N.L + (R.V)n 
+    /*
     couleur =   couleurTexture * ambiantLight.rgb * ambiantMat.rgb 
                 + couleurTexture * diffuseLight.rgb * diffuseMat.rgb * diff;
+       */
+    couleur = ambiantLight.rgb * ambiantMat.rgb 
+                +  diffuseLight.rgb * diffuseMat.rgb * diff;
     
     couleur += S;
     return float4(couleur, 1.0f);

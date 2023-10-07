@@ -86,7 +86,7 @@ struct OrthographicProjection : public Projection
 		znear = zn;
 		zfar = zf;
 
-		projMat = XMMatrixOrthographicLH(left - right, top - bot, znear, zfar);
+		projMat = XMMatrixOrthographicRH(left - right, top - bot, znear, zfar);
 
 	}
 

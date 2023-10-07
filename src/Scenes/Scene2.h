@@ -19,12 +19,8 @@ private:
 	Player  m_player; // Basically the 1st person camera
 	Camera	m_thirdPerson;
 	Camera* currentCamera = &m_thirdPerson;
+	float	aspectRatio = 5;
 
-	float aspectRatio = 5;
-	float left{ 1 }, top{ 1 }, right{ 5 }, bottom{ 5 }, znear{ 0.1 }, zfar{ 1.F };
-	float tx = 0, ty = 30, tz = 15;
-
-	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	
 	// Allows for hot reload of the heightmap
 	std::filesystem::file_time_type ftime = std::filesystem::last_write_time(path_to_map);
@@ -68,7 +64,7 @@ public:
 
 		// -- Setup the orthographic camera
 		m_thirdPerson.setProjection<OrthographicProjection>(
-			OrthographicProjection{1.f,50.f,1.f,50.f, 0.1f, 100.f}
+			OrthographicProjection{1.f,50.f,50.f,1.f, 0.1f, 100.f}
 		);
 		m_thirdPerson.setPosition({ 0,30,15 });
 		auto p = m_terrain.getParams();
@@ -99,8 +95,7 @@ public:
 		m_baseMeshEffect.updateSubresource(sp, "worldParams");
 		m_baseMeshEffect.sendCBufferToGPU("worldParams");
 
-		// Check for hot reloads
-				// -- Check for map refreshes
+		// -- Check for hot reload
 		lastTime = std::filesystem::last_write_time(path_to_map);
 		if (lastTime != ftime) {
 			m_terrain.hotreloadMap();
@@ -118,7 +113,6 @@ public:
 
 		// Clear and render objects
 		Renderer::clearScreen();
-		m_baseMeshEffect.bindTexture("textureEntree", breadbug.getTexture());
 		Renderer::renderMesh(cam, m_terrain.getMesh(), m_baseMeshEffect);
 
 		// Render skybox last
@@ -138,27 +132,12 @@ public:
 				currentCamera = &m_player.getCamera();
 		}
 
-		if (
-			ImGui::DragFloat("AspectRation : ", &aspectRatio, 1.0f, 1.0f, 200) 
-			)
+		if (ImGui::DragFloat("AspectRatio : ", &aspectRatio, 1.0f, 1.0f, 200) 	)
 		{
-			if (left > right) std::swap(left, right);
-			if (top > bottom) std::swap(top, bottom);
-			m_thirdPerson.setProjection<OrthographicProjection>(OrthographicProjection{ 0, aspectRatio, 0, aspectRatio, 0.1, 100 });
+			m_thirdPerson.setProjection<OrthographicProjection>(OrthographicProjection{ 1, aspectRatio, aspectRatio, 1, 0.1, 100 });
 			auto p = m_terrain.getParams();
 			Vec centerPoint = { p.width / 2 * p.xyScale, 0.f, p.height / 2 * p.xyScale };
 			m_thirdPerson.lookAt(centerPoint);
-		}
-
-
-		if (
-			ImGui::DragFloat("target x : ", &tx, 1.0f, -50.0f, 50) +
-			ImGui::DragFloat("target y : ", &ty, 1.0f, -50.0f, 50) +
-			ImGui::DragFloat("target z : ", &tz, 1.0f, -50,50)
-			)
-		{
-			m_thirdPerson.setPosition({ -tx,-ty,-tz,1.0f });
-
 		}
 
 		ImGui::End();
