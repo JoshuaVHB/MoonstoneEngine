@@ -2,36 +2,36 @@
 // Uniforms
 
 TextureCube tex; // la texture
-SamplerState sam; // l’état de sampling
+SamplerState SampleState; // l’état de sampling
 
 cbuffer SkyboxCbuffer
 {
     matrix viewProj;
-    
+    float4 camPos;    
 };
-
 
 struct VSOut
 {
-    float3 worldPos : Position;
+    float3 worldPos : TEXCOORD0;
     float4 outpos : SV_Position;
     
 };
 
 
-VSOut skyboxVS(float3 pos: POSITION)
+VSOut skyboxVS(float3 pos: POSITION) 
 {
     VSOut vso;
     vso.worldPos = pos;
-    vso.outpos = mul(float4(pos, 0.0f), viewProj); // nullify translation by removing w component
+    vso.outpos = mul(float4(pos+camPos.xyz, 1.0f), viewProj); // nullify translation by removing w component
     vso.outpos.z = vso.outpos.w; // z stays at 1 after w division
     return vso;
     
 }
 
-float4 skyboxFS(float3 worldPos : POSITION) : SV_TARGET
+float4 skyboxFS(float3 worldPos : TEXCOORD0) : SV_TARGET
 {
-    return tex.Sample(sam, worldPos);
+    return tex.Sample(SampleState, worldPos);
+   // return float4(1,0,0,1);
 }
 
 technique11 skybox

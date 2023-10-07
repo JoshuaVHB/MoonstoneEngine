@@ -16,9 +16,6 @@
 #include <directXmath.h>
 
 
-extern std::unique_ptr<Keyboard> wKbd;
-extern std::unique_ptr<Mouse> wMouse;
-
 
 
 inline std::ostream& operator<<(std::ostream& os, const Vec2& v) {
@@ -178,9 +175,11 @@ public:
 
 		Renderer::renderMesh(camera, terrainMesh, renderShader);
 
-		Renderer::renderMesh(camera, cube, renderShader);
+		//Renderer::renderMesh(camera, cube, renderShader);
 
-		//box.renderSkybox(camera);
+		box.renderSkybox(camera);
+
+		//Renderer::renderMesh(camera, box.getMesh(), renderShader);
 
 	}
 	virtual void onImGuiRender() override {

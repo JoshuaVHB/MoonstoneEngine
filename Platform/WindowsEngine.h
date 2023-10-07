@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Engine.h"
-#include "../Graphics/d3d11_graphics.h"
-#include "IO/Inputs.h"
 #include <memory>
+
+#include "Engine.h"
+#include "IO/Inputs.h"
+
+#include "../Graphics/d3d11_graphics.h"
 
 
 #define MAX_LOADSTRING 100
