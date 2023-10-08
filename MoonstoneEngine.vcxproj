@@ -190,7 +190,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
-    <ClInclude Include="src\Scenes\Scene2.h" />
+    <ClInclude Include="src\Scenes\Rush2Scene.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Utils\Debug.h" />

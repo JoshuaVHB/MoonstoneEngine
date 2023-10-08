@@ -1,6 +1,6 @@
 #pragma once
 
 #include "TestScene.h"
-#include "Scene2.h"
+#include "Rush2Scene.h"
 #include "Sponza.h"
 

@@ -2,7 +2,8 @@
 
 // Uniforms
 
-Texture2D textureEntree; // la texture
+Texture2D grassTexture; // la texture
+Texture2D rockTexture; // la texture
 SamplerState SampleState; // l’état de sampling
 
 
@@ -15,11 +16,8 @@ cbuffer worldParams
     float4 lightPos ; // la position de la source d’éclairage (Point) 
     float4 cameraPos; // la position de la caméra 
     
-    float4 ambiantLight; // la valeur ambiante de l’éclairage 
-    float4 diffuseLight; // la valeur diffuse de l’éclairage
-    
-    float4 ambiantMat; // la valeur ambiante du matériau 
-    float4 diffuseMat; // la valeur diffuse du matériau 
+    float4 sunColor; // la valeur ambiante de l’éclairage 
+    float  sunStrength; // la valeur diffuse de l’éclairage
 }
 
 cbuffer meshParams
@@ -72,24 +70,32 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     float3 V = normalize(vs.camDir);
     
     // Valeur de la composante diffuse 
-    float3 diff = saturate(dot(N, L)); // R = 2 * (N.L) * N – L 
-    float3 R = normalize(2 * diff * N - L); 
+    float3 sunLight = saturate(dot(N, L));
+    float3 R = normalize(2 * sunLight * N - L);
     // Puissance de 4 - pour l’exemple
     float S = pow(saturate(dot(R, L)), 4.f); 
+
+    float3 rockSample = rockTexture.Sample(SampleState, vs.uv).rgb;
+    float3 grassSample = grassTexture.Sample(SampleState, vs.uv).rgb;
     
-    // Échantillonner la couleur du pixel à partir de la texture
-    float3 couleurTexture = textureEntree.Sample(SampleState, vs.uv).rgb;
-    
-    // I = A + D * N.L + (R.V)n 
+    couleur.rgb = lerp(rockSample, grassSample, smoothstep(0.79, 1, N.y));    
+    couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
+    //couleur += S;
     /*
-    couleur =   couleurTexture * ambiantLight.rgb * ambiantMat.rgb 
-                + couleurTexture * diffuseLight.rgb * diffuseMat.rgb * diff;
-       */
-    couleur = ambiantLight.rgb * ambiantMat.rgb 
-                +  diffuseLight.rgb * diffuseMat.rgb * diff;
     
-    couleur += S;
+    float computeSunlight(vec3 normal) {
+    return max(0, dot(normalize(normal), normalize(u_SunPos)));
+}
+    couleur *= ambiantLight.rgb * ambiantMat.rgb 
+                +  diffuseLight.rgb * diffuseMat.rgb * diff;
+    */    
+    //couleur = float4(rockSample, 1);
+    
+    //  return mix(rockSample, grassSample, smoothstep(u_grassSteepness.x, u_grassSteepness.y, normal.y));
+ //   couleur += S/2;
+    
     return float4(couleur, 1.0f);
+    
 }
 
 ////////////////////

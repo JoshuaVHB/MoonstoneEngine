@@ -55,6 +55,12 @@ public:
 				));
 
 				v.normal = Vec{ normal };
+
+				// 1.3 -> Compute UVs
+
+				Vec uv = { (float)x / (float)width, (float)y / (float)height };
+				v.uv = uv;
+
 				vertices.push_back(v);
 			}
 

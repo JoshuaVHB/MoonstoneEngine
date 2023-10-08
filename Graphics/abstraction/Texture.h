@@ -23,6 +23,7 @@ public:
 
 	Texture() {}
 
+
 	Texture(
 		const std::wstring& path
 	) 
