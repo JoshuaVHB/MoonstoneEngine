@@ -42,7 +42,7 @@ public:
 		TerrainParams defaultParams{
 			m_map.getWidth(), m_map.getHeigth(),
 			/*xyScale*/ 1.F,
-			/*height scale*/ 10.F,
+			/*height scale*/ 100.F,
 			1.F
 		};
 

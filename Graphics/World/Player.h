@@ -62,6 +62,9 @@ private:
 		Vec camForward = m_camera.getForwardDir();
 		Vec camHorizontal = m_camera.getHorizontalDir();
 
+		Vec forwardDir = XMVector3Normalize(Vec{ XMVectorGetX(camForward), 0, XMVectorGetZ(camForward) });
+		Vec horizontalDir = XMVector3Normalize(Vec{ XMVectorGetX(camHorizontal), 0, XMVectorGetZ(camHorizontal) });
+
 		Keyboard::Event e = wKbd->readKey();
 
 		if (wKbd->isKeyPressed(VK_SPACE)) {
@@ -72,24 +75,24 @@ private:
 		}
 
 		if ( wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('a'))) {
-			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camHorizontal));
-			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camHorizontal));
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(horizontalDir));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(horizontalDir));
 		}
 
 		else if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d'))) {
-			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(camHorizontal));
-			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(camHorizontal));
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(horizontalDir));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(horizontalDir));
 		}
 
 		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('w')))
 		{
-			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(camForward));
-			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(camForward));
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) - XMVectorGetZ(forwardDir));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) - XMVectorGetX(forwardDir));
 		}
 
 		else if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s'))) {
-			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(camForward));
-			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(camForward));
+			delta = XMVectorSetZ(delta, XMVectorGetZ(delta) + XMVectorGetZ(forwardDir));
+			delta = XMVectorSetX(delta, XMVectorGetX(delta) + XMVectorGetX(forwardDir));
 		}
 
 

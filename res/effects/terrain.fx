@@ -2,7 +2,8 @@
 
 // Uniforms
 
-Texture2D tex; // la texture
+Texture2D grassTexture; // la texture
+Texture2D rockTexture; // la texture
 SamplerState SampleState; // l’état de sampling
 
 
@@ -12,11 +13,11 @@ SamplerState SampleState; // l’état de sampling
 cbuffer worldParams
 {
     float4x4 viewProj; // la matrice totale 
-    float4 lightPos; // la position de la source d’éclairage (Point) 
+    float4 lightPos ; // la position de la source d’éclairage (Point) 
     float4 cameraPos; // la position de la caméra 
     
     float4 sunColor; // la valeur ambiante de l’éclairage 
-    float sunStrength; // la valeur diffuse de l’éclairage
+    float  sunStrength; // la valeur diffuse de l’éclairage
 }
 
 cbuffer meshParams
@@ -28,23 +29,23 @@ cbuffer meshParams
 
 // -- VSOUT
 
-struct VSOut
-{
-    float4 Pos : SV_Position;
-    float3 Norm : TEXCOORD0;
-    float3 lightDir : TEXCOORD1;
-    float3 camDir : TEXCOORD2;
+struct VSOut { 
+    float4 Pos : SV_Position; 
+    float3 Norm : TEXCOORD0; 
+    float3 lightDir : TEXCOORD1; 
+    float3 camDir : TEXCOORD2; 
     float2 uv : TEXCOORD3;
-};
+}; 
 
 ////////////////////
 
 // -- Vertex Shader
 
-VSOut baseMeshVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOORD)
-{
+VSOut baseMeshVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOORD) 
+
+{ 
     float4x4 MVP = mul(worldMat, viewProj);
-    VSOut vs_out = (VSOut) 0;
+    VSOut vs_out = (VSOut)0; 
     vs_out.Pos = mul(Pos, MVP);
     vs_out.Norm = mul(float4(Normale, 0.0f), worldMat).xyz;
     
@@ -61,10 +62,10 @@ VSOut baseMeshVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEX
 // -- Fragment Shader
 
 float4 baseMeshPS(VSOut vs) : SV_Target
-{
-    float3 couleur;
+{ 
+    float3 couleur; 
     // Normaliser les paramètres 
-    float3 N = normalize(vs.Norm);
+    float3 N = normalize(vs.Norm); 
     float3 L = normalize(vs.lightDir);
     float3 V = normalize(vs.camDir);
     
@@ -72,13 +73,14 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     float3 sunLight = saturate(dot(N, L));
     float3 R = normalize(2 * sunLight * N - L);
     // Puissance de 4 - pour l’exemple
-    float S = pow(saturate(dot(R, L)), 4.f);
+    float S = pow(saturate(dot(R, L)), 4.f); 
 
-    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
+    float3 rockSample = rockTexture.Sample(SampleState, vs.uv).rgb;
+    float3 grassSample = grassTexture.Sample(SampleState, vs.uv).rgb;
     
-    couleur.rgb = texSample;
+    couleur.rgb = lerp(rockSample, grassSample, smoothstep(0.79, 1, N.y));    
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
-    couleur += S / 4.f;
+    couleur += S/4.f;
     
     return float4(couleur, 1.0f);
     

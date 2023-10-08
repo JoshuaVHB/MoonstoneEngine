@@ -5,42 +5,52 @@
 #include <filesystem>
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 
+/*
+//	This scene has been built for the Rush #2. 
+//  It is exceptionally ugly on purpose.
+//
+//	Contains FP, TP, skybox, hot reload of the terrain, textures, ugly blinn-phong with rotating sun.
+//	You have been warned. This scene might permanently damage your conception of "beauty".
+*/
+
 class Rush2Scene : public Scene {
+
+
 private:
 
-
-	//Mesh	m_terrainMesh;
+	// -- Terrain
 	const std::filesystem::path path_to_map = "res/textures/full.png";
 	Terrain m_terrain{ path_to_map };
+	Vec		centerPoint; // for camera target
 	Texture m_rockTexture{ L"res/textures/rock.dds" };
-	Texture m_grassTexture{ L"res/textures/grass6.dds" };
+	Texture m_grassTexture{ L"res/textures/breadbug.dds" };
 
+	// -- Effect and skybox
 	Effect	m_baseMeshEffect;
 	Skybox  m_skybox;
 
-	Player  m_player; // Basically the 1st person camera
+	// -- Camera
+	Player  m_player;					// Basically the 1st person camera
 	Camera	m_orthoCam;
 	Camera* currentCamera = &m_orthoCam;
-	Vec m_orthocamPos = { 0,120,50 }; // For imgui purposes
+	Vec m_orthocamPos = { 0,120,50 };	// For imgui purposes
+	float aspectRatio = 100;
 
-	float	aspectRatio = 100;
-
-	float m_elapsedTime = 0;
-	
-	// Allows for hot reload of the heightmap
+	// -- hot reload of the heightmap
 	std::filesystem::file_time_type ftime = std::filesystem::last_write_time(path_to_map);
 	std::filesystem::file_time_type lastTime;
+	float m_elapsedTime = 0;
 
-	Vec centerPoint;
 
 private:
 
+	// -- Define constant buffers
 	struct worldParams {
 		XMMATRIX viewProj;
-		XMVECTOR lightPos; // la position de la source d’éclairage (Point)
-		XMVECTOR cameraPos; // la position de la caméra 
-		XMVECTOR sunColor = {1,1,.8,1}; // la valeur ambiante de l’éclairage
-		XMVECTOR sunStrength = { 0.75 }; // la valeur ambiante du matériau 
+		XMVECTOR lightPos; 
+		XMVECTOR cameraPos;
+		XMVECTOR sunColor = {1,1,.8,1}; 
+		XMVECTOR sunStrength = { 0.75 }; 
 	} sp ;
 
 	struct meshParams {
@@ -52,30 +62,34 @@ public:
 	Rush2Scene() 
 	{
 		// -- Import the baseMesh effect
-		m_baseMeshEffect.loadEffectFromFile("res/effects/baseMesh.fx");
+		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
+
+
 
 		// -- Setup the effect correctly
-
 		m_baseMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams)); // For camera, light, colors...
 		m_baseMeshEffect.addNewCBuffer("meshParams", sizeof(meshParams)); // For model matrix basically
+
+
 
 		// -- Specify how the input vertices are layered
 		InputLayout testlayout;
 		testlayout.pushBack<3>(InputLayout::Semantic::Position);
 		testlayout.pushBack<3>(InputLayout::Semantic::Normal);
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
-
 		m_baseMeshEffect.bindInputLayout(testlayout);
+
+
 
 		// -- Setup the orthographic camera
 		m_orthoCam.setProjection<OrthographicProjection>(
-			OrthographicProjection{-5.f,5,5,-5, 0, 10000.f}
+			OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio, 0, 500 }
 		);
 		m_orthoCam.setPosition(m_orthocamPos);
-
-
 		Terrain::TerrainParams p = m_terrain.getParams();
 		centerPoint = { p.width / 2 * p.xyScale, 0.f, p.height / 2 * p.xyScale };
+		m_orthoCam.updateCam();
+		m_orthoCam.lookAt(centerPoint);
 	}
 
 
@@ -119,8 +133,8 @@ public:
 		Renderer::clearScreen();
 		Renderer::renderMesh(cam, m_terrain.getMesh(), m_baseMeshEffect);
 
-		// Render skybox last
-		if (currentCamera != &m_orthoCam) m_skybox.renderSkybox(cam);
+		// Render skybox last (if first person)
+		if (currentCamera == &m_player.getCamera()) m_skybox.renderSkybox(cam);
 	
 	}
 
@@ -128,7 +142,7 @@ public:
 	{
 	
 		ImGui::Begin("Rush 2 debug window");
-		if (ImGui::Button("Toggle Third person camera")) {
+		if (ImGui::Button("Switch camera")) {
 
 			if (currentCamera == &m_player.getCamera())
 				currentCamera = &m_orthoCam;
@@ -136,13 +150,13 @@ public:
 				currentCamera = &m_player.getCamera();
 		}
 
-		if (ImGui::DragFloat("Zoom : ", &aspectRatio, 1.0f, 2.0f, 200) 	)
+		if (ImGui::DragFloat("Orthograhic zoom : ", &aspectRatio, 1.0f, 2.0f, 200) 	)
 		{
-			m_orthoCam.setProjection<OrthographicProjection>(OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio, 0.0, 10000 });
+			m_orthoCam.setProjection<OrthographicProjection>(OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio,  0, 500 });
 		}
 
 		ImGui::DragFloat("Sun strength : ", &sp.sunStrength.vector4_f32[0], 0.05f, 0.1F, 2.F);
-		if (ImGui::DragFloat3("Camera pos : ", &m_orthocamPos.vector4_f32[0], 0.5f)) {
+		if (ImGui::DragFloat3("Orthograhic camPos : ", &m_orthocamPos.vector4_f32[0], 0.5f)) {
 			m_orthoCam.setPosition(m_orthocamPos);
 		}
 
@@ -151,6 +165,5 @@ public:
 		m_terrain.showDebugWindow();
 	
 	}
-
 
 };

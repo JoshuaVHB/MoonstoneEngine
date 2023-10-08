@@ -161,6 +161,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
@@ -211,6 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Effects11d.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

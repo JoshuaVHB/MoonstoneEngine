@@ -53,7 +53,7 @@ public:
 
 	TestScene() 
 	{
-		terrainMesh = Renderer::loadMeshFromFile("res/mesh/hello.obj");
+		terrainMesh = Renderer::loadMeshFromFile("res/mesh/cube.obj");
 		terrainMesh.m_worldMat = XMMatrixRotationX(3.141592f / 2.f);
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		cube = Cube::getCubeMesh();
@@ -96,7 +96,7 @@ public:
 	virtual void onRender() override {
 	
 		Renderer::clearScreen();
-		renderShader.bindTexture("textureEntree", breadbug.getTexture());
+		renderShader.bindTexture("tex", breadbug.getTexture());
 
 		Camera& cam = m_player.getCamera();
 		Renderer::renderMesh(cam, terrainMesh, renderShader);
