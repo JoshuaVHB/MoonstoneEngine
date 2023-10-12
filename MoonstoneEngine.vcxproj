@@ -71,10 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PublicIncludeDirectories>Utils/vendor/stbi;Utils/vendor/imgui;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
+    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PublicIncludeDirectories>Utils/vendor/stbi;Utils/vendor/imgui;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
+    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
+    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
+    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,6 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,6 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,8 +122,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>Utils/vendor/stbi;Utils/vendor/imgui</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,8 +140,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions); D3D11_IMPL;;SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Utils/vendor/stbi;C:\Users\vanho\source\repos\JoshuaVHB\MoonstoneEngine\Platform;Utils/vendor/imgui</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,11 +156,14 @@
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
+    <ClCompile Include="Graphics\World\Managers\AssetManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
+    <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
@@ -175,14 +192,16 @@
     <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
     <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h" />
     <ClInclude Include="Graphics\World\Cube.h" />
+    <ClInclude Include="Graphics\World\Material.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
     <ClInclude Include="Graphics\World\Player.h" />
-    <ClInclude Include="Graphics\World\RessourcesManager.h" />
+    <ClInclude Include="Graphics\World\Managers\AssetManager.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Heightmap.h" />
     <ClInclude Include="Graphics\World\WorldRendering\HeightmapBuilder.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Terrain.h" />
+    <ClInclude Include="Graphics\World\Managers\MeshManager.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\IO\DDSTextureLoader11.h" />
     <ClInclude Include="Platform\IO\FileReader.h" />
@@ -194,6 +213,7 @@
     <ClInclude Include="src\Scenes\Rush2Scene.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
+    <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Timer.h" />

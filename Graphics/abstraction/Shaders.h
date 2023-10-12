@@ -9,7 +9,6 @@
 #include <string>
 
 #include "../../Utils/Debug.h"
-
 #include "../../d3dx11effect.h"
 #include "Sampler.h"
 #include "Texture.h"
@@ -177,7 +176,7 @@ public:
 		m_vertexLayout = NULL;
 		DX_TRY_CODE(
 			m_renderContext.device->CreateInputLayout(layout.asInputDesc(),
-			layout.elems.size(), vsCodePtr, vsCodeLen, &m_vertexLayout), 13);
+				static_cast<UINT>(layout.elems.size()), vsCodePtr, static_cast<SIZE_T>(vsCodeLen), &m_vertexLayout), 13);
 
 	}
 

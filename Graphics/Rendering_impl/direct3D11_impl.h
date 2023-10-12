@@ -10,15 +10,27 @@
 #include "../abstraction/IndexBuffer.h"
 #include "../abstraction/Shaders.h"
 #include "../abstraction/Camera.h"
+#include "../World/Material.h"
 
 #include "../../Platform/IO/FileReader.h"
-#include "../../Graphics/World/RessourcesManager.h"
 #include "../World/Cube.h"
 
 #include <vector>
 
 struct direct3D11_impl : public Renderer::_Impl {
 
+private:
+	struct worldParams {
+		// la matrice totale 
+		XMMATRIX viewProj;
+		XMVECTOR lightPos; // la position de la source d’éclairage (Point)
+		XMVECTOR cameraPos; // la position de la caméra 
+		XMVECTOR ambiantLight; // la valeur ambiante de l’éclairage
+		XMVECTOR diffuseLight; // la valeur ambiante du matériau 
+		XMVECTOR ambiantMat; // la valeur diffuse de l’éclairage 
+		XMVECTOR diffuseMat; // la valeur diffuse du matériau 
+	};
+	Effect pbrMeshEffect;
 public:
 
 	direct3D11_impl() 
@@ -29,7 +41,18 @@ public:
 		context = gfx.getImmediateContext();
 		swapChain = gfx.getSwapChain();
 		rtv = gfx.getRenderTargetView();
+		pbrMeshEffect.loadEffectFromFile("res/effects/pbrMesh.fx");
+		
 
+		InputLayout layout;
+		layout.pushBack<3>(InputLayout::Semantic::Position);
+		layout.pushBack<3>(InputLayout::Semantic::Normal);
+		layout.pushBack<2>(InputLayout::Semantic::Texcoord);
+		pbrMeshEffect.bindInputLayout(layout);
+
+		pbrMeshEffect.addNewCBuffer("meshParams", sizeof(XMMATRIX));
+		pbrMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams));
+		
 	}
 
 
@@ -40,6 +63,7 @@ private:
 	ID3D11DeviceContext* context = nullptr; // Issues rendering command + actual drawing
 	IDXGISwapChain* swapChain = nullptr; // Flips buffers
 	ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
+
 
 private:
 
@@ -72,6 +96,35 @@ private:
 		effect.sendCBufferToGPU("meshParams");
 
 		effect.apply();
+		mesh.draw();
+	}
+
+
+	virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) override {
+
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		context->IASetInputLayout(pbrMeshEffect.m_vertexLayout);
+
+		worldParams sp;
+
+		sp.viewProj = XMMatrixTranspose(camera.getVPMatrix());
+		sp.lightPos = XMVectorSet(-10.0f , 10.0f , -10.0f, 1.0f);
+		sp.cameraPos = camera.getPosition();
+		sp.ambiantLight = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f);
+		sp.diffuseLight = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.ambiantMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.diffuseMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+
+		pbrMeshEffect.updateSubresource(sp, "worldParams");
+		pbrMeshEffect.sendCBufferToGPU("worldParams");
+
+		pbrMeshEffect.updateSubresource(XMMatrixTranspose(mesh.m_worldMat), "meshParams"); // TODO make this more flexible
+		pbrMeshEffect.sendCBufferToGPU("meshParams");
+
+		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>().getTexture());
+
+
+		pbrMeshEffect.apply();
 		mesh.draw();
 	}
 

@@ -56,14 +56,13 @@ int main() {
 		//rMoteur.SetWindowsAppInstance(hInstance);
 		rMoteur.init();
 
-		Renderer::setImplementation<direct3D11_impl>();
 		d3d11_graphics& gfx = rMoteur.getGraphics();
 		initImgui(rMoteur.getHwnd(), gfx);
+		Renderer::setImplementation<direct3D11_impl>();
 
 		SceneManager::registerScene<TestScene>("TEST");
 		SceneManager::registerScene<Rush2Scene>("RUSH2");
-		SceneManager::registerScene<Sponza>("Sponza");
-		SceneManager::switchToScene(1);
+		SceneManager::switchToScene(0);
 
 
 		rMoteur.run();

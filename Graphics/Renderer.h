@@ -24,6 +24,7 @@ static auto fnName(auto&& ...args)\
 class Mesh;
 class Effect;
 class Camera;
+class Material;
 
 
 /// Renderer class :
@@ -53,6 +54,7 @@ public:
 		virtual void renderCubemap(Camera&, const Mesh&, const Effect&) = 0;
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
+		virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) = 0;
 
 
 	private:
@@ -67,6 +69,7 @@ public:
 	CALL_IMPL(renderMesh) ;
 	CALL_IMPL(renderCubemap) ;
 	CALL_IMPL(loadMeshFromFile) ;
+	CALL_IMPL(renderPBRMesh) ;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

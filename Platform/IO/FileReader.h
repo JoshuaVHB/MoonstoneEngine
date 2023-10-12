@@ -78,7 +78,7 @@ static std::pair<std::vector<Vertex>, std::vector<uint16_t>> readMeshFromObj(con
                 if (ss.peek() != '/') ss >> i2; // read optional uv
                 skipStreamText(ss, "/");
                 if (ss.peek() != '/') ss >> i3; // read optional uv
-                //ss >> i3;                      // read normal
+                ss >> i3;                      // read normal
                 std::tuple<int, int, int> cacheKey{ i1, i2, i3 };
                 auto inCacheIndex = std::find(cachedVertices.begin(), cachedVertices.end(), cacheKey);
                 if (inCacheIndex == cachedVertices.end()) {

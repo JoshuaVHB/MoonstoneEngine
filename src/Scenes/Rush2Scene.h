@@ -5,6 +5,7 @@
 #include <filesystem>
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 
+
 /*
 //	This scene has been built for the Rush #2. 
 //  It is exceptionally ugly on purpose.
@@ -49,8 +50,8 @@ private:
 		XMMATRIX viewProj;
 		XMVECTOR lightPos; 
 		XMVECTOR cameraPos;
-		XMVECTOR sunColor = {1,1,.8,1}; 
-		XMVECTOR sunStrength = { 0.75 }; 
+		XMVECTOR sunColor = {1.f,1.f,.8f,1.f}; 
+		XMVECTOR sunStrength = { 0.75f }; 
 	} sp ;
 
 	struct meshParams {
@@ -61,6 +62,8 @@ public:
 
 	Rush2Scene() 
 	{
+
+		//rapidobj::Result res = rapidobj::ParseFile("res/mesh/cube.obj");
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
 

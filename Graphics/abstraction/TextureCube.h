@@ -8,12 +8,8 @@
 #include "../../Platform/IO/DDSTextureLoader11.h"
 #include "../../Platform/WindowsEngine.h"
 
-
-
 #include <locale>
 #include <codecvt>
-
-#define SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING 1
 
 inline std::wstring widestring2string(const std::string& string)
 {

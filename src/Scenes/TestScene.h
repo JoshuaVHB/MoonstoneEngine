@@ -16,6 +16,8 @@
 #include <memory>
 #include <directXmath.h>
 
+#include "../../Graphics/World/Material.h"
+#include "../../Graphics/World/Managers/MeshManager.h"
 
 
 
@@ -25,7 +27,7 @@ private:
 
 	float dt = 0 , elapsed = 0;
 
-	Mesh terrainMesh, cube;
+	Mesh ball, cube;
 	Effect renderShader;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
@@ -47,14 +49,17 @@ private:
 		XMMATRIX u_MVP;
 	};
 
+	Texture bb = Texture(L"res/textures/breadbug.dds");
 	Player m_player;
+	Material m;
 
 public:
 
 	TestScene() 
 	{
-		terrainMesh = Renderer::loadMeshFromFile("res/mesh/cube.obj");
-		terrainMesh.m_worldMat = XMMatrixRotationX(3.141592f / 2.f);
+		//ball = Renderer::loadMeshFromFile("res/mesh/0_sphere.obj");
+		ball = MeshManager::loadMeshFromFile("res/mesh/cube.obj");
+
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		cube = Cube::getCubeMesh();
 
@@ -68,7 +73,13 @@ public:
 		auto tmplayout = testlayout.asInputDesc();
 
 		renderShader.bindInputLayout(testlayout);
-
+		m.loadTextures(
+			{
+				{"res/textures/Sphere_Base_Color.dds", TextureType::ALBEDO}		
+			
+			}
+		);
+		
 	}
 
 
@@ -96,10 +107,11 @@ public:
 	virtual void onRender() override {
 	
 		Renderer::clearScreen();
-		renderShader.bindTexture("tex", breadbug.getTexture());
+
 
 		Camera& cam = m_player.getCamera();
-		Renderer::renderMesh(cam, terrainMesh, renderShader);
+		Renderer::renderPBRMesh(cam, ball, m);
+		//Renderer::renderMesh(cam, cube, renderShader);
 
 		//Renderer::renderMesh(camera, cube, renderShader);
 		box.renderSkybox(cam);
