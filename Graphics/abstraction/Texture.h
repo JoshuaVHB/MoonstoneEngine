@@ -45,10 +45,11 @@ public:
 	}
 
 	Texture(const Texture& other) 
-		: m_texture(other.m_texture)
-		, m_path(other.m_path)
+		: m_path(other.m_path)
 		, m_renderContext(WindowsEngine::getInstance().getGraphics().getContext())
-	{}
+	{
+		DirectX::CreateDDSTextureFromFile(m_renderContext.device, m_path.c_str(), nullptr, &m_texture);
+	}
 
 	Texture& operator=(const Texture& other) {
 		Texture{ other }.swap(*this);
@@ -70,9 +71,8 @@ public:
 	}
 
 
-	~Texture() {
-
-		
+	~Texture() 
+	{		
 		DX_RELEASE(m_texture);
 	}
 

@@ -80,6 +80,11 @@ public:
 
 	size_t getBufferSize() const { return m_indices.size(); }
 
+	std::vector<uint16_t> getIndices() const noexcept {
+		return m_indices;
+	}
+
+
 	void bind() const
 	{
 #ifdef D3D11_IMPL

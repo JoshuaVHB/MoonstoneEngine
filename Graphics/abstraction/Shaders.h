@@ -230,6 +230,7 @@ public:
 
 	void bindTexture(std::string uniformName, ID3D11ShaderResourceView* tex)
 	{
+		if (!tex) return;
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
 	}
 

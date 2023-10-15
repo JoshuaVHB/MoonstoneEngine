@@ -30,6 +30,18 @@ cbuffer meshParams
     float4x4 worldMat; // matrice de transformation dans le monde
 };
 
+cbuffer materialParams
+{
+    float4  Ka; // ambiant	
+    float4  Kd; // diffuse
+    float4  Ks; // specular
+    float4  Ke; // emissive	
+    float   Ns; // exponent specular	
+    float   Ni; // refraction, optical density	
+    float   transparency; // 1 - d
+
+};
+
 
 
 /////////////////////
@@ -68,10 +80,52 @@ VSOut baseMeshVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEX
 
 // -- Fragment Shader
 
+float3 cookTorrence(
+    float3 materialDiffuseColor,
+	float3 materialSpecularColor,
+	float3 normal,
+	float3 lightDir,
+	float3 viewDir,
+	float3 lightColor)
+{
+    float roughness = 0.1f;
+    float k = 0.2f;
+    float NdotL = max(0, dot(normal, lightDir));
+    float Rs = 0.0;
+    if (NdotL > 0)
+    {
+        float3 H = normalize(lightDir + viewDir);
+        float NdotH = max(0, dot(normal, H));
+        float NdotV = max(0, dot(normal, viewDir));
+        float VdotH = max(0, dot(lightDir, H));
+
+		// Fresnel reflectance
+        float F = pow(1.0 - VdotH, 5.0);
+        F *= (1.0 - 0.8);
+        F += 0.8;
+
+		// Microfacet distribution by Beckmann
+        float m_squared = roughness * roughness;
+        float r1 = 1.0 / (4.0 * m_squared * pow(NdotH, 4.0));
+        float r2 = (NdotH * NdotH - 1.0) / (m_squared * NdotH * NdotH);
+        float D = r1 * exp(r2);
+
+		// Geometric shadowing
+        float two_NdotH = 2.0 * NdotH;
+        float g1 = (two_NdotH * NdotV) / VdotH;
+        float g2 = (two_NdotH * NdotL) / VdotH;
+        float G = min(1.0, min(g1, g2));
+
+        Rs = (F * D * G) / (3.14159 * NdotL * NdotV);
+    }
+    return materialDiffuseColor * lightColor * NdotL + lightColor * materialSpecularColor * NdotL * (k + Rs * (1.0 - k));
+}
+
+
 float4 baseMeshPS(VSOut vs) : SV_Target
 {
-    
     float3 couleur;
+
     // Normaliser les paramètres 
     float3 N = normalize(vs.Norm);
     float3 L = normalize(vs.lightDir);
@@ -85,12 +139,12 @@ float4 baseMeshPS(VSOut vs) : SV_Target
 
     float3 texSample = albedo.Sample(SampleState, vs.uv).rgb;
     
-    couleur.rgb = texSample;
+    //couleur.rgb = texSample;
+    
+    couleur.rgb = Ka.rgb;
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
     couleur += S / 4.f;
-    
-    return float4(couleur, 1.0f); //+ float4(1, 0, 0, 1);
-    
+    return float4(couleur.rgb, transparency);
 }
 
 ////////////////////

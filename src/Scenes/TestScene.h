@@ -58,7 +58,7 @@ public:
 	TestScene() 
 	{
 		//ball = Renderer::loadMeshFromFile("res/mesh/0_sphere.obj");
-		ball = MeshManager::loadMeshFromFile("res/mesh/cube.obj");
+		ball = std::move(MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj"));
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		cube = Cube::getCubeMesh();

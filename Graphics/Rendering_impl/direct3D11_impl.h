@@ -52,6 +52,7 @@ public:
 
 		pbrMeshEffect.addNewCBuffer("meshParams", sizeof(XMMATRIX));
 		pbrMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams));
+		pbrMeshEffect.addNewCBuffer("materialParams", sizeof(MaterialCoefs));
 		
 	}
 
@@ -120,6 +121,11 @@ private:
 
 		pbrMeshEffect.updateSubresource(XMMatrixTranspose(mesh.m_worldMat), "meshParams"); // TODO make this more flexible
 		pbrMeshEffect.sendCBufferToGPU("meshParams");
+
+
+		pbrMeshEffect.updateSubresource(mesh.getMaterials()[0].getCoefficients(), "materialParams");
+		pbrMeshEffect.sendCBufferToGPU("materialParams");
+
 
 		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>().getTexture());
 
