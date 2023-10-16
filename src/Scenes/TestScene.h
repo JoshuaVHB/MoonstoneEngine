@@ -62,7 +62,7 @@ public:
 	TestScene() 
 	{
 		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
-		bunny = MeshManager::loadMeshFromFile("res/mesh/pls.obj");
+		bunny = MeshManager::loadMeshFromFile("res/mesh/sponza.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
@@ -122,7 +122,7 @@ public:
 
 		Camera& cam = m_player.getCamera();
 		renderShader.bindTexture("tex", bb.getTexture());
-		Renderer::renderMesh(cam, ball, renderShader);
+		//Renderer::renderMesh(cam, ball, renderShader);
 		Renderer::renderMesh(cam, bunny, renderShader);
 		box.renderSkybox(cam);
 

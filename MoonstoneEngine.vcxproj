@@ -153,6 +153,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\abstraction\2D\2DRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Quad.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\TextureAtlas.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
@@ -179,7 +186,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx11effect.h" />
+    <ClInclude Include="Graphics\abstraction\2D\2DRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Billboard.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Quad.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Sprite.h" />
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\TextureAtlas.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\Layer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
     <ClInclude Include="Graphics\abstraction\Framebuffer.h" />
@@ -238,6 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="res\effects\sprite.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

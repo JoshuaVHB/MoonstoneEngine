@@ -1,9 +1,19 @@
+
+
 //////////////////////
 
 // Uniforms
 
+#include <cstddef>
 Texture2D tex; // la texture
 SamplerState SampleState; // l’état de sampling
+
+struct VSIn
+{
+    uint vertexId;
+    uint vertexTexid;
+
+};
 
 // -- VSOUT
 
@@ -13,21 +23,21 @@ struct VSOut
     float2 uv : TEXCOORD0;
 };
 
-static const float4 vertices[6] = 
+static const float4 vertices[6] =
 {
-    float4(-1, -1   , 0, 0),
-    float4(+1, +1   , 1, 1),
-    float4(+1, -1   , 1, 0),
-    float4(-1, +1   , 0, 1),
-    float4(+1, +1   , 1, 1),
-    float4(-1, -1   , 0, 0)
+    float4(-1, -1, 0, 0),
+    float4(+1, +1, 1, 1),
+    float4(+1, -1, 1, 0),
+    float4(-1, +1, 0, 1),
+    float4(+1, +1, 1, 1),
+    float4(-1, -1, 0, 0)
 };
 
 ////////////////////
 
 // -- Vertex Shader
 
-VSOut blitVS(uint id : SV_VertexID)
+VSOut spriteVS(uint id : SV_VertexID)
 {
     
     VSOut vso;
@@ -41,7 +51,7 @@ VSOut blitVS(uint id : SV_VertexID)
 
 // -- Fragment Shader
 
-float4 blitPS(VSOut vs) : SV_Target
+float4 spritePS(VSOut vs) : SV_Target
 {
     
     
@@ -53,12 +63,12 @@ float4 blitPS(VSOut vs) : SV_Target
 
 // -- Technique
 
-technique11 blit
+technique11 sprite
 {
     pass pass0
     {
-        SetVertexShader(CompileShader(vs_5_0, blitVS()));
-        SetPixelShader(CompileShader(ps_5_0, blitPS()));
+        SetVertexShader(CompileShader(vs_5_0, spriteVS()));
+        SetPixelShader(CompileShader(ps_5_0, spritePS()));
         SetGeometryShader(NULL);
     }
 }

@@ -144,7 +144,7 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     couleur.rgb = Ka.rgb;
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
     couleur += S / 4.f;
-    return float4(couleur.rgb, transparency);
+    return (float4(couleur.rgb, transparency) + float4(1.f, 0.f, 0.f, 0.f));
 }
 
 ////////////////////
