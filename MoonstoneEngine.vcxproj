@@ -182,6 +182,7 @@
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
+    <ClInclude Include="Graphics\abstraction\Framebuffer.h" />
     <ClInclude Include="Graphics\abstraction\Sampler.h" />
     <ClInclude Include="Graphics\abstraction\Shaders.h" />
     <ClInclude Include="Graphics\abstraction\Texture.h" />
@@ -192,6 +193,8 @@
     <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
     <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h" />
     <ClInclude Include="Graphics\World\Cube.h" />
+    <ClInclude Include="Graphics\World\Lights\LightManager.h" />
+    <ClInclude Include="Graphics\World\Lights\Lights.h" />
     <ClInclude Include="Graphics\World\Material.h" />
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />

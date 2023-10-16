@@ -11,7 +11,7 @@
 
 namespace fs = std::filesystem;
 
-using Index = uint16_t;
+using Index = uint32_t;
 using Vec = XMVECTOR;
 
 /// <summary>
@@ -58,7 +58,7 @@ public:
 
 				// 1.3 -> Compute UVs
 
-				Vec uv = { (float)x / (float)width, (float)y / (float)height };
+				Vec uv = { (float)x, (float)y };
 				v.uv = uv;
 
 				vertices.push_back(v);

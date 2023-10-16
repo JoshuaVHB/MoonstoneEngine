@@ -22,7 +22,7 @@ private:
 
 	std::vector<Material> m_materials;
 
-	std::vector<uint16_t> m_submeshes;
+	std::vector<IndexBuffer::size_type> m_submeshes;
 	std::vector<uint16_t> m_submeshMats;
 
 
@@ -34,14 +34,14 @@ public:
 
 	Mesh() = default;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<uint16_t> indices) 
+	Mesh(std::vector<Vertex> vertices, std::vector<IndexBuffer::size_type> indices) 
 	{
 		m_vbo = VertexBuffer(vertices);
 		m_ibo = IndexBuffer(indices);
-		m_submeshes = std::vector<uint16_t>{ 0, (uint16_t)(indices.size())};
+		m_submeshes = std::vector<IndexBuffer::size_type>{ 0, (IndexBuffer::size_type)(indices.size())};
 	};
 
-	Mesh(std::vector<Vertex> vertices, std::vector<uint16_t> indices, const std::vector<uint16_t>& submeshIndices)
+	Mesh(std::vector<Vertex> vertices, std::vector<IndexBuffer::size_type> indices, const std::vector<IndexBuffer::size_type>& submeshIndices)
 	{
 		m_vbo = VertexBuffer(vertices);
 		m_ibo = IndexBuffer(indices);
@@ -49,8 +49,8 @@ public:
 		m_materials = {};
 	};
 
-	Mesh(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices, 
-		const std::vector<uint16_t>& submeshIndices,
+	Mesh(const std::vector<Vertex>& vertices, const std::vector<IndexBuffer::size_type>& indices,
+		const std::vector<IndexBuffer::size_type>& submeshIndices,
 		const std::vector<Material>& materials,
 		const std::vector<uint16_t>& submeshMats
 	)
@@ -71,7 +71,7 @@ public:
 
 	[[nodiscard]] const std::vector<Material>& getMaterials() const noexcept	{ return m_materials;	}
 	[[nodiscard]] std::vector<uint16_t> getSubmeshMaterials() const noexcept	{ return m_submeshMats; }
-	[[nodiscard]] std::vector<uint16_t> getSubmeshIndices()	  const noexcept	{ return m_submeshes;	}
+	[[nodiscard]] std::vector<IndexBuffer::size_type> getSubmeshIndices()	  const noexcept	{ return m_submeshes;	}
 		 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -109,7 +109,7 @@ public:
 		, m_vbo			(std::exchange(other.m_vbo,			{}))
 		, m_materials	(std::exchange(other.m_materials,	std::vector<Material>()))
 		, m_submeshMats	(std::exchange(other.m_submeshMats,	std::vector<uint16_t>()))
-		, m_submeshes	(std::exchange(other.m_submeshes,	std::vector<uint16_t>()))
+		, m_submeshes	(std::exchange(other.m_submeshes,	std::vector<IndexBuffer::size_type>()))
 	{}
 
 	Mesh& operator=(Mesh&& other) noexcept {

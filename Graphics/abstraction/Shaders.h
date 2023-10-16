@@ -154,7 +154,6 @@ public:
 		m_technique = m_effect->GetTechniqueByIndex(0); 
 		m_pass = m_technique->GetPassByIndex(0);
 
-		//createInputLayout();
 		
 		createSampler();
 

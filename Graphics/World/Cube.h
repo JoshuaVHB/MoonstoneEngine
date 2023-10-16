@@ -74,7 +74,7 @@ public:
 			{point[1], n5, Vec{0.0f, 0.0f}},	{point[7], n5, Vec{1.0f, 0.0f}},
 			{point[6], n5, Vec{1.0f, 1.0f}},	{point[2], n5, Vec{0.0f, 1.0f}},
 		};
-		std::vector<uint16_t> indices
+		std::vector<IndexBuffer::size_type> indices
 		{
 			1,0,2,		// devant 
 			2,0,3,		// devant 

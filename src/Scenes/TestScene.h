@@ -5,6 +5,7 @@
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
 #include "../../Graphics/abstraction/Shaders.h"
+#include "../../Graphics/abstraction/Framebuffer.h"
 #include "../../Graphics/World/Mesh.h"
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/World/Player.h"
@@ -27,10 +28,12 @@ private:
 
 	float dt = 0 , elapsed = 0;
 
-	Mesh ball, cube;
-	Effect renderShader;
+	Mesh ball, cube, bunny;
+	Effect renderShader, blitFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
+
+	Framebuffer fbo;
 
 	struct worldParams {
 		// la matrice totale 
@@ -52,16 +55,17 @@ private:
 	Texture bb = Texture(L"res/textures/breadbug.dds");
 	Player m_player;
 	Material m;
+	bool renderSponza = false;
 
 public:
 
 	TestScene() 
 	{
-		//ball = Renderer::loadMeshFromFile("res/mesh/0_sphere.obj");
-		ball = std::move(MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj"));
+		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
+		bunny = MeshManager::loadMeshFromFile("res/mesh/pls.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
-		cube = Cube::getCubeMesh();
+		blitFx.loadEffectFromFile("res/effects/blit.fx");
 
 		renderShader.addNewCBuffer("worldParams", sizeof(worldParams));
 		renderShader.addNewCBuffer("meshParams", sizeof(meshParams));
@@ -106,16 +110,32 @@ public:
 
 	virtual void onRender() override {
 	
+		if (!renderSponza) Framebuffer::unbind();
+		if (renderSponza)
+		{
+			fbo.bind();
+		}
+		
+
+
 		Renderer::clearScreen();
 
-
 		Camera& cam = m_player.getCamera();
-		Renderer::renderPBRMesh(cam, ball, m);
-		//Renderer::renderMesh(cam, cube, renderShader);
-
-		//Renderer::renderMesh(camera, cube, renderShader);
+		renderShader.bindTexture("tex", bb.getTexture());
+		Renderer::renderMesh(cam, ball, renderShader);
+		Renderer::renderMesh(cam, bunny, renderShader);
 		box.renderSkybox(cam);
-		//Renderer::renderMesh(camera, box.getMesh(), renderShader);
+
+		//////////////
+
+		/*
+		auto tex = fbo.getTex();
+		renderShader.bindTexture("tex", tex.getTexture());
+		blitFx.apply();
+		WindowsEngine::getInstance().getGraphics().getContext().context->Draw(6, 0);
+		*/
+
+		
 
 	}
 	virtual void onImGuiRender() override {
@@ -123,6 +143,7 @@ public:
 
 		ImGui::Text(std::to_string(m_player.getCamera().getPosition().vector4_f32[0]).c_str());
 		ImGui::End();
+		ImGui::Checkbox("render sponza", &renderSponza);
 
 		m_player.onImGuiRender();
 

@@ -20,11 +20,12 @@ class Rush2Scene : public Scene {
 private:
 
 	// -- Terrain
-	const std::filesystem::path path_to_map = "res/textures/full.png";
+	const std::filesystem::path path_to_map = "res/textures/heightmap.png";
 	Terrain m_terrain{ path_to_map };
 	Vec		centerPoint; // for camera target
 	Texture m_rockTexture{ L"res/textures/rock.dds" };
 	Texture m_grassTexture{ L"res/textures/breadbug.dds" };
+	Texture m_grass6Texture{ L"res/textures/grass6.dds" };
 
 	// -- Effect and skybox
 	Effect	m_baseMeshEffect;

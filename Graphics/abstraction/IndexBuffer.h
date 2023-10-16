@@ -11,10 +11,12 @@
 
 class IndexBuffer
 {
+public:
+	using size_type = uint32_t;
 private:
 
 	// -- Store indices
-	std::vector<uint16_t> m_indices;
+	std::vector<size_type> m_indices;
 
 	// -- Buffer stuff
 
@@ -27,7 +29,7 @@ public:
 
 	IndexBuffer() {}
 
-	IndexBuffer(const std::vector<uint16_t>& indices)
+	IndexBuffer(const std::vector<size_type>& indices)
 	{
 #ifdef D3D11_IMPL
 
@@ -42,7 +44,7 @@ public:
 		ZeroMemory(&m_descriptor, sizeof(m_descriptor));
 
 		m_descriptor.Usage = D3D11_USAGE_IMMUTABLE;
-		m_descriptor.ByteWidth = static_cast<UINT>(m_indices.size()) * sizeof(uint16_t);
+		m_descriptor.ByteWidth = static_cast<UINT>(m_indices.size()) * sizeof(size_type);
 		m_descriptor.BindFlags = D3D11_BIND_INDEX_BUFFER;
 		m_descriptor.CPUAccessFlags = 0;
 
@@ -80,7 +82,7 @@ public:
 
 	size_t getBufferSize() const { return m_indices.size(); }
 
-	std::vector<uint16_t> getIndices() const noexcept {
+	std::vector<size_type> getIndices() const noexcept {
 		return m_indices;
 	}
 
@@ -88,7 +90,7 @@ public:
 	void bind() const
 	{
 #ifdef D3D11_IMPL
-		m_renderContext.context->IASetIndexBuffer(m_ibo, DXGI_FORMAT_R16_UINT, 0);
+		m_renderContext.context->IASetIndexBuffer(m_ibo, DXGI_FORMAT_R32_UINT, 0);
 #endif	
 	}
 

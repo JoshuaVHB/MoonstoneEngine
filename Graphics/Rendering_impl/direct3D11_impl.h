@@ -12,6 +12,8 @@
 #include "../abstraction/Camera.h"
 #include "../World/Material.h"
 
+#include "../World/Managers/MeshManager.h"
+
 #include "../../Platform/IO/FileReader.h"
 #include "../World/Cube.h"
 
@@ -123,8 +125,8 @@ private:
 		pbrMeshEffect.sendCBufferToGPU("meshParams");
 
 
-		pbrMeshEffect.updateSubresource(mesh.getMaterials()[0].getCoefficients(), "materialParams");
-		pbrMeshEffect.sendCBufferToGPU("materialParams");
+		//pbrMeshEffect.updateSubresource(mesh.getMaterials()[0].getCoefficients(), "materialParams");
+		//pbrMeshEffect.sendCBufferToGPU("materialParams");
 
 
 		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>().getTexture());
@@ -146,8 +148,7 @@ private:
 	
 
 	virtual Mesh loadMeshFromFile(const std::filesystem::path& path) override {
-		auto res = readMeshFromObj(path);
-		return Mesh(res.first, res.second);
+		return MeshManager::loadMeshFromFile(path);
 	}
 
 

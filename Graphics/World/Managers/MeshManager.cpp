@@ -29,30 +29,53 @@ void assertValid(const rapidobj::Result& res) {
 }
 
 
-Vertex generateVertexFromKey(const rapidobj::Index& key, const rapidobj::Result& loadedResult)
+inline Vertex generateVertexFromKey(const rapidobj::Index& key, const rapidobj::Result& loadedResult)
 {
-	return
-	{
 
-		{
+	XMVECTOR pos{}, normal{}, uv{};
+
+	if (key.position_index != -1)
+	{
+		pos = {
 			loadedResult.attributes.positions[key.position_index * 3],
 			loadedResult.attributes.positions[key.position_index * 3 + 1],
 			loadedResult.attributes.positions[key.position_index * 3 + 2],
-		},
+		};
+	}
 
+	if (key.normal_index != -1)
+	{
+		normal =
 		{
 			loadedResult.attributes.normals[key.normal_index * 3],
 			loadedResult.attributes.normals[key.normal_index * 3 + 1],
 			loadedResult.attributes.normals[key.normal_index * 3 + 2],
-		},
+		};
+	}
 
-		{
+	if (key.texcoord_index != -1)
+	{
+		uv = {
 			loadedResult.attributes.texcoords[key.texcoord_index * 2],
 			loadedResult.attributes.texcoords[key.texcoord_index * 2 + 1]
-		},
-	};
+		};
+	}
+
+	return { pos, normal, uv };
 }
 
+static constexpr auto hash = [](const rapidobj::Index& index) -> size_t {
+	size_t h1 = std::hash<int>()(index.position_index);
+	size_t h2 = std::hash<int>()(index.normal_index);
+	size_t h3 = std::hash<double>()(index.texcoord_index);
+	return h1 ^ h2 << 1 ^ h3;
+};
+
+auto comp = [](const rapidobj::Index& a, const rapidobj::Index& b) -> bool {
+	return a.position_index == b.position_index && a.normal_index == b.normal_index && a.texcoord_index == b.texcoord_index;
+};
+
+std::unordered_map<rapidobj::Index, IndexBuffer::size_type, decltype(hash), decltype(comp)> vertsIndex;
 
 Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
@@ -69,47 +92,63 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 	// -- Generate the mesh
 
 	using key = std::tuple<int, int, int>;
-	std::set<key> cachedKeys; // todo use a haser for the rapidobj::Index
+	std::vector<key> cachedKeys; // todo use a haser for the rapidobj::Index
+	std::set<key> allcachedKeys; // todo use a haser for the rapidobj::Index
 
 	std::vector<Vertex> vertices;
-	vertices.resize(res.attributes.positions.size());
 
-	std::vector<uint16_t> indices;
-	std::vector<uint16_t> submeshesIndices;
+	std::vector<IndexBuffer::size_type> indices;
+	std::vector<IndexBuffer::size_type> submeshesIndices;
 	std::vector<uint16_t> submeshesMat;
-	uint16_t lastIndex = 0;
+	IndexBuffer::size_type lastIndex = 0;
 
 
 	for (const auto& shape : res.shapes) {
 		
 		submeshesIndices.push_back(indices.size());
-		submeshesMat.push_back(shape.mesh.material_ids[0]); // THIS IS TRASH BUT I DONT WANT TO DO PER FACE
+		submeshesMat.push_back(0); // THIS IS TRASH BUT I DONT WANT TO DO PER FACE
 
-		for (rapidobj::Index i : shape.mesh.indices)
+		for (size_t i = 0; i < shape.mesh.indices.size(); i += 3)
 		{
-			indices.push_back(i.position_index);
-
-			key currentKey =
+			int materialIndex = 0;
+			if (!res.materials.empty())
 			{
-				i.position_index,
-				i.normal_index,
-				i.texcoord_index
-			};
+				materialIndex = shape.mesh.material_ids[i / 3]; // Material index for this face
+			}
 
-			if (cachedKeys.contains(currentKey)) continue;
-			
-			cachedKeys.insert(std::move(currentKey));
-			vertices[i.position_index] = std::move(generateVertexFromKey(i, res));
+			// Iterate through the vertices of the face
+			// Use this one for left handed winding
+			for (int j = 2; j >= 0; --j)
+			{
+				const auto& indexes = shape.mesh.indices[i + j];
+				const auto& [position_index, texcoord_index, normal_index] = indexes;
+
+
+				key currentKey =
+				{
+					position_index,
+					texcoord_index,
+					normal_index
+				};
+
+				IndexBuffer::size_type index = static_cast<IndexBuffer::size_type>(vertices.size());
+				if (vertsIndex.contains(indexes)) {
+					index = vertsIndex[indexes];
+				}
+				else {
+					vertices.push_back(std::move(generateVertexFromKey(indexes, res)));
+					vertsIndex[indexes] = index;
+				}
+
+				indices.push_back(index);
+			}
 		}
-
-
-
 	}
-
-	submeshesIndices.push_back(static_cast<uint16_t>(indices.size()));
+	
+	submeshesIndices.push_back(static_cast<IndexBuffer::size_type>(indices.size()));
 
 	// -- Build Materials
-
+	
 	std::vector<Material> mats;
 
 	for (const auto& mat : res.materials)
@@ -145,7 +184,6 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 	}
 	
-	//Extremely weird bug
 
-	return Mesh(vertices, indices, submeshesIndices, mats, submeshesMat);//, mats, submeshesMat);
+	return Mesh(vertices, indices, submeshesIndices , mats, submeshesMat);
 }
