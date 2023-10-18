@@ -3,9 +3,15 @@
 #include "../Mesh.h"
 #include "Heightmap.h"
 #include "HeightmapBuilder.h"
+#include <map>
 #include <filesystem>
 
 namespace fs = std::filesystem;
+
+struct Chunk
+{
+	Mesh chunkMesh;
+};
 
 class Terrain {
 
@@ -18,6 +24,7 @@ public:
 		float	xyScale;
 		float	scaleFactor;
 		int		chunkSize;
+		Vec2<int> chunkCount{1,1};
 	};
 
 private:
@@ -26,8 +33,8 @@ private:
 	TerrainParams m_params;
 
 	Heightmap m_map;
-	Mesh m_mesh;
-
+	//Mesh m_mesh;
+	std::vector<Mesh> m_chunks;
 
 	fs::path m_path; // used for hot reload
 
@@ -37,43 +44,46 @@ public:
 	Terrain(const fs::path& pathToMap) 
 	{
 		m_path = pathToMap;
-		m_map = std::move(HeightmapReader::readMapFromFile(pathToMap));
+		m_map = HeightmapReader::readMapFromFile(pathToMap);
 
-		TerrainParams defaultParams{
+		const TerrainParams defaultParams{
 			m_map.getWidth(), m_map.getHeigth(),
 			/*xyScale*/ 1.F,
 			/*height scale*/ 100.F,
 			1
 		};
 
-		m_params = std::move(defaultParams);
+		m_params = defaultParams;
 
 		rebuildMesh();
 	}
 
 	void changeMap(const fs::path& pathToMap) {
-		m_map = std::move(HeightmapReader::readMapFromFile(pathToMap));
+		m_map = HeightmapReader::readMapFromFile(pathToMap);
 		rebuildMesh();
 	}
 
-	void hotreloadMap()
+	void hotReloadMap()
 	{
 		changeMap(m_path);
 	}
 
 	void rebuildMesh() {
-		m_mesh = HeightmapBuilder::buildTerrainMesh(m_map, m_params.xyScale, m_params.scaleFactor);
+		m_chunks = HeightmapBuilder::buildTerrainMesh(
+			m_map, m_params.chunkCount, 
+			m_params.xyScale, m_params.scaleFactor);
 	}
 
-	void setParams(TerrainParams params) {
+	void setParams(const TerrainParams &params) {
 		m_params = params;
 		rebuildMesh();
 	}
 
-	TerrainParams getParams() const { return m_params; }
+	const TerrainParams& getParams() const { return m_params; }
 
-	const Mesh& getMesh() const noexcept { return m_mesh; }
-	Mesh& getMesh() noexcept { return m_mesh; }
+	//const Mesh& getMesh() const noexcept { return m_mesh; }
+	//Mesh& getMesh() noexcept { return m_mesh; }
+	std::vector<Mesh>& getMesh() noexcept { return m_chunks; }
 
 
 	void showDebugWindow() {
@@ -82,7 +92,8 @@ public:
 
 		if (
 			ImGui::DragFloat("XY Scale", &m_params.xyScale) +
-			ImGui::DragFloat("Height Factor", &m_params.scaleFactor) 
+			ImGui::DragFloat("Height Factor", &m_params.scaleFactor) +
+			ImGui::DragInt2("Height Factor", &m_params.chunkCount[0], 1, 1, 10)
 			) {
 			rebuildMesh();
 		}
@@ -92,16 +103,6 @@ public:
 
 
 	}
-
-
-
-private:
-
-	struct Chunk {
-		// This will come later
-	};
-
-	void generateChunks() {}
 
 
 

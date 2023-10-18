@@ -23,7 +23,7 @@ private:
 	
 	XMVECTOR delta;
 
-	const Vec2 winSize = Vec2(WindowsEngine::getInstance().getGraphics().getWinSize());
+	const Vec2<int> winSize = Vec2<int>(WindowsEngine::getInstance().getGraphics().getWinSize());
 	HWND hWnd = WindowsEngine::getInstance().getHwnd();
 
 	bool isConfined = false;

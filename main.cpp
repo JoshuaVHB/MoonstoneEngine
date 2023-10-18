@@ -61,7 +61,7 @@ int main() {
 		Renderer::setImplementation<direct3D11_impl>();
 
 		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Rush2Scene>("RUSH2");
+		SceneManager::registerScene<Rush3Scene>("RUSH2");
 		SceneManager::switchToScene(0);
 
 
