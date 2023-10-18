@@ -1,13 +1,9 @@
 #pragma once
 
-#include <concepts>
-#include <d3d11.h>
 #include <vector>
-#include <algorithm>
-#include <cstdint>
-
-#include "../../Utils/Debug.h"
 #include "../../Platform/WindowsEngine.h"
+
+struct ID3D11Buffer;
 
 class IndexBuffer
 {
@@ -27,40 +23,21 @@ private:
 
 public:
 
-	IndexBuffer() {}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// -- Basic operations
 
-	IndexBuffer(const std::vector<size_type>& indices)
-	{
-#ifdef D3D11_IMPL
+	[[nodiscard]] size_t					getBufferSize() const;
+	[[nodiscard]] std::vector<size_type>	getIndices() const noexcept;
+	[[nodiscard]] size_t					getIndicesCount() const noexcept;
+	void bind() const;
 
-		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-		m_indices = indices;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// -- Constructors and other stuff
+	///
+	IndexBuffer() = default;
+	explicit IndexBuffer(const std::vector<size_type>& indices);
 
-		D3D11_BUFFER_DESC m_descriptor{};
-		D3D11_SUBRESOURCE_DATA m_initData{};
-
-		// -- Index buffer
-
-		ZeroMemory(&m_descriptor, sizeof(m_descriptor));
-
-		m_descriptor.Usage = D3D11_USAGE_IMMUTABLE;
-		m_descriptor.ByteWidth = static_cast<UINT>(m_indices.size()) * sizeof(size_type);
-		m_descriptor.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		m_descriptor.CPUAccessFlags = 0;
-
-		ZeroMemory(&m_initData, sizeof(m_initData));
-		m_initData.pSysMem = &indices[0];
-
-		DX_TRY(m_renderContext.device->CreateBuffer(&m_descriptor, &m_initData, &m_ibo));
-#endif
-	}
-
-	void swap(IndexBuffer& other) {
-		std::swap(other.m_ibo, m_ibo);
-		std::swap(other.m_indices, m_indices);
-		std::swap(other.m_renderContext, m_renderContext);
-	}
-
+	void swap(IndexBuffer& other) noexcept;
 	IndexBuffer(const IndexBuffer&) = delete;
 	IndexBuffer& operator=(const IndexBuffer&) = delete;
 
@@ -80,20 +57,7 @@ public:
 		DX_RELEASE(m_ibo);
 	}
 
-	size_t getBufferSize() const { return m_indices.size(); }
 
-	std::vector<size_type> getIndices() const noexcept {
-		return m_indices;
-	}
-
-	int getIndicesCount() const noexcept { return m_indices.size(); }
-
-	void bind() const
-	{
-#ifdef D3D11_IMPL
-		m_renderContext.context->IASetIndexBuffer(m_ibo, DXGI_FORMAT_R32_UINT, 0);
-#endif	
-	}
 
 
 

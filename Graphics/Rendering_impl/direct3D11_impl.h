@@ -9,7 +9,7 @@
 #include "../abstraction/Vertex.h"
 #include "../abstraction/VertexBuffer.h"
 #include "../abstraction/IndexBuffer.h"
-#include "../abstraction/Shaders.h"
+#include "..\abstraction\Effect.h"
 #include "../abstraction/Camera.h"
 #include "../World/Material.h"
 
@@ -35,8 +35,8 @@ private:
 	};
 	Effect pbrMeshEffect, debugLine;
 
-	int verticesCount = 0;
-	int triangleCount = 0;
+	size_t verticesCount = 0;
+	size_t triangleCount = 0;
 
 
 public:
@@ -106,7 +106,7 @@ private:
 	virtual void renderMesh(Camera& camera, const Mesh& mesh, const Effect& effect) override {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		context->IASetInputLayout(effect.m_vertexLayout);
+		context->IASetInputLayout(effect.getVertexLayout());
 
 		effect.updateSubresource(XMMatrixTranspose(mesh.getTransform().getTransformationMatrix()), "meshParams"); // TODO make this more flexible
 		effect.sendCBufferToGPU("meshParams");
@@ -122,7 +122,7 @@ private:
 	virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) override {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		context->IASetInputLayout(pbrMeshEffect.m_vertexLayout);
+		context->IASetInputLayout(pbrMeshEffect.getVertexLayout());
 
 		worldParams sp;
 
@@ -157,7 +157,7 @@ private:
 
 		
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		context->IASetInputLayout(effect.m_vertexLayout);
+		context->IASetInputLayout(effect.getVertexLayout());
 		effect.apply();
 		mesh.draw();
 
@@ -195,7 +195,7 @@ private:
 				
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-		context->IASetInputLayout(debugLine.m_vertexLayout);
+		context->IASetInputLayout(debugLine.getVertexLayout());
 
 
 		debugLine.updateSubresource(cam.getVPMatrix(), "worldParams");
@@ -216,7 +216,6 @@ private:
 	{
 		//const PerspectiveProjection& proj = outlinedCamera.getProjection<PerspectiveProjection>();
 		//PerspectiveProjection proj = PerspectiveProjection();
-
 
 
 		float zfar = 1000.F;

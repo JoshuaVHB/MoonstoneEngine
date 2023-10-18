@@ -1,9 +1,8 @@
 #pragma once
 
-#include <filesystem>
 #include <d3d11.h>
+#include "../../Platform/WindowsEngine.h"
 
-#include "../../Utils/Debug.h"
 
 // TODO create multiple fixed samplers
 

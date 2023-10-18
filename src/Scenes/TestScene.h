@@ -5,7 +5,7 @@
 
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
-#include "../../Graphics/abstraction/Shaders.h"
+#include "..\..\Graphics\abstraction\Effect.h"
 #include "../../Graphics/abstraction/Framebuffer.h"
 #include "../../Graphics/World/Mesh.h"
 #include "../../Graphics/World/Cube.h"
@@ -141,8 +141,8 @@ public:
 
 		renderShader.bindTexture("tex", bb.getTexture());
 
-		Renderer::renderMesh(cam, ball, renderShader);
-		Renderer::renderMesh(cam, bunny, renderShader);
+		//Renderer::renderMesh(cam, ball, renderShader);
+		//Renderer::renderMesh(cam, bunny, renderShader);
 
 		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
 

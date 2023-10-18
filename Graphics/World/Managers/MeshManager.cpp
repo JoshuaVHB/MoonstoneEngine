@@ -105,7 +105,7 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 	for (const auto& shape : res.shapes) {
 		
-		submeshesIndices.push_back(indices.size());
+		submeshesIndices.push_back(static_cast<IndexBuffer::size_type>(indices.size()));
 		submeshesMat.push_back(0); // THIS IS TRASH BUT I DONT WANT TO DO PER FACE
 
 		for (size_t i = 0; i < shape.mesh.indices.size(); i += 3)

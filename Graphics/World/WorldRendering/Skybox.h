@@ -2,7 +2,7 @@
 
 #include "../Cube.h"
 #include "../Mesh.h"
-#include "../../abstraction/Shaders.h"
+#include "..\..\abstraction\Effect.h"
 #include "../../abstraction/Camera.h"
 #include "../../abstraction/TextureCube.h"
 

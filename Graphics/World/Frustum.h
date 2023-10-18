@@ -1,11 +1,9 @@
 #pragma once
 
+#include <directXmath.h>
 #include "../abstraction/Camera.h"
 #include "../../Utils/AABB.h"
 
-#include <directXmath.h>
-using namespace DirectX;
-using Vec = XMVECTOR;
 
 struct Plan {
 
@@ -39,8 +37,6 @@ struct Frustum {
 
     bool isOnFrustum(const AABB& boudingBox) const;
 
-    static Frustum createFrustumFromCamera(const Camera& cam);
-    static Frustum createFrustumFromOrthographicCamera(const Camera& cam);
     static Frustum createFrustumFromPerspectiveCamera(const Camera& cam);
 
     static bool isOnOrForwardPlan(const Plan& plan, const AABB& boundingBox);
@@ -59,12 +55,12 @@ Frustum Frustum::createFrustumFromPerspectiveCamera(const Camera& cam)
 
     const float halfVSide = zfar *tanf(fovy * .5f);
     const float halfHSide = halfVSide * aspect;
-    const Vec frontMultFar = zfar * cam.getForward();
+    const XMVECTOR frontMultFar = zfar * cam.getForward();
 
-    Vec hz = cam.getHorizontalDir();
-    Vec fw = cam.getForward();
-    Vec up = cam.getUp();
-    Vec campos = cam.getPosition();
+    const XMVECTOR hz = cam.getHorizontalDir();
+    const XMVECTOR fw = cam.getForward();
+    const XMVECTOR up = cam.getUp();
+    const XMVECTOR campos = cam.getPosition();
 
     frustum.nearFace = { campos + znear * fw, -fw };
     frustum.farFace = { campos + frontMultFar, fw };
@@ -80,18 +76,6 @@ Frustum Frustum::createFrustumFromPerspectiveCamera(const Camera& cam)
 
 bool Frustum::isOnFrustum(const AABB& boudingBox) const
 {
-    bool l=false, r = false, t = false, b = false, n = false, f = false;
-    std::string print = "";
-
-    if (isOnOrForwardPlan(leftFace, boudingBox))        print += "l";
-    if (isOnOrForwardPlan(rightFace, boudingBox))       print += "r";
-    if (isOnOrForwardPlan(topFace, boudingBox))         print += "t";
-    if (isOnOrForwardPlan(bottomFace, boudingBox))      print += "b";
-    if (isOnOrForwardPlan(nearFace, boudingBox))        print += "n";
-    if (isOnOrForwardPlan(farFace, boudingBox))         print += "f";
-
-    std::cout << print << std::endl;
-
     return (
         isOnOrForwardPlan(leftFace, boudingBox) &&
         isOnOrForwardPlan(rightFace, boudingBox) &&
@@ -106,8 +90,8 @@ bool Frustum::isOnOrForwardPlan(const Plan& plan, const AABB& boundingBox)
 {
     // Compute the projection interval radius of b onto L(t) = b.c + t * p.n
 
-    Vec center = XMVectorAdd(boundingBox.origin, XMVectorDivide(boundingBox.size, Vec{ 2,2,2,2 })) ;
-    Vec e =         XMVectorSubtract(XMVectorAdd(boundingBox.origin, boundingBox.size), center);
+    XMVECTOR center = XMVectorAdd(boundingBox.origin, XMVectorDivide(boundingBox.size, XMVECTOR{ 2,2,2,2 })) ;
+    XMVECTOR e =         XMVectorSubtract(XMVectorAdd(boundingBox.origin, boundingBox.size), center);
     const float r = 
         XMVectorGetX(e) * std::abs(XMVectorGetX(plan.normal)) 
         + XMVectorGetY(e) * std::abs(XMVectorGetY(plan.normal)) 

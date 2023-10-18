@@ -25,7 +25,7 @@ private:
 		Vertex{ {0,1}},
 		}
 	};
-	const IndexBuffer m_ibo= {
+	const IndexBuffer m_ibo= IndexBuffer{
 		{
 			0,1,2,
 			2,3,0

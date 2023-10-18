@@ -43,7 +43,7 @@ public:
 			m_map.getWidth(), m_map.getHeigth(),
 			/*xyScale*/ 1.F,
 			/*height scale*/ 100.F,
-			1.F
+			1
 		};
 
 		m_params = std::move(defaultParams);

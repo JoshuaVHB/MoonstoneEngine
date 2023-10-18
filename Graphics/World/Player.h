@@ -1,11 +1,13 @@
 #pragma once
 
+#include <optional>
+#include <DirectXMath.h>
 #include "../abstraction/Camera.h"
 
 #include "../../Platform/WindowsEngine.h"
-#include <optional>
+#include "../../Utils/Vec2.h"
 
-
+using namespace DirectX;
 // This is the default FPS player.
 // Windows specific
 
@@ -19,9 +21,9 @@ private:
 	Camera		m_camera;
 	XMFLOAT3	m_position;
 	
-	Vec delta;
+	XMVECTOR delta;
 
-	const Vec2 winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
+	const Vec2 winSize = Vec2(WindowsEngine::getInstance().getGraphics().getWinSize());
 	HWND hWnd = WindowsEngine::getInstance().getHwnd();
 
 	bool isConfined = false;
@@ -30,6 +32,8 @@ public:
 
 	Player()
 	{
+		m_position = { 0,0,0 };
+		delta = { 0,0,0 };
 		m_camera.setProjection<PerspectiveProjection>(PerspectiveProjection());
 	}
 
@@ -61,11 +65,10 @@ private:
 
 
 	void handleKeyboardEvents() {
-		Vec camForward = m_camera.getForwardDir();
-		Vec camHorizontal = m_camera.getHorizontalDir();
-
-		Vec forwardDir = XMVector3Normalize(Vec{ XMVectorGetX(camForward), 0, XMVectorGetZ(camForward) });
-		Vec horizontalDir = XMVector3Normalize(Vec{ XMVectorGetX(camHorizontal), 0, XMVectorGetZ(camHorizontal) });
+		const XMVECTOR camForward = m_camera.getForwardDir();
+		const XMVECTOR camHorizontal = m_camera.getHorizontalDir();
+		const XMVECTOR forwardDir = XMVector3Normalize(XMVECTOR{ XMVectorGetX(camForward), 0, XMVectorGetZ(camForward) });
+		const XMVECTOR horizontalDir = XMVector3Normalize(XMVECTOR{ XMVectorGetX(camHorizontal), 0, XMVectorGetZ(camHorizontal) });
 
 		Keyboard::Event e = wKbd->readKey();
 
@@ -127,14 +130,15 @@ private:
 		while (const auto rawDelta = wMouse->readRawdelta()) {
 
 			if (isConfined) {
-				dx += rawDelta->x;
-				dy += rawDelta->y;
+				dx += static_cast<float>(rawDelta->x);
+				dy += static_cast<float>(rawDelta->y);
 			}
 		}
 
-		float m_dx = (float)dx / (float)winSize.x * DirectX::XM_PI;
-		float m_dy = (float)dy / (float)winSize.y * DirectX::XM_PI;
-		m_camera.rotate(m_dx, m_dy);
+		float mouseDx = static_cast<float>(dx) / static_cast<float>(winSize.x) * DirectX::XM_PI;
+		float mouseDy = static_cast<float>(dy) / static_cast<float>(winSize.y) * DirectX::XM_PI;
+		std::cout << mouseDx << "|" << mouseDy << std::endl;
+		m_camera.rotate(mouseDx, mouseDy);
 
 	}
 

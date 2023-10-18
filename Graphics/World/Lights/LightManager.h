@@ -6,7 +6,7 @@
 #include <variant>
 
 #include "Lights.h"
-#include "../../abstraction/Shaders.h"
+#include "..\..\abstraction\Effect.h"
 
 /* Add this to the shader code to attach lights correctly :
 

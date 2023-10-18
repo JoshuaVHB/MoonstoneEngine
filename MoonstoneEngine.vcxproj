@@ -153,6 +153,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\abstraction\Camera.cpp" />
+    <ClCompile Include="Graphics\abstraction\Effect.cpp" />
+    <ClCompile Include="Graphics\abstraction\Texture.cpp" />
+    <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
@@ -164,7 +168,6 @@
     <ClCompile Include="Graphics\abstraction\2D\TextureAtlas.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
-    <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
     <ClCompile Include="Graphics\World\Managers\AssetManager.cpp" />
@@ -204,10 +207,9 @@
     <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
-    <ClInclude Include="Graphics\abstraction\ConstantBuffer.h" />
     <ClInclude Include="Graphics\abstraction\Framebuffer.h" />
     <ClInclude Include="Graphics\abstraction\Sampler.h" />
-    <ClInclude Include="Graphics\abstraction\Shaders.h" />
+    <ClInclude Include="Graphics\abstraction\Effect.h" />
     <ClInclude Include="Graphics\abstraction\Texture.h" />
     <ClInclude Include="Graphics\abstraction\TextureCube.h" />
     <ClInclude Include="Graphics\abstraction\Vertex.h" />
@@ -239,7 +241,6 @@
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
-    <ClInclude Include="src\Scenes\Rush2Scene.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
@@ -248,6 +249,7 @@
     <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\Transform.h" />
+    <ClInclude Include="Utils\Vec2.h" />
     <ClInclude Include="Utils\vendor\imgui\imconfig.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui_impl_dx11.h" />

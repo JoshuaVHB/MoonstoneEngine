@@ -74,9 +74,9 @@ public:
 	[[nodiscard]] const Transform&						getTransform()			const  noexcept	{ return m_transform;	}
 
 
-	[[nodiscard]] int	getVerticesCount()			const  noexcept	{ return m_vbo.getVerticesCount(); }
-	[[nodiscard]] int	getTriangleCount()			const  noexcept	{ return m_ibo.getIndicesCount()/3u; }
-	[[nodiscard]] int	getIndicesCount()			const  noexcept	{ return m_ibo.getIndicesCount(); }
+	[[nodiscard]] size_t	getVerticesCount()			const  noexcept	{ return m_vbo.getVerticesCount(); }
+	[[nodiscard]] size_t	getTriangleCount()			const  noexcept	{ return m_ibo.getIndicesCount()/3u; }
+	[[nodiscard]] size_t	getIndicesCount()			const  noexcept	{ return m_ibo.getIndicesCount(); }
 		 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

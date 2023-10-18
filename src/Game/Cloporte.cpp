@@ -16,7 +16,7 @@ Cloporte::Cloporte()
 void Cloporte::handleInputs() 
 {
 
-	Vec delta;
+	Vec delta{};
 
 	Keyboard::Event e = wKbd->readKey();
 

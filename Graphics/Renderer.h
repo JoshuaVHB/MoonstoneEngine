@@ -25,7 +25,7 @@ class Mesh;
 class Effect;
 class Camera;
 class Material;
-class AABB;
+struct AABB;
 
 
 /// Renderer class :
