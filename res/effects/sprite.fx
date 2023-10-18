@@ -4,7 +4,6 @@
 
 // Uniforms
 
-#include <cstddef>
 Texture2D tex; // la texture
 SamplerState SampleState; // l’état de sampling
 

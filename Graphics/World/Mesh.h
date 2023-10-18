@@ -11,6 +11,8 @@
 #include "../abstraction/VertexBuffer.h"
 #include "../World/Material.h"
 
+#include "../../Utils/Transform.h"
+
 using namespace DirectX;
 
 class Mesh
@@ -25,10 +27,10 @@ private:
 	std::vector<IndexBuffer::size_type> m_submeshes;
 	std::vector<uint16_t> m_submeshMats;
 
+	Transform m_transform;
 
 public:
 	
-	XMMATRIX m_worldMat = XMMatrixIdentity(); // TODO TRANSLATION
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -62,16 +64,14 @@ public:
 		m_submeshMats = submeshMats;
 	};
 
-	~Mesh()
-	{
-		std::cout << "wtf";
-	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	[[nodiscard]] const std::vector<Material>& getMaterials() const noexcept	{ return m_materials;	}
-	[[nodiscard]] std::vector<uint16_t> getSubmeshMaterials() const noexcept	{ return m_submeshMats; }
-	[[nodiscard]] std::vector<IndexBuffer::size_type> getSubmeshIndices()	  const noexcept	{ return m_submeshes;	}
+	[[nodiscard]] const std::vector<Material>& getMaterials()					const noexcept	{ return m_materials;	}
+	[[nodiscard]] std::vector<uint16_t> getSubmeshMaterials()					const noexcept	{ return m_submeshMats; }
+	[[nodiscard]] std::vector<IndexBuffer::size_type> getSubmeshIndices()		const noexcept	{ return m_submeshes;	}
+	[[nodiscard]] Transform&							getTransform()				  noexcept	{ return m_transform;	}
+	[[nodiscard]] const Transform&						getTransform()			const  noexcept	{ return m_transform;	}
 		 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -92,7 +92,7 @@ public:
 
 	void swap(Mesh& other)
 	{
-		std::swap(other.m_worldMat, m_worldMat);
+		std::swap(other.m_transform, m_transform);
 		std::swap(other.m_ibo, m_ibo);
 		std::swap(other.m_vbo, m_vbo);
 		std::swap(other.m_materials, m_materials);
@@ -105,7 +105,7 @@ public:
 
 	Mesh(Mesh&& other) noexcept
 		: m_ibo			(std::exchange(other.m_ibo,			{}))
-		, m_worldMat	(std::exchange(other.m_worldMat,	{}))
+		, m_transform	(std::exchange(other.m_transform,	{}))
 		, m_vbo			(std::exchange(other.m_vbo,			{}))
 		, m_materials	(std::exchange(other.m_materials,	std::vector<Material>()))
 		, m_submeshMats	(std::exchange(other.m_submeshMats,	std::vector<uint16_t>()))

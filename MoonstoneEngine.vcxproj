@@ -72,19 +72,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj</IncludePath>
+    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -153,6 +153,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="src\Game\GameLogic.cpp" />
+    <ClCompile Include="src\Game\CameraController.cpp" />
+    <ClCompile Include="src\Game\Cloporte.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\2DRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Quad.cpp" />
@@ -185,6 +189,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\GameLogic.h" />
+    <ClInclude Include="src\Game\CameraController.h" />
+    <ClInclude Include="src\Game\Cloporte.h" />
     <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="Graphics\abstraction\2D\2DRenderer.h" />
     <ClInclude Include="Graphics\abstraction\2D\Billboard.h" />
@@ -226,15 +233,20 @@
     <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Game\GameScenes\EndScreen.h" />
+    <ClInclude Include="src\Game\GameScenes\InGame.h" />
+    <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\Rush2Scene.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
+    <ClInclude Include="Utils\AABB.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Timer.h" />
+    <ClInclude Include="Utils\Transform.h" />
     <ClInclude Include="Utils\vendor\imgui\imconfig.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui_impl_dx11.h" />
@@ -253,9 +265,6 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="res\effects\sprite.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

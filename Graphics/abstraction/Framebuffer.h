@@ -90,7 +90,6 @@ public:
 #ifdef D3D11_IMPL
 		m_renderContext.context->OMSetRenderTargets(1, &m_target, m_depthStencil);
 #endif
-		
 
 	}
 

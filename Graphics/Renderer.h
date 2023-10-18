@@ -25,6 +25,7 @@ class Mesh;
 class Effect;
 class Camera;
 class Material;
+class AABB;
 
 
 /// Renderer class :
@@ -55,6 +56,7 @@ public:
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;
 		virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) = 0;
+		virtual void renderAABB(Camera& camera, const AABB&) = 0;
 
 
 	private:
@@ -70,6 +72,7 @@ public:
 	CALL_IMPL(renderCubemap) ;
 	CALL_IMPL(loadMeshFromFile) ;
 	CALL_IMPL(renderPBRMesh) ;
+	CALL_IMPL(renderAABB) ;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

@@ -20,6 +20,10 @@
 #include "../../Graphics/World/Material.h"
 #include "../../Graphics/World/Managers/MeshManager.h"
 
+#include "../../Utils/Transform.h"
+
+#define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
+
 
 
 class TestScene : public Scene {
@@ -32,6 +36,9 @@ private:
 	Effect renderShader, blitFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
+
+	Transform transform;
+	AABB aabb;
 
 	Framebuffer fbo;
 
@@ -93,6 +100,9 @@ public:
 		elapsed += deltaTime;
 
 		m_player.step(elapsed);
+
+		aabb.origin = transform.getPosition();
+		aabb.size = transform.getScale();
 		worldParams sp;
 
 		sp.viewProj = XMMatrixTranspose(m_player.getCamera().getVPMatrix());
@@ -115,25 +125,17 @@ public:
 		{
 			fbo.bind();
 		}
-		
-
 
 		Renderer::clearScreen();
 
 		Camera& cam = m_player.getCamera();
 		renderShader.bindTexture("tex", bb.getTexture());
 		//Renderer::renderMesh(cam, ball, renderShader);
-		Renderer::renderMesh(cam, bunny, renderShader);
+		//Renderer::renderMesh(cam, bunny, renderShader);
+
+		Renderer::renderAABB(cam, aabb);
 		box.renderSkybox(cam);
 
-		//////////////
-
-		/*
-		auto tex = fbo.getTex();
-		renderShader.bindTexture("tex", tex.getTexture());
-		blitFx.apply();
-		WindowsEngine::getInstance().getGraphics().getContext().context->Draw(6, 0);
-		*/
 
 		
 
@@ -142,6 +144,11 @@ public:
 		ImGui::Begin("Debug");
 
 		ImGui::Text(std::to_string(m_player.getCamera().getPosition().vector4_f32[0]).c_str());
+
+
+		bunny.getTransform().showControlWindow();
+		transform.showControlWindow();
+
 		ImGui::End();
 		ImGui::Checkbox("render sponza", &renderSponza);
 

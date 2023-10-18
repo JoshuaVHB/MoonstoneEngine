@@ -5,6 +5,7 @@
 #include "../../Platform/WindowsEngine.h"
 
 #include "../../Debug.h"
+#include "../../Utils/AABB.h"
 #include "../abstraction/Vertex.h"
 #include "../abstraction/VertexBuffer.h"
 #include "../abstraction/IndexBuffer.h"
@@ -32,7 +33,10 @@ private:
 		XMVECTOR ambiantMat; // la valeur diffuse de l’éclairage 
 		XMVECTOR diffuseMat; // la valeur diffuse du matériau 
 	};
-	Effect pbrMeshEffect;
+	Effect pbrMeshEffect, debugLine;
+
+
+
 public:
 
 	direct3D11_impl() 
@@ -46,7 +50,7 @@ public:
 		pbrMeshEffect.loadEffectFromFile("res/effects/pbrMesh.fx");
 		
 
-		InputLayout layout;
+		InputLayout layout, debuglayout;
 		layout.pushBack<3>(InputLayout::Semantic::Position);
 		layout.pushBack<3>(InputLayout::Semantic::Normal);
 		layout.pushBack<2>(InputLayout::Semantic::Texcoord);
@@ -55,7 +59,14 @@ public:
 		pbrMeshEffect.addNewCBuffer("meshParams", sizeof(XMMATRIX));
 		pbrMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams));
 		pbrMeshEffect.addNewCBuffer("materialParams", sizeof(MaterialCoefs));
+
+
+		debugLine.loadEffectFromFile("res/effects/debugLine.fx");
+		debuglayout.pushBack<3>(InputLayout::Semantic::Position);
+		debugLine.bindInputLayout(debuglayout);
+		debugLine.addNewCBuffer("worldParams", sizeof(XMMATRIX));
 		
+
 	}
 
 
@@ -95,7 +106,7 @@ private:
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->IASetInputLayout(effect.m_vertexLayout);
 
-		effect.updateSubresource(XMMatrixTranspose(mesh.m_worldMat), "meshParams"); // TODO make this more flexible
+		effect.updateSubresource(XMMatrixTranspose(mesh.getTransform().getTransformationMatrix()), "meshParams"); // TODO make this more flexible
 		effect.sendCBufferToGPU("meshParams");
 
 		effect.apply();
@@ -121,7 +132,7 @@ private:
 		pbrMeshEffect.updateSubresource(sp, "worldParams");
 		pbrMeshEffect.sendCBufferToGPU("worldParams");
 
-		pbrMeshEffect.updateSubresource(XMMatrixTranspose(mesh.m_worldMat), "meshParams"); // TODO make this more flexible
+		pbrMeshEffect.updateSubresource(XMMatrixTranspose(mesh.getTransform().getTransformationMatrix()), "meshParams"); // TODO make this more flexible
 		pbrMeshEffect.sendCBufferToGPU("meshParams");
 
 
@@ -139,10 +150,13 @@ private:
 	// todo make this more clear
 	virtual void renderCubemap(Camera& camera, const Mesh& mesh, const Effect& effect) override {
 
+		
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->IASetInputLayout(effect.m_vertexLayout);
 		effect.apply();
 		mesh.draw();
+
+
 	}
 
 	
@@ -151,5 +165,47 @@ private:
 		return MeshManager::loadMeshFromFile(path);
 	}
 
+
+	virtual void renderAABB(Camera& cam, const AABB& box) override
+	{
+		Vec o = box.origin;
+		Vec x = { XMVectorGetX(box.size), 0, 0 };
+		Vec y = { 0, XMVectorGetY(box.size), 0 };
+		Vec z = { 0, 0, XMVectorGetZ(box.size) };
+
+		renderDebugLine(cam, o, o + x);
+		renderDebugLine(cam, o + y, o + x + y);
+		renderDebugLine(cam, o + z, o + x + z);
+		renderDebugLine(cam, o + y + z, o + x + y + z);
+		renderDebugLine(cam, o, o + y);
+		renderDebugLine(cam, o + x, o + y + x);
+		renderDebugLine(cam, o + z, o + y + z);
+		renderDebugLine(cam, o + x + z, o + y + x + z);
+		renderDebugLine(cam, o, o + z);
+		renderDebugLine(cam, o + x, o + z + x);
+		renderDebugLine(cam, o + y, o + z + y);
+		renderDebugLine(cam, o + x + y, o + z + x + y);
+	}
+
+	void renderDebugLine(Camera& cam, Vec from, Vec to) {
+				
+
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		context->IASetInputLayout(debugLine.m_vertexLayout);
+
+
+		debugLine.updateSubresource(cam.getVPMatrix(), "worldParams");
+		debugLine.sendCBufferToGPU("worldParams");
+
+		debugLine.apply();
+
+
+		VertexBuffer vbo({ Vertex{from}, Vertex{to} });
+		vbo.bind();
+
+		context->Draw(2, 0);
+
+
+	}
 
 };
