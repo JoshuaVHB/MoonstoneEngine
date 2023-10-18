@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "../../Graphics/Rendering_impl/direct3D11_impl.h"
 
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
@@ -18,6 +19,7 @@
 #include <directXmath.h>
 
 #include "../../Graphics/World/Material.h"
+#include "../../Graphics/World/Frustum.h"
 #include "../../Graphics/World/Managers/MeshManager.h"
 
 #include "../../Utils/Transform.h"
@@ -64,6 +66,8 @@ private:
 	Material m;
 	bool renderSponza = false;
 
+	Camera lastcam;
+
 public:
 
 	TestScene() 
@@ -90,6 +94,8 @@ public:
 			
 			}
 		);
+
+		lastcam = m_player.getCamera();
 		
 	}
 
@@ -103,6 +109,8 @@ public:
 
 		aabb.origin = transform.getPosition();
 		aabb.size = transform.getScale();
+
+
 		worldParams sp;
 
 		sp.viewProj = XMMatrixTranspose(m_player.getCamera().getVPMatrix());
@@ -123,15 +131,20 @@ public:
 		if (!renderSponza) Framebuffer::unbind();
 		if (renderSponza)
 		{
-			fbo.bind();
 		}
 
 		Renderer::clearScreen();
 
 		Camera& cam = m_player.getCamera();
+		Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+
+
 		renderShader.bindTexture("tex", bb.getTexture());
-		//Renderer::renderMesh(cam, ball, renderShader);
-		//Renderer::renderMesh(cam, bunny, renderShader);
+
+		Renderer::renderMesh(cam, ball, renderShader);
+		Renderer::renderMesh(cam, bunny, renderShader);
+
+		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
 
 		Renderer::renderAABB(cam, aabb);
 		box.renderSkybox(cam);
@@ -145,15 +158,25 @@ public:
 
 		ImGui::Text(std::to_string(m_player.getCamera().getPosition().vector4_f32[0]).c_str());
 
+		std::string hello = "no";
+		Frustum f = Frustum::createFrustumFromPerspectiveCamera(m_player.getCamera());
+		if (f.isOnFrustum(aabb))
+		{
+			hello = "yes";
+		}
+		ImGui::Text(hello.c_str());
 
 		bunny.getTransform().showControlWindow();
 		transform.showControlWindow();
 
-		ImGui::End();
 		ImGui::Checkbox("render sponza", &renderSponza);
+		if (ImGui::Button("photo")) {
+			lastcam = m_player.getCamera();
+		}
+		ImGui::End();
 
 		m_player.onImGuiRender();
-
+		Renderer::showImGuiDebugData();
 	}
 
 

@@ -72,6 +72,11 @@ public:
 	[[nodiscard]] std::vector<IndexBuffer::size_type> getSubmeshIndices()		const noexcept	{ return m_submeshes;	}
 	[[nodiscard]] Transform&							getTransform()				  noexcept	{ return m_transform;	}
 	[[nodiscard]] const Transform&						getTransform()			const  noexcept	{ return m_transform;	}
+
+
+	[[nodiscard]] int	getVerticesCount()			const  noexcept	{ return m_vbo.getVerticesCount(); }
+	[[nodiscard]] int	getTriangleCount()			const  noexcept	{ return m_ibo.getIndicesCount()/3u; }
+	[[nodiscard]] int	getIndicesCount()			const  noexcept	{ return m_ibo.getIndicesCount(); }
 		 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	

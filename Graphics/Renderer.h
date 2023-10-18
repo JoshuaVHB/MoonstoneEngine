@@ -57,7 +57,8 @@ public:
 		virtual void clearScreen() = 0;
 		virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) = 0;
 		virtual void renderAABB(Camera& camera, const AABB&) = 0;
-
+		virtual void renderDebugPerspectiveCameraOutline(Camera& viewCamera, const Camera& outlinedCamera) = 0;
+		virtual void showImGuiDebugData() = 0;
 
 	private:
 
@@ -73,6 +74,8 @@ public:
 	CALL_IMPL(loadMeshFromFile) ;
 	CALL_IMPL(renderPBRMesh) ;
 	CALL_IMPL(renderAABB) ;
+	CALL_IMPL(renderDebugPerspectiveCameraOutline) ;
+	CALL_IMPL(showImGuiDebugData) ;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

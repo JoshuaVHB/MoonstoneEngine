@@ -189,6 +189,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\World\Frustum.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />

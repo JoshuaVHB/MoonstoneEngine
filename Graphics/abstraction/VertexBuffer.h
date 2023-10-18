@@ -53,6 +53,8 @@ public:
 #endif
 	}
 
+	int getVerticesCount() const noexcept { return m_vertices.size(); }
+
 	void bind() const
 	{
 		const UINT stride = sizeof(Vertex);

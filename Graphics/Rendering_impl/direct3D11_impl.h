@@ -35,6 +35,8 @@ private:
 	};
 	Effect pbrMeshEffect, debugLine;
 
+	int verticesCount = 0;
+	int triangleCount = 0;
 
 
 public:
@@ -111,6 +113,9 @@ private:
 
 		effect.apply();
 		mesh.draw();
+
+		triangleCount += mesh.getTriangleCount();
+
 	}
 
 
@@ -165,7 +170,6 @@ private:
 		return MeshManager::loadMeshFromFile(path);
 	}
 
-
 	virtual void renderAABB(Camera& cam, const AABB& box) override
 	{
 		Vec o = box.origin;
@@ -205,6 +209,56 @@ private:
 
 		context->Draw(2, 0);
 
+
+	}
+
+	virtual void renderDebugPerspectiveCameraOutline(Camera& viewCamera, const Camera& outlinedCamera) override
+	{
+		//const PerspectiveProjection& proj = outlinedCamera.getProjection<PerspectiveProjection>();
+		//PerspectiveProjection proj = PerspectiveProjection();
+
+
+
+		float zfar = 1000.F;
+		float znear = 0.10F;
+		float fovy = 3.1415f / 4.F;
+		float aspect = 2.0f;
+
+		Vec pos = outlinedCamera.getPosition();
+		Vec I = outlinedCamera.getHorizontalDir();
+		Vec J = outlinedCamera.getUp();
+		Vec F = outlinedCamera.getForward();
+		float dh = sin(fovy * .5f);
+		float dw = dh * aspect;
+		Vec U1 = F + dh * J + dw * I;
+		Vec U2 = F - dh * J + dw * I;
+		Vec U3 = F - dh * J - dw * I;
+		Vec U4 = F + dh * J - dw * I;
+		float zNear = -znear;
+		float zFar = -zfar;
+
+		renderDebugLine(viewCamera, pos, pos + F * zFar		); // dir
+		renderDebugLine(viewCamera, pos, pos + Vec{0,1,0,1}); // world up
+		renderDebugLine(viewCamera, pos, pos + I		); // right
+		renderDebugLine(viewCamera, pos, pos + J			); // up
+		renderDebugLine(viewCamera, pos, pos + U1 * zFar		);
+		renderDebugLine(viewCamera, pos, pos + U2 * zFar		);
+		renderDebugLine(viewCamera, pos, pos + U3 * zFar		);
+		renderDebugLine(viewCamera, pos, pos + U4 * zFar		);
+		renderDebugLine(viewCamera, pos + U1 * zFar, pos + U2 * zFar);
+		renderDebugLine(viewCamera, pos + U2 * zFar, pos + U3 * zFar);
+		renderDebugLine(viewCamera, pos + U3 * zFar, pos + U4 * zFar);
+		renderDebugLine(viewCamera, pos + U4 * zFar, pos + U1 * zFar);
+
+	}
+
+	virtual void showImGuiDebugData() override
+	{
+		ImGui::Begin("D3D11 Rendering debug data:");
+		ImGui::Text("Current drawn triangle count : %d", triangleCount);
+		ImGui::End();
+
+		triangleCount = 0;
 
 	}
 

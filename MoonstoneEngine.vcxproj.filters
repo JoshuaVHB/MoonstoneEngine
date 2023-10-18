@@ -323,6 +323,9 @@
     <ClInclude Include="Utils\AABB.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\World\Frustum.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc">

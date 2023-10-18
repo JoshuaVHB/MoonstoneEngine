@@ -86,6 +86,7 @@ public:
 		return m_indices;
 	}
 
+	int getIndicesCount() const noexcept { return m_indices.size(); }
 
 	void bind() const
 	{

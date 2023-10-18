@@ -51,11 +51,12 @@ protected:
 struct PerspectiveProjection : Projection
 {
 	float aspectRatio = 2.0f;
-	float FOV = XM_PI / 4.f;
+	float FOV = 3.141592653f / 4.f;
 
 	float znear = 0.10f, zfar = 1000.F;
 
 	PerspectiveProjection() {
+
 		projMat = XMMatrixPerspectiveFovLH(FOV, aspectRatio, znear, zfar);
 	}
 
@@ -125,6 +126,36 @@ private:
 
 
 public:
+
+
+	Camera() = default;
+	Camera(const Camera& other)
+	{
+		m_position = other.m_position;
+		m_target = other.m_target;
+		m_UP = other.m_UP;
+		m_left = other.m_left;
+		t = other.t;
+		m_rotationSpeed = other.m_rotationSpeed;
+		m_angles = other.m_angles;
+		m_viewProjMatrix = other.m_viewProjMatrix;
+		m_viewMatrix = other.m_viewMatrix;
+	}
+	Camera& operator=(const Camera& other)
+	{
+		m_position = other.m_position;
+		m_target = other.m_target;
+		m_UP = other.m_UP;
+		m_left = other.m_left;
+		t = other.t;
+		m_rotationSpeed = other.m_rotationSpeed;
+		m_angles = other.m_angles;
+		m_viewProjMatrix = other.m_viewProjMatrix;
+		m_viewMatrix = other.m_viewMatrix;
+		setProjection<PerspectiveProjection>(PerspectiveProjection{});
+		return *this;
+
+	}
 
 	void updateCam() 
 	{
@@ -200,6 +231,7 @@ public:
 	}
 
 	Vec getPosition() const noexcept { return m_position; }
+	Vec getUp() const noexcept { return XMVector4Normalize(XMVector3Cross(getHorizontalDir(), getForward())); }
 
 	Vec getForward() const noexcept { 	
 	
@@ -226,6 +258,11 @@ public:
 
 	[[nodiscard]] float& getRawYaw() { return m_angles.yaw; }
 	[[nodiscard]] float& getRawPitch() { return m_angles.pitch; }
+
+
+	template<class _proj = PerspectiveProjection>
+		requires (std::derived_from<_proj, Projection>)
+	[[nodiscard]] _proj getProjection() const { return _proj{}; }
 
 };
 

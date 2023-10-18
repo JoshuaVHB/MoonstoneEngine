@@ -35,6 +35,8 @@ public:
 
 	Camera& getCamera() { return m_camera; }
 
+
+
 	void step(float deltaTime)
 	{
 		handleMouseEvents();		
