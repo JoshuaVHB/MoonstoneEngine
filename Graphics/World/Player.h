@@ -137,7 +137,6 @@ private:
 
 		float mouseDx = static_cast<float>(dx) / static_cast<float>(winSize.x) * DirectX::XM_PI;
 		float mouseDy = static_cast<float>(dy) / static_cast<float>(winSize.y) * DirectX::XM_PI;
-		std::cout << mouseDx << "|" << mouseDy << std::endl;
 		m_camera.rotate(mouseDx, mouseDy);
 
 	}

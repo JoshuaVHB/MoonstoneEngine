@@ -22,23 +22,28 @@ class HeightmapBuilder {
 
 public:
 
-	static Mesh buildChunk(const Heightmap& map, Vec2<int> chunkPos, Vec2<int> chunkSize, float xy_scale = 1, float height_factor = 1)
+	static Mesh buildChunk(const Heightmap& map, Vec2<int> chunkPos, Vec2<int> chunkSize, float xy_scale = 1, float height_factor = 10)
 	{
+
 		int width = map.getWidth();
 		int height = map.getHeigth();
 
 		std::vector<Vertex> vertices;
 		std::vector<Index> indices;
 
+
 		// -- Step 1 : Build the vertices
 
-		for (int y = chunkPos.y; y < chunkPos.y + chunkSize.y; y++)
-			for (int x = chunkPos.x; x < chunkPos.x + chunkSize.x; x++)
+		for (int dy = 0; dy < chunkSize.y+1; dy++)
+			for (int dx = 0; dx < chunkSize.x+1; dx++)
 			{
+				int x = chunkPos.x + dx + 1;
+				int y = chunkPos.y + dy + 1;
+
 				// 1.1 -> Compute the position
 				Vertex v;
 				float h = map.getAt(x, y);
-				v.position = Vec{ x * xy_scale,h * height_factor * xy_scale  ,y * xy_scale, };
+				v.position = Vec{ x * xy_scale, h * height_factor  , y * xy_scale, };
 
 				// 1.2 -> Compute the normal
 				float a, b, c, d;
@@ -63,14 +68,17 @@ public:
 			}
 
 		// -- Step 2 : Build the indicies
-		for (int y = 0; y < height - 1; y++)
-			for (int x = 0; x < width - 1; x++)
+		for (int y = 0; y < chunkSize.y  ; y++)
+			for (int x = 0; x < chunkSize.x; x++)
 			{
 
-				Index a1 = y * (width)+x;
-				Index a2 = y * (width)+x + 1;
-				Index a3 = (y + 1) * (width)+x;
-				Index a4 = (y + 1) * (width)+x + 1;
+
+				Index a1 = y * (chunkSize.x+1)+x;
+				Index a2 = y * (chunkSize.x+1)+x + 1;
+				Index a3 = (y + 1) * (chunkSize.x+1)+x;
+				Index a4 = (y + 1) * (chunkSize.x+1)+x + 1;
+
+
 				indices.push_back(a1);
 				indices.push_back(a3);
 				indices.push_back(a2);
@@ -79,9 +87,10 @@ public:
 				indices.push_back(a4);
 
 			}
+		assert(indices.size() == 6 * (chunkSize.x * chunkSize.y));
+		assert(vertices.size() == ((chunkSize.x+1) * (chunkSize.y+1)));
 
-
-		return {vertices, indices};
+		return Mesh{vertices, indices};
 	}
 
 	static std::vector<Mesh> buildTerrainMesh(const Heightmap& map, Vec2<int> chunkCount,

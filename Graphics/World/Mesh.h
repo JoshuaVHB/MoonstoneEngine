@@ -12,6 +12,7 @@
 #include "../World/Material.h"
 
 #include "../../Utils/Transform.h"
+#include "../../Utils/AABB.h"
 
 using namespace DirectX;
 
@@ -28,6 +29,7 @@ private:
 	std::vector<uint16_t> m_submeshMats;
 
 	Transform m_transform;
+	AABB m_boundingBox;
 
 public:
 	
@@ -41,6 +43,7 @@ public:
 		m_vbo = VertexBuffer(vertices);
 		m_ibo = IndexBuffer(indices);
 		m_submeshes = std::vector<IndexBuffer::size_type>{ 0, (IndexBuffer::size_type)(indices.size())};
+		computeBoundingBox();
 	};
 
 	Mesh(std::vector<Vertex> vertices, std::vector<IndexBuffer::size_type> indices, const std::vector<IndexBuffer::size_type>& submeshIndices)
@@ -49,6 +52,7 @@ public:
 		m_ibo = IndexBuffer(indices);
 		m_submeshes = submeshIndices;
 		m_materials = {};
+		computeBoundingBox();
 	};
 
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<IndexBuffer::size_type>& indices,
@@ -62,6 +66,7 @@ public:
 		m_submeshes = submeshIndices;
 		m_materials = materials;
 		m_submeshMats = submeshMats;
+		computeBoundingBox();
 	};
 
 
@@ -72,6 +77,8 @@ public:
 	[[nodiscard]] std::vector<IndexBuffer::size_type> getSubmeshIndices()		const noexcept	{ return m_submeshes;	}
 	[[nodiscard]] Transform&							getTransform()				  noexcept	{ return m_transform;	}
 	[[nodiscard]] const Transform&						getTransform()			const  noexcept	{ return m_transform;	}
+	[[nodiscard]] AABB&									getBoundingBox()		  noexcept	{ return m_boundingBox;	}
+	[[nodiscard]] const AABB&							getBoundingBox()		const  noexcept	{ return m_boundingBox;	}
 
 
 	[[nodiscard]] size_t	getVerticesCount()			const  noexcept	{ return m_vbo.getVerticesCount(); }
@@ -93,6 +100,23 @@ public:
 
 	}
 
+	void computeBoundingBox() noexcept
+	{
+		XMVECTOR maxp;
+		XMVECTOR minp;
+		for (const Vertex& v : m_vbo.getVertices())
+		{
+			maxp = XMVectorMax(m_transform.getPosition(), v.position);
+			minp = XMVectorMin(m_transform.getPosition(), v.position);
+		}
+
+		m_boundingBox = AABB::makeAABBFromPoints(minp, maxp);
+		BoundingSphere bs = makeSphereFromAABB(m_boundingBox);
+		m_boundingBox = makeAABBFromSphere(bs);
+
+
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void swap(Mesh& other)
@@ -103,6 +127,7 @@ public:
 		std::swap(other.m_materials, m_materials);
 		std::swap(other.m_submeshMats, m_submeshMats);
 		std::swap(other.m_submeshes, m_submeshes);
+		std::swap(other.m_boundingBox, m_boundingBox);
 	}
 
 	Mesh(const Mesh&) = delete;
@@ -115,6 +140,7 @@ public:
 		, m_materials	(std::exchange(other.m_materials,	std::vector<Material>()))
 		, m_submeshMats	(std::exchange(other.m_submeshMats,	std::vector<uint16_t>()))
 		, m_submeshes	(std::exchange(other.m_submeshes,	std::vector<IndexBuffer::size_type>()))
+		, m_boundingBox	(std::exchange(other.m_boundingBox, {}))
 	{}
 
 	Mesh& operator=(Mesh&& other) noexcept {

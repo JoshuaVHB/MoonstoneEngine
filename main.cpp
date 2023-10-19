@@ -62,7 +62,7 @@ int main() {
 
 		SceneManager::registerScene<TestScene>("TEST");
 		SceneManager::registerScene<Rush3Scene>("RUSH2");
-		SceneManager::switchToScene(0);
+		SceneManager::switchToScene(1);
 
 
 		rMoteur.run();

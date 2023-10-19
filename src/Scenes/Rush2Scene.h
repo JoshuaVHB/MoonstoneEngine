@@ -139,8 +139,9 @@ public:
 		Renderer::clearScreen();
 		for (auto&& m : m_terrain.getMesh())
 		{
-			//if ()
-			Renderer::renderMesh(cam, m, m_baseMeshEffect);
+			if (f.isOnFrustum(m.getBoundingBox()))
+				Renderer::renderMesh(cam, m, m_baseMeshEffect);
+			Renderer::renderAABB(cam, m.getBoundingBox());
 		}
 
 		// Render skybox last (if first person)
