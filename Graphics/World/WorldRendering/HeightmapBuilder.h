@@ -2,8 +2,11 @@
 
 #include "../Mesh.h"
 #include "Heightmap.h"
-#include <directXmath.h>
 #include <vector>
+#include "Utils/Vec2.h"
+
+#define _XM_NO_INTRINSICS_
+#include <directXmath.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

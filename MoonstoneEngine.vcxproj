@@ -157,7 +157,11 @@
     <ClCompile Include="Graphics\abstraction\Effect.cpp" />
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
     <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
+    <ClCompile Include="Graphics\World\Frustum.cpp" />
+    <ClCompile Include="Graphics\World\Material.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="Graphics\World\Player.cpp" />
+    <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
@@ -232,7 +236,6 @@
     <ClInclude Include="Graphics\World\Managers\MeshManager.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\IO\DDSTextureLoader11.h" />
-    <ClInclude Include="Platform\IO\FileReader.h" />
     <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />

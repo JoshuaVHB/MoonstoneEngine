@@ -67,8 +67,6 @@ public:
 
 	CALL_IMPL(drawIndexed) ;
 	CALL_IMPL(clearScreen) ;
-
-	// Camera&, const Mesh&, const Effect&
 	CALL_IMPL(renderMesh) ;
 	CALL_IMPL(renderCubemap) ;
 	CALL_IMPL(loadMeshFromFile) ;

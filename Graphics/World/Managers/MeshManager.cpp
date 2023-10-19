@@ -2,6 +2,7 @@
 
 #include "MeshManager.h"
 #include "../../abstraction/Vertex.h"
+#include "../../World/Material.h"
 #include "../Mesh.h"
 
 #include <iostream>
@@ -27,7 +28,6 @@ void assertValid(const rapidobj::Result& res) {
 		throw;
 	}
 }
-
 
 inline Vertex generateVertexFromKey(const rapidobj::Index& key, const rapidobj::Result& loadedResult)
 {
@@ -106,7 +106,7 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 	for (const auto& shape : res.shapes) {
 		
 		submeshesIndices.push_back(static_cast<IndexBuffer::size_type>(indices.size()));
-		submeshesMat.push_back(0); // THIS IS TRASH BUT I DONT WANT TO DO PER FACE
+		submeshesMat.push_back(0); // trash
 
 		for (size_t i = 0; i < shape.mesh.indices.size(); i += 3)
 		{
@@ -118,11 +118,10 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 			// Iterate through the vertices of the face
 			// Use this one for left handed winding
-			for (int j = 2; j >= 0; --j)
+			for (int j = 0; j < 3; ++j)
 			{
 				const auto& indexes = shape.mesh.indices[i + j];
 				const auto& [position_index, texcoord_index, normal_index] = indexes;
-
 
 				key currentKey =
 				{

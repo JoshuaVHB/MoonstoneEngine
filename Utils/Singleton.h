@@ -17,9 +17,7 @@
 
 	protected :
 
-		Singleton(){}	
-		~Singleton(){}
-
-
+		Singleton() = default;
+		~Singleton() = default;
   
 	};

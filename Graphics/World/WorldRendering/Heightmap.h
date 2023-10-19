@@ -74,6 +74,7 @@ public:
 		using difference_type = std::ptrdiff_t;
 		using pointer = float*;  // or also value_type*
 		using reference = float&;  // or also value_type&
+		
 
 		Iterator(pointer ptr) : m_ptr(ptr) {}
 		reference operator*() const { return *m_ptr; }

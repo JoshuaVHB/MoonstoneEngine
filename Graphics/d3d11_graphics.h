@@ -113,7 +113,6 @@ public:
 		ZeroMemory(&desc, sizeof(desc));
 		desc.FillMode = D3D11_FILL_SOLID;
 		desc.CullMode = D3D11_CULL_BACK;
-		desc.CullMode = D3D11_CULL_NONE;
 		m_context.device->CreateRasterizerState(&desc, &pRasterizerState);
 		m_context.context->RSSetState(pRasterizerState);
 
