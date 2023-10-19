@@ -64,8 +64,10 @@ struct OrthographicProjection : public Projection
 	{
 		type = ProjectionType::ORTHOGRAPHIC;
 		projMat = XMMatrixOrthographicRH(left - right, top - bot, znear, zfar);
-
 	}
+
+	[[nodiscard]] virtual Mat getProjMatrix() const noexcept override 
+	{ return XMMatrixOrthographicRH(left - right, top - bot, znear, zfar); }
 };
 
 

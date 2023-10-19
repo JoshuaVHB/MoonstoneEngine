@@ -73,7 +73,7 @@ public:
 	TestScene() 
 	{
 		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
-		bunny = MeshManager::loadMeshFromFile("res/mesh/sponza.obj");
+		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
@@ -142,7 +142,8 @@ public:
 		renderShader.bindTexture("tex", bb.getTexture());
 
 		//Renderer::renderMesh(cam, ball, renderShader);
-		//Renderer::renderMesh(cam, bunny, renderShader);
+		Renderer::renderMesh(cam, bunny, renderShader);
+		Renderer::renderAABB(cam, bunny.getBoundingBox());
 
 		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
 

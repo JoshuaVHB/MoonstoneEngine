@@ -25,7 +25,7 @@ private:
 	Terrain m_terrain{ path_to_map };
 	Vec		centerPoint; // for camera target
 	Texture m_rockTexture{ L"res/textures/rock.dds" };
-	Texture m_grassTexture{ L"res/textures/grass6.dds" };
+	Texture m_grassTexture{ L"res/textures/seamless.dds" };
 	Texture m_grass6Texture{ L"res/textures/breadbug.dds" };
 
 	// -- Effect and skybox
@@ -139,9 +139,19 @@ public:
 		Renderer::clearScreen();
 		for (auto&& m : m_terrain.getMesh())
 		{
-			if (f.isOnFrustum(m.getBoundingBox()))
+
+			if (currentCamera == &m_orthoCam)
+			{
 				Renderer::renderMesh(cam, m, m_baseMeshEffect);
-			Renderer::renderAABB(cam, m.getBoundingBox());
+				continue;
+
+			}
+
+			if ( f.isOnFrustum(m.getBoundingBox()))
+			{
+				Renderer::renderMesh(cam, m, m_baseMeshEffect);
+				Renderer::renderAABB(cam, m.getBoundingBox());
+			} 
 		}
 
 		// Render skybox last (if first person)

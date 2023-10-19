@@ -100,10 +100,11 @@ public:
 
 	}
 
+	// Very innacurate
 	void computeBoundingBox() noexcept
 	{
-		XMVECTOR maxp;
-		XMVECTOR minp;
+		XMVECTOR maxp{};
+		XMVECTOR minp{};
 		for (const Vertex& v : m_vbo.getVertices())
 		{
 			maxp = XMVectorMax(m_transform.getPosition(), v.position);

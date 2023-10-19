@@ -31,7 +31,8 @@ public:
 		std::vector<Vertex> vertices;
 		std::vector<Index> indices;
 
-
+		float maxHeightValue = FLT_MIN; // can't use limits cause ::max() becomes C max... so annoying
+		float minHeightValue = FLT_MAX;
 		// -- Step 1 : Build the vertices
 
 		for (int dy = 0; dy < chunkSize.y+1; dy++)
@@ -43,6 +44,8 @@ public:
 				// 1.1 -> Compute the position
 				Vertex v;
 				float h = map.getAt(x, y);
+				maxHeightValue = max(maxHeightValue, h * height_factor);
+				minHeightValue = min(minHeightValue, h * height_factor);
 				v.position = Vec{ x * xy_scale, h * height_factor  , y * xy_scale, };
 
 				// 1.2 -> Compute the normal
@@ -89,8 +92,12 @@ public:
 			}
 		assert(indices.size() == 6 * (chunkSize.x * chunkSize.y));
 		assert(vertices.size() == ((chunkSize.x+1) * (chunkSize.y+1)));
+		Mesh res{ vertices, indices };
+		res.getBoundingBox() = AABB{ 
+			Vec{static_cast<float>(chunkPos.x), minHeightValue, static_cast<float>(chunkPos.y)},
+			Vec{static_cast<float>(chunkSize.x), maxHeightValue, static_cast<float>(chunkSize.y)} };
 
-		return Mesh{vertices, indices};
+		return res;
 	}
 
 	static std::vector<Mesh> buildTerrainMesh(const Heightmap& map, Vec2<int> chunkCount,
@@ -102,19 +109,17 @@ public:
 		int chunkWidth = width / chunkCount.x;
 		int chunkHeight = height / chunkCount.y;
 
-		//Mesh terrainMesh;
 		std::vector<Mesh> chunks;
 
 		for (int y = 0; y < chunkCount.y; ++y)
 			for (int x = 0; x < chunkCount.x; ++x)
-				//Vec2 chunkStart = Vec2{ x * chunkWidth, y * chunkHeight };
 			{
 				chunks.emplace_back(buildChunk(map,
 					Vec2<int>{ x* chunkWidth, y* chunkHeight },
 					Vec2<int>{ chunkWidth, chunkHeight },
 					xy_scale, height_factor));
 			}
-				
+		
 
 		return chunks;
 
