@@ -6,6 +6,7 @@
 #include "IO/Inputs.h"
 
 #include "../Graphics/d3d11_graphics.h"
+#include "../Utils/Debug.h"
 
 
 #define MAX_LOADSTRING 100

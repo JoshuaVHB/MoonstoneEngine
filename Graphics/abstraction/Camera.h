@@ -94,8 +94,8 @@ private:
 
 	} m_angles;
 
-	Mat m_viewProjMatrix;
-	Mat m_viewMatrix;
+	Mat m_viewProjMatrix{};
+	Mat m_viewMatrix{};
 
 	float m_rotationSpeed = 1.f;
 

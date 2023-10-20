@@ -38,14 +38,14 @@ public:
 		float minHeightValue = FLT_MAX;
 		// -- Step 1 : Build the vertices
 
-		for (int dy = 0; dy < chunkSize.y+1; dy++)
-			for (int dx = 0; dx < chunkSize.x+1; dx++)
+		for (int dy = 0; dy < chunkSize.y + 1; dy++)
+			for (int dx = 0; dx < chunkSize.x + 1; dx++)
 			{
 				int x = chunkPos.x + dx + 1;
 				int y = chunkPos.y + dy + 1;
 
 				// 1.1 -> Compute the position
-				Vertex v;
+				Vertex v{};
 				float h = map.getAt(x, y);
 				maxHeightValue = max(maxHeightValue, h * height_factor);
 				minHeightValue = min(minHeightValue, h * height_factor);
@@ -74,15 +74,15 @@ public:
 			}
 
 		// -- Step 2 : Build the indicies
-		for (int y = 0; y < chunkSize.y  ; y++)
+		for (int y = 0; y < chunkSize.y; y++)
 			for (int x = 0; x < chunkSize.x; x++)
 			{
 
 
-				Index a1 = y * (chunkSize.x+1)+x;
-				Index a2 = y * (chunkSize.x+1)+x + 1;
-				Index a3 = (y + 1) * (chunkSize.x+1)+x;
-				Index a4 = (y + 1) * (chunkSize.x+1)+x + 1;
+				Index a1 = y * (chunkSize.x + 1) + x;
+				Index a2 = y * (chunkSize.x + 1) + x + 1;
+				Index a3 = (y + 1) * (chunkSize.x + 1) + x;
+				Index a4 = (y + 1) * (chunkSize.x + 1) + x + 1;
 
 
 				indices.push_back(a1);
@@ -94,11 +94,11 @@ public:
 
 			}
 		assert(indices.size() == 6 * (chunkSize.x * chunkSize.y));
-		assert(vertices.size() == ((chunkSize.x+1) * (chunkSize.y+1)));
+		assert(vertices.size() == ((chunkSize.x + 1) * (chunkSize.y + 1)));
 		Mesh res{ vertices, indices };
-		res.getBoundingBox() = AABB{ 
-			Vec{static_cast<float>(chunkPos.x), minHeightValue, static_cast<float>(chunkPos.y)},
-			Vec{static_cast<float>(chunkSize.x), maxHeightValue, static_cast<float>(chunkSize.y)} };
+		res.getBoundingBox() = AABB{
+			Vec{static_cast<float>(chunkPos.x) * chunkSize.x, minHeightValue, static_cast<float>(chunkPos.y) * chunkSize.y},
+			Vec{static_cast<float>(chunkSize.x) * xy_scale, maxHeightValue, static_cast<float>(chunkSize.y) * xy_scale} };
 
 		return res;
 	}
@@ -122,7 +122,7 @@ public:
 					Vec2<int>{ chunkWidth, chunkHeight },
 					xy_scale, height_factor));
 			}
-		
+
 
 		return chunks;
 

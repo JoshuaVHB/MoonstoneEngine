@@ -5,15 +5,7 @@
 #include <filesystem>
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/abstraction/Camera.h"
-
-
-/*
-//	This scene has been built for the Rush #2. 
-//  It is exceptionally ugly on purpose.
-//
-//	Contains FP, TP, skybox, hot reload of the terrain, textures, ugly blinn-phong with rotating sun.
-//	You have been warned. This scene might permanently damage your conception of "beauty".
-*/
+#include "../../Graphics/abstraction/Framebuffer.h"
 
 class Rush3Scene : public Scene {
 
@@ -27,6 +19,7 @@ private:
 	Texture m_rockTexture{ L"res/textures/rock.dds" };
 	Texture m_grassTexture{ L"res/textures/seamless.dds" };
 	Texture m_grass6Texture{ L"res/textures/breadbug.dds" };
+	Texture m_snow{ L"res/textures/snow.dds" };
 
 	// -- Effect and skybox
 	Effect	m_baseMeshEffect;
@@ -44,17 +37,18 @@ private:
 	std::filesystem::file_time_type lastTime;
 	float m_elapsedTime = 0;
 
+	Framebuffer fbo;
 
 private:
 
 	// -- Define constant buffers
 	struct worldParams {
 		XMMATRIX viewProj;
-		XMVECTOR lightPos; 
+		XMVECTOR lightPos;
 		XMVECTOR cameraPos;
-		XMVECTOR sunColor = {1.f,1.f,.8f,1.f}; 
-		XMVECTOR sunStrength = { 0.75f }; 
-	} sp ;
+		XMVECTOR sunColor = { 1.f,1.f,.8f,1.f };
+		XMVECTOR sunStrength = { 0.75f };
+	} sp;
 
 	struct meshParams {
 		XMMATRIX worldMat;
@@ -65,7 +59,6 @@ public:
 	Rush3Scene()
 	{
 
-		//rapidobj::Result res = rapidobj::ParseFile("res/mesh/cube.obj");
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
 
@@ -88,17 +81,20 @@ public:
 
 		// -- Setup the orthographic camera
 		m_orthoCam.setProjection<OrthographicProjection>(
-			OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio, 0, 500 }
+			OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio, 0.0,  100 + 5 * aspectRatio }
 		);
 		m_orthoCam.setPosition(m_orthocamPos);
-		Terrain::TerrainParams p = m_terrain.getParams();
+		Terrain::TerrainParams& p = m_terrain.getParams();
+		p.height = 64;
+		p.xyScale = 3;
+		m_terrain.rebuildMesh();
 		centerPoint = { p.width / 2 * p.xyScale, 0.f, p.height / 2 * p.xyScale };
 		m_orthoCam.updateCam();
 		m_orthoCam.lookAt(centerPoint);
 	}
 
 
-	virtual void onUpdate(float deltaTime) override 
+	virtual void onUpdate(float deltaTime) override
 	{
 		m_elapsedTime += deltaTime;
 
@@ -109,9 +105,9 @@ public:
 			m_orthoCam.lookAt(centerPoint);
 		}
 		// -- Send world data to baseMesh effect
-		sp.viewProj		= XMMatrixTranspose(currentCamera->getVPMatrix());
-		sp.lightPos		= XMVectorSet(-100.0f * cos(m_elapsedTime), 1000.f, -1000.0f * sin(m_elapsedTime), 1.0f); // spinning sun
-		sp.cameraPos	= currentCamera->getPosition();
+		sp.viewProj = XMMatrixTranspose(currentCamera->getVPMatrix());
+		sp.lightPos = XMVectorSet(-100.0f, 1000.f, -1000.0f, 1.0f); // spinning sun
+		sp.cameraPos = currentCamera->getPosition();
 
 		m_baseMeshEffect.updateSubresource(sp, "worldParams");
 		m_baseMeshEffect.sendCBufferToGPU("worldParams");
@@ -134,6 +130,7 @@ public:
 
 		m_baseMeshEffect.bindTexture("grassTexture", m_grassTexture.getTexture());
 		m_baseMeshEffect.bindTexture("rockTexture", m_rockTexture.getTexture());
+		m_baseMeshEffect.bindTexture("snowTexture", m_snow.getTexture());
 
 		// Clear and render objects
 		Renderer::clearScreen();
@@ -147,22 +144,23 @@ public:
 
 			}
 
-			if ( f.isOnFrustum(m.getBoundingBox()))
+			if (f.isOnFrustum(m.getBoundingBox()))
 			{
 				Renderer::renderMesh(cam, m, m_baseMeshEffect);
 				Renderer::renderAABB(cam, m.getBoundingBox());
-			} 
+			}
 		}
 
 		// Render skybox last (if first person)
 		if (currentCamera == &m_player.getCamera()) m_skybox.renderSkybox(cam);
-	
+
 	}
 
-	virtual void onImGuiRender() override 
+	virtual void onImGuiRender() override
 	{
-	
-		ImGui::Begin("Rush 2 debug window");
+
+		ImGui::Begin("Rush 3 debug window");
+
 		if (ImGui::Button("Switch camera")) {
 
 			if (currentCamera == &m_player.getCamera())
@@ -171,9 +169,12 @@ public:
 				currentCamera = &m_player.getCamera();
 		}
 
-		if (ImGui::DragFloat("Orthograhic zoom : ", &aspectRatio, 1.0f, 2.0f, 200) 	)
+		if (ImGui::DragFloat("Orthograhic zoom : ", &aspectRatio, 1.0f, 2.0f, 200))
 		{
-			m_orthoCam.setProjection<OrthographicProjection>(OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio,  0, 500 });
+
+			m_orthoCam.setProjection<OrthographicProjection>(
+				OrthographicProjection{ -aspectRatio , aspectRatio, aspectRatio, -aspectRatio, 0.0,  100 + 5 * aspectRatio }
+			);
 		}
 
 		ImGui::DragFloat("Sun strength : ", &sp.sunStrength.vector4_f32[0], 0.05f, 0.1F, 2.F);
@@ -185,7 +186,7 @@ public:
 		m_player.onImGuiRender();
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
-	
+
 	}
 
 };

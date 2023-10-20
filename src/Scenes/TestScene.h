@@ -35,14 +35,14 @@ private:
 	float dt = 0 , elapsed = 0;
 
 	Mesh ball, cube, bunny;
-	Effect renderShader, blitFx;
+	Effect renderShader, blitFx, gPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
 
 	Transform transform;
 	AABB aabb;
 
-	Framebuffer fbo;
+	Framebuffer fbo{3};
 
 	struct worldParams {
 		// la matrice totale 
@@ -76,6 +76,7 @@ public:
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
+		gPassFx.loadEffectFromFile("res/effects/gPass.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
 
 		renderShader.addNewCBuffer("worldParams", sizeof(worldParams));
@@ -85,7 +86,6 @@ public:
 		testlayout.pushBack<3>(InputLayout::Semantic::Position);
 		testlayout.pushBack<3>(InputLayout::Semantic::Normal);
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
-		auto tmplayout = testlayout.asInputDesc();
 
 		renderShader.bindInputLayout(testlayout);
 		m.loadTextures(
@@ -95,8 +95,13 @@ public:
 			}
 		);
 
-		lastcam = m_player.getCamera();
-		
+
+
+		gPassFx.addNewCBuffer("worldParams", sizeof(worldParams));
+		gPassFx.addNewCBuffer("meshParams", sizeof(meshParams));
+		gPassFx.bindInputLayout(testlayout);
+
+		lastcam = m_player.getCamera();		
 	}
 
 
@@ -128,28 +133,30 @@ public:
 
 	virtual void onRender() override {
 	
-		if (!renderSponza) Framebuffer::unbind();
+		Renderer::clearScreen();
 		if (renderSponza)
 		{
+			fbo.clear();
+			fbo.bind();
+
+			Camera& cam = m_player.getCamera();
+			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+			renderShader.bindTexture("tex", bb.getTexture());
+			Renderer::renderMesh(cam, bunny, gPassFx);
+			box.renderSkybox(cam);
 		}
+		else {
 
-		Renderer::clearScreen();
+			Framebuffer::unbind();
+			Renderer::clearScreen();
 
-		Camera& cam = m_player.getCamera();
-		Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+			Camera& cam = m_player.getCamera();
+			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+			renderShader.bindTexture("tex", bb.getTexture());
+			Renderer::renderMesh(cam, bunny, renderShader);
+			box.renderSkybox(cam);
 
-
-		renderShader.bindTexture("tex", bb.getTexture());
-
-		//Renderer::renderMesh(cam, ball, renderShader);
-		Renderer::renderMesh(cam, bunny, renderShader);
-		Renderer::renderAABB(cam, bunny.getBoundingBox());
-
-		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
-
-		Renderer::renderAABB(cam, aabb);
-		box.renderSkybox(cam);
-
+		}
 
 		
 

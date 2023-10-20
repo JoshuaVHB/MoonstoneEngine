@@ -24,7 +24,7 @@ public:
 		float	xyScale;
 		float	scaleFactor;
 		int		chunkSize;
-		Vec2<int> chunkCount{1,1};
+		Vec2<int> chunkCount{ 1,1 };
 	};
 
 private:
@@ -41,7 +41,7 @@ private:
 public:
 
 
-	Terrain(const fs::path& pathToMap) 
+	Terrain(const fs::path& pathToMap)
 	{
 		m_path = pathToMap;
 		m_map = HeightmapReader::readMapFromFile(pathToMap);
@@ -70,16 +70,17 @@ public:
 
 	void rebuildMesh() {
 		m_chunks = HeightmapBuilder::buildTerrainMesh(
-			m_map, m_params.chunkCount, 
+			m_map, m_params.chunkCount,
 			m_params.xyScale, m_params.scaleFactor);
 	}
 
-	void setParams(const TerrainParams &params) {
+	void setParams(const TerrainParams& params) {
 		m_params = params;
 		rebuildMesh();
 	}
 
 	const TerrainParams& getParams() const { return m_params; }
+	TerrainParams& getParams() { return m_params; }
 
 	//const Mesh& getMesh() const noexcept { return m_mesh; }
 	//Mesh& getMesh() noexcept { return m_mesh; }
