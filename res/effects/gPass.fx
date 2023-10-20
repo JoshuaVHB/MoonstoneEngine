@@ -70,9 +70,13 @@ VSOut gPassVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOO
 
 PSOut gPassPS(VSOut vs) : SV_Target
 {
-    float3 couleur;
-    // Normaliser les paramètres 
     float3 N = normalize(vs.Norm);
+    float3 couleur;
+    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
+    couleur.rgb = texSample;
+    /*
+
+    // Normaliser les paramètres 
     float3 L = normalize(vs.lightDir);
     float3 V = normalize(vs.camDir);
     
@@ -82,16 +86,14 @@ PSOut gPassPS(VSOut vs) : SV_Target
     // Puissance de 4 - pour l’exemple
     float S = pow(saturate(dot(R, L)), 4.f);
 
-    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
     
-    couleur.rgb = texSample;
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
     couleur += S / 4.f;
-    
+    */
     PSOut pso;
     pso.Normal = float4(N, 1.0F);
-    pso.Diffuse = float4(1.0, 1.0, 0, 1);
-    pso.Position = float4(1.0,0,0,1);
+    pso.Diffuse = float4(couleur, 1.0F);
+    pso.Position = vs.Pos;
     
     return pso;
     

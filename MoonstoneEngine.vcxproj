@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
+    <ClCompile Include="Graphics\Blit.cpp" />
     <ClCompile Include="Graphics\d3d11_graphics.cpp" />
     <ClCompile Include="Graphics\abstraction\Effect.cpp" />
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
@@ -199,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
+    <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />

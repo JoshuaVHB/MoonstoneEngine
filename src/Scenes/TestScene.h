@@ -35,7 +35,7 @@ private:
 	float dt = 0 , elapsed = 0;
 
 	Mesh ball, cube, bunny;
-	Effect renderShader, blitFx, gPassFx;
+	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
 
@@ -76,6 +76,7 @@ public:
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
+		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
 		gPassFx.loadEffectFromFile("res/effects/gPass.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
 
@@ -88,18 +89,16 @@ public:
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 
 		renderShader.bindInputLayout(testlayout);
-		m.loadTextures(
-			{
-				{"res/textures/Sphere_Base_Color.dds", TextureType::ALBEDO}		
-			
-			}
-		);
+		m.loadTextures(	{	{"res/textures/Sphere_Base_Color.dds", TextureType::ALBEDO}	}	);
 
 
 
+		lightPassFx.addNewCBuffer("worldParams", sizeof(worldParams));
 		gPassFx.addNewCBuffer("worldParams", sizeof(worldParams));
 		gPassFx.addNewCBuffer("meshParams", sizeof(meshParams));
 		gPassFx.bindInputLayout(testlayout);
+
+
 
 		lastcam = m_player.getCamera();		
 	}
@@ -129,6 +128,13 @@ public:
 		renderShader.updateSubresource(sp, "worldParams");
 		renderShader.sendCBufferToGPU("worldParams");
 
+		gPassFx.updateSubresource(sp, "worldParams");
+		gPassFx.sendCBufferToGPU("worldParams");
+
+		lightPassFx.updateSubresource(sp, "worldParams");
+		lightPassFx.sendCBufferToGPU("worldParams");
+
+
 	}
 
 	virtual void onRender() override {
@@ -141,9 +147,24 @@ public:
 
 			Camera& cam = m_player.getCamera();
 			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
-			renderShader.bindTexture("tex", bb.getTexture());
+
+			gPassFx.bindTexture("tex", bb.getTexture());
 			Renderer::renderMesh(cam, bunny, gPassFx);
-			box.renderSkybox(cam);
+
+			auto SRVLit = fbo.bindUnlitRTV();
+			box.renderSkybox(cam);			
+
+			Renderer::setBackbufferToDefault();
+
+			lightPassFx.bindTexture("tex", bb.getTexture());
+			lightPassFx.bindTexture("normal", fbo.getResource(0));
+			lightPassFx.bindTexture("albedo", fbo.getResource(1));
+			lightPassFx.bindTexture("position", fbo.getResource(2));
+			lightPassFx.bindTexture("unlitTexture", SRVLit);
+			lightPassFx.apply();
+			Renderer::draw(6);
+
+
 		}
 		else {
 

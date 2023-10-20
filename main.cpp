@@ -23,6 +23,7 @@ void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Gamepad Controls
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(hWnd);
@@ -50,8 +51,6 @@ int main() {
 	try
 	{
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
-		
-
 
 		//rMoteur.SetWindowsAppInstance(hInstance);
 		rMoteur.init();

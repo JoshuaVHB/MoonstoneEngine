@@ -103,6 +103,7 @@ Effect::Effect()
 		m_pass->Apply(0, m_renderContext.context);
 
 		ID3DX11EffectSamplerVariable* variableSampler;
+	// move this
 		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
 		variableSampler->SetSampler(0, pSampleState);
 

@@ -42,8 +42,7 @@ public:
 			if (isRunning)
 			{
 
-				isRunning = animation();
-				
+				isRunning = animation();		
 
 			}
 
@@ -80,6 +79,7 @@ public:
 			SceneManager::onUpdate(deltaTime);
 			SceneManager::onRender();
 			SceneManager::onImGuiRender();
+			ImGui::UpdatePlatformWindows();
 			p_renderingDevice->present();
 			m_previousTime = m_nextTime;
 

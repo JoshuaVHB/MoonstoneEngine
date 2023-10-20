@@ -34,7 +34,6 @@ public:
 		m_skyboxPass.loadEffectFromFile("res/effects/skybox.fx");
 		
 		m_skyboxPass.addNewCBuffer("SkyboxCbuffer", sizeof(SkyboxParam));
-		//m_mesh.m_worldMat = XMMatrixTranslationFromVector({ 1,0,0 });
 
 
 		InputLayout testlayout;
