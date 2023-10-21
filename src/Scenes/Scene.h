@@ -10,12 +10,10 @@ public:
 	virtual ~Scene() = default;
 	Scene() = default;
 
+	virtual void onPhysicSimulation(float deltaTime) = 0;
 	virtual void onRender() = 0;
 	virtual void onUpdate(float deltaTime) = 0;
 	virtual void onImGuiRender() = 0;
-
-
-
 };
 
 using SceneBuildFn = std::function<Scene* ()>;
@@ -26,7 +24,7 @@ class SceneManager
 {
 
 public:
-
+	
 	static void onUpdate(float deltaTime);
 	static void onRender();
 	static void onImGuiRender();
