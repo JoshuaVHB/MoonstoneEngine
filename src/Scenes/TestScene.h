@@ -83,7 +83,9 @@ private:
 	void initPhysics() {
 		gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
 
+		// For debugging physx
 		gPvd = PxCreatePvd(*gFoundation);
+#define PVD_HOST "127.0.0.1"
 		PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
 		gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
