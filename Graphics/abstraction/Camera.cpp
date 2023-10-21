@@ -108,7 +108,7 @@ Camera::Camera(Camera&& other) noexcept
 	: m_position(std::exchange(other.m_position, {}))
 	, m_up(std::exchange(other.m_up, {}))
 	, m_left(std::exchange(other.m_left, {}))
-	, m_rotationSpeed(std::exchange(other.m_rotationSpeed, 1))
+	, m_rotationSpeed(std::exchange(other.m_rotationSpeed, 1.f))
 	, m_angles(std::exchange(other.m_angles, {}))
 	, m_viewProjMatrix(std::exchange(other.m_viewProjMatrix, {}))
 	, m_viewMatrix(std::exchange(other.m_viewMatrix, {}))

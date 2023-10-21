@@ -184,24 +184,11 @@ public:
 	}
 	virtual void onImGuiRender() override {
 		ImGui::Begin("Debug");
-
-		ImGui::Text(std::to_string(m_player.getCamera().getPosition().vector4_f32[0]).c_str());
-
-		std::string hello = "no";
-		Frustum f = Frustum::createFrustumFromPerspectiveCamera(m_player.getCamera());
-		if (f.isOnFrustum(aabb))
-		{
-			hello = "yes";
-		}
-		ImGui::Text(hello.c_str());
-
+		ImGui::Text("MY BELOVED TEST SCENE !!! THIS IS HIGHLY EXPERIMENTAL");
 		bunny.getTransform().showControlWindow();
 		transform.showControlWindow();
 
-		ImGui::Checkbox("render sponza", &renderSponza);
-		if (ImGui::Button("photo")) {
-			lastcam = m_player.getCamera();
-		}
+		ImGui::Checkbox("USE DEFERRED RENDERING", &renderSponza);
 		ImGui::End();
 
 		m_player.onImGuiRender();

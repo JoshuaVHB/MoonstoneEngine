@@ -353,7 +353,7 @@
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scenes\Rush2Scene.h">
+    <ClInclude Include="src\Scenes\Rush3Scene.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Blit.h">

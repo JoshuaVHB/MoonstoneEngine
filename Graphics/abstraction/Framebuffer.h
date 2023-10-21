@@ -18,10 +18,10 @@ private:
 	int m_texCount;
 	int m_width, m_height;
 	DepthBuffer m_depth;
-	std::vector<ID3D11RenderTargetView*> m_rtv;
-	std::vector<ID3D11ShaderResourceView*> m_srv;
+	std::vector<ID3D11RenderTargetView*> m_rtv{};
+	std::vector<ID3D11ShaderResourceView*> m_srv{};
 
-	std::pair<ID3D11RenderTargetView*, ID3D11ShaderResourceView*> m_unlitSrv;
+	std::pair<ID3D11RenderTargetView*, ID3D11ShaderResourceView*> m_unlitSrv{};
 
 #ifdef D3D11_IMPL
 	ID3D11RenderTargetView* m_target = nullptr;
@@ -40,7 +40,7 @@ public:
 
 		// Get current fbo desc
 		D3D11_TEXTURE2D_DESC dsc{};	
-		ID3D11Texture2D* bb;		
+		ID3D11Texture2D* bb = nullptr;		
 		m_renderContext.swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(& bb));
 		bb->GetDesc(&dsc);
 		bb->Release();
@@ -85,6 +85,8 @@ public:
 		shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
 		shaderResourceViewDesc.Texture2D.MipLevels = 1;
+
+		
 
 		for (int i = 0; i < m_texCount; i++)
 		{

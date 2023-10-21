@@ -61,7 +61,7 @@ d3d11_graphics::d3d11_graphics(HWND hWnd, GRAPHICS_MODE mode)
 		&m_context.context
 	), FAIL);
 
-	ID3D11Texture2D* pBackBuffer;
+	ID3D11Texture2D* pBackBuffer = nullptr;
 	DX_TRY_CODE(m_context.swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer), -2);
 	DX_TRY_CODE(m_context.device->CreateRenderTargetView(pBackBuffer, nullptr, &m_context.rtv), -2);
 	pBackBuffer->Release();
@@ -96,11 +96,13 @@ d3d11_graphics::d3d11_graphics(HWND hWnd, GRAPHICS_MODE mode)
 
 d3d11_graphics::~d3d11_graphics() {
 
+#ifdef _DEBUG
 	ID3D11Debug* debugDev = nullptr;
 	m_context.device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debugDev));
 	debugDev->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-
 	DX_RELEASE(debugDev);
+#endif
+
 	DX_RELEASE(m_context.rtv);
 	DX_RELEASE(m_context.context);
 	DX_RELEASE(m_context.swapChain);

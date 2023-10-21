@@ -24,7 +24,7 @@ public:
 		float	xyScale;
 		float	scaleFactor;
 		int		chunkSize;
-		Vec2<int> chunkCount{ 1,1 };
+		Vec2<int> chunkCount{ 2,2 };
 	};
 
 private:
@@ -94,7 +94,7 @@ public:
 		if (
 			ImGui::DragFloat("XY Scale", &m_params.xyScale) +
 			ImGui::DragFloat("Height Factor", &m_params.scaleFactor) +
-			ImGui::DragInt2("Height Factor", &m_params.chunkCount[0], 1, 1, 10)
+			ImGui::DragInt2("Chunk Count", &m_params.chunkCount[0], 2, 2, 5)
 			) {
 			rebuildMesh();
 		}

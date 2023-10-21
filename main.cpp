@@ -59,8 +59,8 @@ int main() {
 		initImgui(rMoteur.getHwnd(), gfx);
 		Renderer::setImplementation<direct3D11_impl>();
 
-		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Rush3Scene>("RUSH2");
+		SceneManager::registerScene<TestScene>("Deferred Rendering test");
+		SceneManager::registerScene<Rush3Scene>("RUSH3");
 		SceneManager::switchToScene(1);
 
 

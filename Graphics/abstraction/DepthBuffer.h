@@ -6,7 +6,7 @@
 class DepthBuffer {
 
 private:
-	ID3D11Texture2D* m_depthTexture = nullptr;
+	ID3D11Texture2D* m_depthTexture = 0;
 	ID3D11DepthStencilView* m_depthStencil = nullptr;
 	ID3D11DepthStencilState* m_state = nullptr;
 
@@ -55,7 +55,7 @@ public:
 
 		device->CreateTexture2D(&depthTextureDesc, nullptr, &m_depthTexture);
 
-		D3D11_DEPTH_STENCIL_DESC dsDesc;
+		D3D11_DEPTH_STENCIL_DESC dsDesc{};
 
 		// Depth test parameters
 		dsDesc.DepthEnable = true;
@@ -88,6 +88,7 @@ public:
 		descDSView.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		descDSView.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		descDSView.Texture2D.MipSlice = 0;
+
 
 		device->CreateDepthStencilView(m_depthTexture, &descDSView, &m_depthStencil);
 

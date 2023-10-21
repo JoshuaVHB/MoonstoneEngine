@@ -26,8 +26,8 @@ struct BoundingSphere : BoundingVolume
 
 struct AABB : BoundingVolume
 {
-	Vec origin;
-	Vec size;
+	Vec origin{};
+	Vec size{};
 
 	AABB() = default;
 	AABB(const Vec& _origin, const Vec& _size) 

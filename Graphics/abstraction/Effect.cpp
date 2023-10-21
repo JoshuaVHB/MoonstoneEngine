@@ -3,7 +3,11 @@
 
 #include <d3dcompiler.h>
 
-Effect::Effect()
+Effect::Effect() 
+	: m_effect(nullptr)
+	, m_pass(nullptr)
+	, m_technique(nullptr)
+	, pSampleState(nullptr)
 {
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
@@ -62,7 +66,7 @@ Effect::Effect()
 
 	void Effect::createSampler()
 	{
-		D3D11_SAMPLER_DESC samplerDesc;
+		D3D11_SAMPLER_DESC samplerDesc{};
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -103,7 +107,7 @@ Effect::Effect()
 		m_pass->Apply(0, m_renderContext.context);
 
 		ID3DX11EffectSamplerVariable* variableSampler;
-	// move this
+	// TODO MAKE SAMPLERS CORRECTLY  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
 		variableSampler->SetSampler(0, pSampleState);
 

@@ -25,7 +25,7 @@ private:
 	std::vector<uint16_t> m_submeshMats;
 
 	Transform m_transform;
-	AABB m_boundingBox;
+	AABB m_boundingBox{};
 
 public:
 	

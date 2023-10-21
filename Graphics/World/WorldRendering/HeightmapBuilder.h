@@ -43,6 +43,7 @@ public:
 			{
 				int x = chunkPos.x + dx + 1;
 				int y = chunkPos.y + dy + 1;
+	
 
 				// 1.1 -> Compute the position
 				Vertex v{};
@@ -97,7 +98,7 @@ public:
 		assert(vertices.size() == ((chunkSize.x + 1) * (chunkSize.y + 1)));
 		Mesh res{ vertices, indices };
 		res.getBoundingBox() = AABB{
-			Vec{static_cast<float>(chunkPos.x) * chunkSize.x, minHeightValue, static_cast<float>(chunkPos.y) * chunkSize.y},
+			Vec{static_cast<float>(chunkPos.x+1) * xy_scale, minHeightValue, static_cast<float>(chunkPos.y+1) * xy_scale},
 			Vec{static_cast<float>(chunkSize.x) * xy_scale, maxHeightValue, static_cast<float>(chunkSize.y) * xy_scale} };
 
 		return res;

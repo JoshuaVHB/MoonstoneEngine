@@ -3,10 +3,20 @@
 #include <filesystem>
 #include <utility>
 #include <d3d11.h>
+#include <locale>
+#include <codecvt>
 
 #include "../../Utils/Debug.h"
 #include "../../Platform/IO/DDSTextureLoader11.h"
 #include "../../Platform/WindowsEngine.h"
+
+inline std::wstring widestring2string2(const std::string& string)
+{
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	return converter.from_bytes(string);
+}
+
 
 namespace fs = std::filesystem;
 
@@ -18,6 +28,9 @@ Texture::Texture(const std::wstring& path)
 	DirectX::CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
 #endif
 }
+
+Texture::Texture(const std::string& path) : Texture(widestring2string2(path))
+{}
 
 Texture::Texture(int width, int height)
 	: m_texture(nullptr)

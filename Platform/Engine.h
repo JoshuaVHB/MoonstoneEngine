@@ -125,11 +125,11 @@ protected:
 
 protected:
 	// Variables pour le temps de l’animation
-	Timer::count_type m_nextTime;
-	Timer::count_type m_previousTime;
-	Timer m_clock;
+	Timer::count_type m_nextTime{};
+	Timer::count_type m_previousTime{};
+	Timer m_clock{};
 
-	_RenderingDevice* p_renderingDevice; // This will store a Graphics() on windows
+	_RenderingDevice* p_renderingDevice = nullptr; // This will store a Graphics() on windows
 
 };
 
