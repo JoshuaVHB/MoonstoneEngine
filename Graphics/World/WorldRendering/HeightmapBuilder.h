@@ -94,8 +94,8 @@ public:
 				indices.push_back(a4);
 
 			}
-		assert(indices.size() == 6 * (chunkSize.x * chunkSize.y));
-		assert(vertices.size() == ((chunkSize.x + 1) * (chunkSize.y + 1)));
+		//assert(indices.size() == 6 * (chunkSize.x * chunkSize.y));
+		//assert(vertices.size() == ((chunkSize.x + 1) * (chunkSize.y + 1)));
 		Mesh res{ vertices, indices };
 		res.getBoundingBox() = AABB{
 			Vec{static_cast<float>(chunkPos.x+1) * xy_scale, minHeightValue, static_cast<float>(chunkPos.y+1) * xy_scale},

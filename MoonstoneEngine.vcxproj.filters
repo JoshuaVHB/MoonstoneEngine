@@ -263,12 +263,6 @@
     <ClInclude Include="Graphics\World\WorldRendering\HeightmapBuilder.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\vendor\stbi\stb_image.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\stbi\stb_image_write.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="d3dx11effect.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

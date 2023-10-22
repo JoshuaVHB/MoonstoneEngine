@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(suppress : 6387) // removes useless intellisense warning
 
 #include <filesystem>
 #include <utility>
@@ -7,6 +8,8 @@
 #include "../../Utils/Debug.h"
 #include "../../Platform/WindowsEngine.h"
 #include "Texture.h"
+
+
 
 
 class Framebuffer 

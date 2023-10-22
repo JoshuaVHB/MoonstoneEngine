@@ -59,7 +59,6 @@ public:
 
 	Rush3Scene()
 	{
-
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
 

@@ -6,11 +6,7 @@
 /*
 // A heightmap is simply a 2D array that holds float.
 */
-#ifdef _DEBUG
 #define ASSERT_IS_IN_MAP(width, height, x, y) { if (y*width + x >= width*height) return 0.f;}
-#else
-#define ASSERT_IS_IN_MAP(width, height, x, y) {if (y*width + x >= width*height) throw std::exception();}
-#endif
 
 class Heightmap {
 

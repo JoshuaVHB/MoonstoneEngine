@@ -34,7 +34,7 @@ private:
 
 	float dt = 0 , elapsed = 0;
 
-	Mesh ball, cube, bunny;
+	Mesh bunny;
 	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
@@ -72,7 +72,6 @@ public:
 
 	TestScene() 
 	{
-		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");

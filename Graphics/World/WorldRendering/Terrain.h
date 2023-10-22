@@ -20,11 +20,11 @@ public:
 
 	struct TerrainParams {
 
-		int		width, height;
-		float	xyScale;
-		float	scaleFactor;
-		int		chunkSize;
-		Vec2<int> chunkCount{ 2,2 };
+		int		width = 0, height=0;
+		float	xyScale=1;
+		float	scaleFactor=1;
+		int		chunkSize=0;
+		Vec2<int> chunkCount{ 1,1 };
 	};
 
 private:

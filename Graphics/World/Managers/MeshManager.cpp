@@ -182,7 +182,6 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 		mats.emplace_back(resMat);
 
 	}
-	
-
+	vertsIndex.clear();
 	return Mesh(vertices, indices, submeshesIndices , mats, submeshesMat);
 }

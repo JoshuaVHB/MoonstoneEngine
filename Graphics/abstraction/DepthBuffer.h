@@ -3,6 +3,8 @@
 #include <d3d11.h>
 #include "../Utils/Debug.h"
 
+#pragma warning(suppress : 6387) // removes useless intellisense warning
+
 class DepthBuffer {
 
 private:
