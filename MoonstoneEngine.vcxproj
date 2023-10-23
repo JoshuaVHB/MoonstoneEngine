@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
     <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics;$(SolutionDir)Utils/vendor/physx/include/physx/include;$(SolutionDir)Utils/vendor/physx/include/physx/graphics/include;$(SolutionDir)Utils/vendor/physx/freeglut-windows</IncludePath>
+    <LibraryPath>$(SolutionDir)Utils/vendor/physx/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
@@ -130,7 +131,11 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Utils/vendor/physx/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Utils/vendor/physx/dll\*" "$(TargetDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
