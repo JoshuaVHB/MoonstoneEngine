@@ -62,9 +62,6 @@ private:
 
 public:
 
-	virtual void onPhysicSimulation(float deltaTime) override {
-	}
-
 	Rush2Scene() 
 	{
 

@@ -132,7 +132,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PVDRuntime_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Utils/vendor/physx/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -167,6 +167,7 @@
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
     <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="src\Physics\PhysicModule.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\World\Frustum.h" />
+    <ClInclude Include="src\Physics\PhysicModule.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
