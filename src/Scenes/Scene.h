@@ -3,17 +3,23 @@
 
 #include <vector>
 #include <functional>
-#include <string>
-
+#include <string> 
+#include <PxPhysicsAPI.h>
+#include <iostream>
+#include "../Physics/PhysicModule.h"
 class Scene {
+protected:
+	PhysicModule mPhysic;
+
 public:
 	virtual ~Scene() = default;
 	Scene() = default;
 
-	virtual void onPhysicSimulation(float deltaTime) = 0;
 	virtual void onRender() = 0;
 	virtual void onUpdate(float deltaTime) = 0;
 	virtual void onImGuiRender() = 0;
+
+
 };
 
 using SceneBuildFn = std::function<Scene* ()>;
