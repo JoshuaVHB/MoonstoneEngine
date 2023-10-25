@@ -60,7 +60,7 @@ void Physx_Impl::cleanupPhysics(bool)
 	PX_RELEASE(gFoundation);
 }
 #include <vector>
-PhysicEngine::iVec3 Physx_Impl::getPosition(std::string id)
+std::pair<PhysicEngine::iVec3, PhysicEngine::iVec3> Physx_Impl::getTransform(std::string id)
 {
 	const PxU32 nbActors = gScene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
 	std::vector<PxActor*> acteurs(nbActors);
@@ -79,12 +79,13 @@ PhysicEngine::iVec3 Physx_Impl::getPosition(std::string id)
 				PxRigidActor* actor = acteur->is<PxRigidActor>();
 				PxTransform transform = actor->getGlobalPose();
 				PxVec3 position = transform.p;
-				return position;
+				PxVec3 rotation = transform.q.getBasisVector0();
+				return std::make_pair<>(position, rotation);
 			}
 		}
 	}
 	std::cout << "Actor not found" << std::endl;
-	return PhysicEngine::iVec3{};
+	return std::pair<PhysicEngine::iVec3, PhysicEngine::iVec3>{};
 
 	
 }
