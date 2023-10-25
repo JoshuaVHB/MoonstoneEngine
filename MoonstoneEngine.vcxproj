@@ -91,12 +91,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -106,12 +106,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -121,7 +121,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>
@@ -130,7 +130,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PVDRuntime_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Utils/vendor/physx/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -145,32 +145,38 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions); D3D11_IMPL;;SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Graphics\abstraction\Camera.cpp">
-      <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
-    </ClCompile>
+    <ClCompile Include="Graphics\abstraction\Camera.cpp" />
+    <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
+    <ClCompile Include="Graphics\Blit.cpp" />
+    <ClCompile Include="Graphics\d3d11_graphics.cpp" />
     <ClCompile Include="Graphics\abstraction\Effect.cpp" />
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
     <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
+    <ClCompile Include="Graphics\World\Frustum.cpp" />
+    <ClCompile Include="Graphics\World\Material.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
     <ClCompile Include="Physics\PhysicEngine.cpp" />
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
     <ClCompile Include="Physics\World\Body.cpp" />
     <ClCompile Include="Physics\World\PhysicalObject.cpp" />
+    <ClCompile Include="Graphics\World\Player.cpp" />
+    <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
@@ -205,6 +211,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
+    <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
     <ClInclude Include="Physics\PhysicEngine.h" />
     <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
@@ -250,7 +259,6 @@
     <ClInclude Include="Graphics\World\Managers\MeshManager.h" />
     <ClInclude Include="Platform\Engine.h" />
     <ClInclude Include="Platform\IO\DDSTextureLoader11.h" />
-    <ClInclude Include="Platform\IO\FileReader.h" />
     <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
@@ -258,7 +266,9 @@
     <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
+    <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\Scenes\SceneDeferred.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
@@ -276,8 +286,6 @@
     <ClInclude Include="Utils\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="Utils\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="Utils\vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="Utils\vendor\stbi\stb_image.h" />
-    <ClInclude Include="Utils\vendor\stbi\stb_image_write.h" />
     <ClInclude Include="Utils\vendor\stdafx.h" />
     <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
   </ItemGroup>

@@ -3,10 +3,20 @@
 #include <filesystem>
 #include <utility>
 #include <d3d11.h>
+#include <locale>
+#include <codecvt>
 
 #include "../../Utils/Debug.h"
 #include "../../Platform/IO/DDSTextureLoader11.h"
 #include "../../Platform/WindowsEngine.h"
+
+inline std::wstring widestring2string2(const std::string& string)
+{
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	return converter.from_bytes(string);
+}
+
 
 namespace fs = std::filesystem;
 
@@ -16,6 +26,44 @@ Texture::Texture(const std::wstring& path)
 #ifdef D3D11_IMPL
 	m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 	DirectX::CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
+#endif
+}
+
+Texture::Texture(const std::string& path) : Texture(widestring2string2(path))
+{}
+
+Texture::Texture(int width, int height)
+	: m_texture(nullptr)
+{
+#ifdef D3D11_IMPL
+	m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
+
+	constexpr static const uint32_t s_pixel = 0xffc99aff;
+
+	D3D11_SUBRESOURCE_DATA initData = { &s_pixel, sizeof(uint32_t), 0 };
+
+	D3D11_TEXTURE2D_DESC desc = {};
+	desc.Width = width;  desc.Height = height;
+	desc.MipLevels = desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_IMMUTABLE;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+	ID3D11Texture2D* tex;
+	HRESULT hr = m_renderContext.device->CreateTexture2D(&desc, &initData, &tex);
+
+	if (SUCCEEDED(hr))
+	{
+		D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
+		SRVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		SRVDesc.Texture2D.MipLevels = 1;
+		hr = m_renderContext.device->CreateShaderResourceView(tex, &SRVDesc, &m_texture);
+	}
+
+
+
 #endif
 }
 

@@ -33,8 +33,8 @@ private:
 
 	float dt = 0 , elapsed = 0;
 
-	Mesh ball, cube, bunny;
-	Effect renderShader, blitFx;
+	Mesh bunny;
+	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
 
@@ -43,23 +43,21 @@ private:
 	Transform transform;
 	AABB aabb;
 
-	Framebuffer fbo;
+	Framebuffer fbo{3};
 
 	struct worldParams {
 		// la matrice totale 
 		XMMATRIX viewProj;
-		XMVECTOR lightPos; // la position de la source d’éclairage (Point)
-		XMVECTOR cameraPos; // la position de la caméra 
-		XMVECTOR ambiantLight; // la valeur ambiante de l’éclairage
-		XMVECTOR diffuseLight; // la valeur ambiante du matériau 
-		XMVECTOR ambiantMat; // la valeur diffuse de l’éclairage 
-		XMVECTOR diffuseMat; // la valeur diffuse du matériau 
+		XMVECTOR lightPos; // la position de la source dï¿½ï¿½clairage (Point)
+		XMVECTOR cameraPos; // la position de la camï¿½ra 
+		XMVECTOR ambiantLight; // la valeur ambiante de lï¿½ï¿½clairage
+		XMVECTOR diffuseLight; // la valeur ambiante du matï¿½riau 
+		XMVECTOR ambiantMat; // la valeur diffuse de lï¿½ï¿½clairage 
+		XMVECTOR diffuseMat; // la valeur diffuse du matï¿½riau 
 	};
 
 	struct meshParams {
-
 		XMMATRIX worldMat;
-		XMMATRIX u_MVP;
 	};
 
 	Texture bb = Texture(L"res/textures/breadbug.dds");
@@ -77,12 +75,11 @@ public:
 
 	TestScene() 
 	{
-		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
-		bunny = MeshManager::loadMeshFromFile("res/mesh/sponza.obj");
-
-		cube_P.setMesh(&ball);
+		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
+		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
+		gPassFx.loadEffectFromFile("res/effects/gPass.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
 
 		renderShader.addNewCBuffer("worldParams", sizeof(worldParams));
@@ -92,17 +89,20 @@ public:
 		testlayout.pushBack<3>(InputLayout::Semantic::Position);
 		testlayout.pushBack<3>(InputLayout::Semantic::Normal);
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
-		auto tmplayout = testlayout.asInputDesc();
 
 		renderShader.bindInputLayout(testlayout);
-		m.loadTextures(
-			{
-				{"res/textures/Sphere_Base_Color.dds", TextureType::ALBEDO}		
-			
-			}
-		);		
-		lastcam = m_player.getCamera();
-		
+		m.loadTextures(	{	{"res/textures/Sphere_Base_Color.dds", TextureType::ALBEDO}	}	);
+
+
+
+		lightPassFx.addNewCBuffer("worldParams", sizeof(worldParams));
+		gPassFx.addNewCBuffer("worldParams", sizeof(worldParams));
+		gPassFx.addNewCBuffer("meshParams", sizeof(meshParams));
+		gPassFx.bindInputLayout(testlayout);
+
+
+
+		lastcam = m_player.getCamera();		
 	}
 
 	
@@ -130,59 +130,67 @@ public:
 		renderShader.updateSubresource(sp, "worldParams");
 		renderShader.sendCBufferToGPU("worldParams");
 
+		gPassFx.updateSubresource(sp, "worldParams");
+		gPassFx.sendCBufferToGPU("worldParams");
+
+		lightPassFx.updateSubresource(sp, "worldParams");
+		lightPassFx.sendCBufferToGPU("worldParams");
+
+
 	}
 
 	virtual void onRender() override {
 	
-		if (!renderSponza) Framebuffer::unbind();
+		Renderer::clearScreen();
 		if (renderSponza)
 		{
+			fbo.clear();
+			fbo.bind();
+
+			Camera& cam = m_player.getCamera();
+			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+
+			gPassFx.bindTexture("tex", bb.getTexture());
+			Renderer::renderMesh(cam, bunny, gPassFx);
+
+			auto SRVLit = fbo.bindUnlitRTV();
+			box.renderSkybox(cam);			
+
+			Renderer::setBackbufferToDefault();
+
+			lightPassFx.bindTexture("tex", bb.getTexture());
+			lightPassFx.bindTexture("normal", fbo.getResource(0));
+			lightPassFx.bindTexture("albedo", fbo.getResource(1));
+			lightPassFx.bindTexture("position", fbo.getResource(2));
+			lightPassFx.bindTexture("unlitTexture", SRVLit);
+			lightPassFx.apply();
+			Renderer::draw(6);
+
+
 		}
+		else {
 
-		Renderer::clearScreen();
+			Framebuffer::unbind();
+			Renderer::clearScreen();
 
-		Camera& cam = m_player.getCamera();
-		Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+			Camera& cam = m_player.getCamera();
+			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+			renderShader.bindTexture("tex", bb.getTexture());
+			Renderer::renderMesh(cam, bunny, renderShader);
+			box.renderSkybox(cam);
 
-
-		renderShader.bindTexture("tex", bb.getTexture());
-
-		//Renderer::renderMesh(cam, ball, renderShader);
-		//Renderer::renderMesh(cam, bunny, renderShader);
-
-		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
-
-		//Renderer::renderAABB(cam, aabb);
-		cube_P.updateTransform();
-
-		Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
-
-		box.renderSkybox(cam);
-
+		}
 
 		
 
 	}
 	virtual void onImGuiRender() override {
 		ImGui::Begin("Debug");
-
-		ImGui::Text(std::to_string(m_player.getCamera().getPosition().vector4_f32[0]).c_str());
-
-		std::string hello = "no";
-		Frustum f = Frustum::createFrustumFromPerspectiveCamera(m_player.getCamera());
-		if (f.isOnFrustum(aabb))
-		{
-			hello = "yes";
-		}
-		ImGui::Text(hello.c_str());
-
+		ImGui::Text("MY BELOVED TEST SCENE !!! THIS IS HIGHLY EXPERIMENTAL");
 		bunny.getTransform().showControlWindow();
 		transform.showControlWindow();
 
-		ImGui::Checkbox("render sponza", &renderSponza);
-		if (ImGui::Button("photo")) {
-			lastcam = m_player.getCamera();
-		}
+		ImGui::Checkbox("USE DEFERRED RENDERING", &renderSponza);
 		ImGui::End();
 
 		m_player.onImGuiRender();

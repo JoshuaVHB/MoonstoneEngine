@@ -17,7 +17,6 @@ public:
 	virtual void onUpdate(float deltaTime) = 0;
 	virtual void onImGuiRender() = 0;
 
-
 };
 
 using SceneBuildFn = std::function<Scene* ()>;
@@ -33,7 +32,7 @@ public:
 	static void onRender();
 	static void onImGuiRender();
 
-	static void registerScene(const std::string& name, SceneBuildFn provider);
+	static void registerScene(const std::string& name, const SceneBuildFn& provider);
 
 	template<class _SceneInstance>
 		requires (std::derived_from<_SceneInstance, Scene>)

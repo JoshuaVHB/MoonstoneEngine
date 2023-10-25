@@ -26,7 +26,8 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Basic operations
 
-	[[nodiscard]] size_t getVerticesCount() const noexcept { return m_vertices.size(); }
+	[[nodiscard]] size_t getVerticesCount()			const noexcept { return m_vertices.size(); }
+	[[nodiscard]] std::vector<Vertex> getVertices() const noexcept { return m_vertices; }
 	void bind() const noexcept;
 
 

@@ -26,7 +26,7 @@ class Effect;
 class Camera;
 class Material;
 struct AABB;
-
+struct ID3D11DepthStencilView;
 
 /// Renderer class :
 /// 
@@ -59,23 +59,26 @@ public:
 		virtual void renderAABB(Camera& camera, const AABB&) = 0;
 		virtual void renderDebugPerspectiveCameraOutline(Camera& viewCamera, const Camera& outlinedCamera) = 0;
 		virtual void showImGuiDebugData() = 0;
+		virtual void setBackbufferToDefault() = 0;
+		virtual void draw(size_t count) = 0;
+		virtual void setDepthBuffer(ID3D11DepthStencilView* other) = 0;
 
 	private:
 
 
 	};
-
+	CALL_IMPL(draw);
 	CALL_IMPL(drawIndexed) ;
 	CALL_IMPL(clearScreen) ;
-
-	// Camera&, const Mesh&, const Effect&
 	CALL_IMPL(renderMesh) ;
 	CALL_IMPL(renderCubemap) ;
 	CALL_IMPL(loadMeshFromFile) ;
 	CALL_IMPL(renderPBRMesh) ;
 	CALL_IMPL(renderAABB) ;
-	CALL_IMPL(renderDebugPerspectiveCameraOutline) ;
-	CALL_IMPL(showImGuiDebugData) ;
+	CALL_IMPL(renderDebugPerspectiveCameraOutline)	;
+	CALL_IMPL(showImGuiDebugData)					;
+	CALL_IMPL(setBackbufferToDefault)				;
+	CALL_IMPL(setDepthBuffer)						;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

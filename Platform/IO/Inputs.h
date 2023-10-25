@@ -3,6 +3,8 @@
 #include <bitset>
 #include <queue>
 #include <optional>
+#include <windows.h>
+#include "imgui.h"
 
 
 /*https://www.youtube.com/watch?v=h7HCdEyGRRw&list=PLqCJpWy5Fohd3S7ICFXwUomYW0Wv67pDD&index=9*/
@@ -11,7 +13,7 @@ class Keyboard {
 
 public:
 
-	static unsigned char letterCodeFromChar(const char c) {
+	static char letterCodeFromChar(const char c) {
 		return 0x41 + (c-'a');
 	}
 

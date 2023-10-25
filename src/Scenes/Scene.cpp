@@ -23,7 +23,6 @@ void SceneManager::onImGuiRender()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow(); // Show demo window! :)
 
     s_activeScene->onImGuiRender();
 
@@ -43,9 +42,9 @@ void SceneManager::onImGuiRender()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void SceneManager::registerScene(const std::string& name, SceneBuildFn provider)
+void SceneManager::registerScene(const std::string& name, const SceneBuildFn& provider)
 {
-    s_availableScenes.push_back(std::make_pair(name, provider));
+    s_availableScenes.emplace_back(std::make_pair(name, provider));
 }
 
 void SceneManager::switchToScene(size_t sceneIndex)

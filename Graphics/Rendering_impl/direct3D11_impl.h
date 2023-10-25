@@ -8,14 +8,12 @@
 #include "../../Utils/AABB.h"
 #include "../abstraction/Vertex.h"
 #include "../abstraction/VertexBuffer.h"
-#include "../abstraction/IndexBuffer.h"
-#include "..\abstraction\Effect.h"
+#include "../abstraction/Texture.h"
+#include "../abstraction/Effect.h"
 #include "../abstraction/Camera.h"
 #include "../World/Material.h"
 
 #include "../World/Managers/MeshManager.h"
-
-#include "../../Platform/IO/FileReader.h"
 #include "../World/Cube.h"
 
 #include <vector>
@@ -49,6 +47,8 @@ public:
 		context = gfx.getImmediateContext();
 		swapChain = gfx.getSwapChain();
 		rtv = gfx.getRenderTargetView();
+		depth = gfx.getDepthBuffer().getView();
+		
 		pbrMeshEffect.loadEffectFromFile("res/effects/pbrMesh.fx");
 		
 
@@ -79,6 +79,7 @@ private:
 	ID3D11DeviceContext* context = nullptr; // Issues rendering command + actual drawing
 	IDXGISwapChain* swapChain = nullptr; // Flips buffers
 	ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
+	ID3D11DepthStencilView* depth = nullptr;
 
 
 private:
@@ -91,6 +92,16 @@ private:
 
 	}
 
+	virtual void setBackbufferToDefault() override final {
+
+		context->OMSetRenderTargets(1, &rtv, depth);
+	}
+
+	virtual void setDepthBuffer(ID3D11DepthStencilView* other) override final {
+
+		depth = other;
+	}
+
 
 	virtual void clearScreen(float r, float g, float b, float a) override final { 
 		const FLOAT rgba[4] = {r,g,b,a};
@@ -100,6 +111,11 @@ private:
 	virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) override {
 
 		context->DrawIndexed(static_cast<UINT>(count), startIndexLocation, baseVertexLocation);
+	}
+
+	virtual void draw(size_t count) override {
+
+		context->Draw(static_cast<UINT>(count), 0);
 	}
 
 
@@ -145,7 +161,7 @@ private:
 		//pbrMeshEffect.sendCBufferToGPU("materialParams");
 
 
-		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>().getTexture());
+		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>());
 
 
 		pbrMeshEffect.apply();

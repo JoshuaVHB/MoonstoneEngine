@@ -55,7 +55,7 @@ bool WindowsEngine::InitAppInstance()
 	hAccelTable = LoadAccelerators(hAppInstance, MAKEINTRESOURCE(IDC_PETITMOTEUR3D));
 
 
-	RAWINPUTDEVICE rid;
+	RAWINPUTDEVICE rid{};
 	rid.usUsagePage = 0x01; //mouse page
 	rid.usUsage = 0x02; //mouse usage
 	rid.hwndTarget = nullptr; //mouse usage

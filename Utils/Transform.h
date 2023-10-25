@@ -47,7 +47,7 @@ public:
 
 	void showControlWindow()
 	{
-		std::string name = "Transform " + std::to_string(debug_count);
+		std::string name = "Transform #" + std::to_string(debug_count);
 		if (ImGui::CollapsingHeader(name.c_str())) {
 			ImGui::DragFloat3("Rotation", angles, 0.1f);
 			if (ImGui::DragFloat3("Translation", position, 0.1f))

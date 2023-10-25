@@ -1,38 +1,36 @@
 #pragma once
-#include <cstdint>
 #include "vendor/stdafx.h"
 
+class Timer
+{
 
-	class Timer
+public:
+
+	using value_type = double;
+	using count_type = long long;
+
+	Timer() 
 	{
+		LARGE_INTEGER counterFrequency;
+		::QueryPerformanceFrequency(&counterFrequency);
+		m_secPerCount = 1.0 / static_cast<value_type>(counterFrequency.QuadPart);
+	}
 
-	public:
+	static count_type getTimeCount() { 
+		LARGE_INTEGER countNumber;
+		::QueryPerformanceCounter(&countNumber);
+		return countNumber.QuadPart;
+		;
+	}
 
-		using value_type = double;
-		using count_type = long long;
+	value_type getSecPerCount() const { return m_secPerCount;  }
+	value_type getTimeBetweenCounts(const count_type start, const count_type stop) const { 	
+		return static_cast<value_type>(stop - start) * m_secPerCount;
+	}
 
-		Timer() 
-		{
-			LARGE_INTEGER counterFrequency;
-			::QueryPerformanceFrequency(&counterFrequency);
-			m_secPerCount = 1.0 / static_cast<value_type>(counterFrequency.QuadPart);
-		}
+private:
 
-		count_type getTimeCount() const { 
-			LARGE_INTEGER countNumber;
-			::QueryPerformanceCounter(&countNumber);
-			return countNumber.QuadPart;
-			;
-		}
+	value_type m_secPerCount{};
 
-		value_type getSecPerCount() const { return m_secPerCount;  }
-		value_type getTimeBetweenCounts(count_type start, count_type stop) const { 	
-			return static_cast<value_type>(stop - start) * m_secPerCount;
-		}
-
-	private:
-
-		value_type m_secPerCount{};
-
-	};
+};
 

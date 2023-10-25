@@ -78,7 +78,7 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     
     couleur.rgb = texSample;
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
-    couleur += S / 4.f;
+    couleur += S / 4.f; 
     
     return float4(texSample, 1.0f);
     

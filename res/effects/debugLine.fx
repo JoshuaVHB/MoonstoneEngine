@@ -1,5 +1,6 @@
 //////////////////////
 
+SamplerState SampleState; // l’état de sampling
 
 // -- Constant buffers 
 cbuffer worldParams

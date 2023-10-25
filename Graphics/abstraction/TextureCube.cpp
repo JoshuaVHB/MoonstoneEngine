@@ -23,6 +23,7 @@ TextureCube::TextureCube(const std::string& path)
 		: m_path(path)
 		, m_srv(nullptr)
 		, m_tex(nullptr)
+		, resource(nullptr)
 	{
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();

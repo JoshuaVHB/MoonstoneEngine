@@ -20,6 +20,8 @@ private:
 public:
 
 	Texture(const std::wstring& path);
+	Texture(const std::string& path);
+	Texture(int width, int height);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Basic operations
@@ -31,6 +33,7 @@ public:
 	/// -- Constructor and stuff
 
 	Texture() = default;
+	Texture(nullptr_t) {};
 	void swap(Texture& other) noexcept;
 	Texture(const Texture& other);
 	Texture& operator=(const Texture& other);

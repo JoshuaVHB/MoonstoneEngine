@@ -25,6 +25,7 @@ void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Gamepad Controls
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(hWnd);
@@ -39,19 +40,20 @@ void shutdownImgui(){
 	ImGui::DestroyContext();
 }
 
-//int APIENTRY _tWinMain(
-//	HINSTANCE hInstance,
-//	HINSTANCE hPrevInstance,
-//	LPTSTR    lpCmdLine,
-//	int       nCmdShow)
-// 
-//{
-//	UNREFERENCED_PARAMETER(hPrevInstance);
-//	UNREFERENCED_PARAMETER(lpCmdLine);
-//	UNREFERENCED_PARAMETER(nCmdShow);
-int main() {
+int APIENTRY _tWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPTSTR    lpCmdLine,
+	int       nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(nCmdShow);
+
+//int main() {
 	try
 	{
+
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
 
 		PhysicEngine::setImplementation<Physx_Impl>();
@@ -65,10 +67,10 @@ int main() {
 		initImgui(rMoteur.getHwnd(), gfx);
 		Renderer::setImplementation<direct3D11_impl>();
 
-		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Rush2Scene>("RUSH2");
-		SceneManager::switchToScene(0);
-
+		SceneManager::registerScene<TestScene>("Test scene");
+		SceneManager::registerScene<SceneDeferred>("Deferred Rendering test");
+		SceneManager::registerScene<Rush3Scene>("RUSH3");
+		SceneManager::switchToScene(1);
 
 		rMoteur.run();
 		
@@ -95,7 +97,7 @@ int main() {
 	{
 
 		wchar_t szErrMsg[MAX_LOADSTRING];// Un message d'erreur selon le code
-		///::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
+		::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
 		::MessageBox(nullptr, szErrMsg, L"Erreur", MB_ICONWARNING);
 		(void)err;
 		return (int)99; // POURQUOI 99???

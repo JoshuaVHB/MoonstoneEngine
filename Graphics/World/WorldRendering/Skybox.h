@@ -16,25 +16,25 @@ class Skybox {
 private:
 
 	struct SkyboxParam {
-		XMMATRIX viewProj;
-		XMVECTOR camPos;
-	} m_params;
+		XMMATRIX viewProj{};
+		XMVECTOR camPos{};
+	} m_params{};
 	Mesh	m_mesh		= Cube::getCubeMesh();
 	Effect	m_skyboxPass;
 
 
-	TextureCube m_tex{ "res/textures/ex.dds" };
+	TextureCube m_tex;
 
 
 
 public:
 
-	Skybox() {
+	Skybox(const std::string& path = "res/textures/cosmos.dds") {
 
+		m_tex = std::move(TextureCube{ path });
 		m_skyboxPass.loadEffectFromFile("res/effects/skybox.fx");
 		
 		m_skyboxPass.addNewCBuffer("SkyboxCbuffer", sizeof(SkyboxParam));
-		//m_mesh.m_worldMat = XMMatrixTranslationFromVector({ 1,0,0 });
 
 
 		InputLayout testlayout;
@@ -46,7 +46,7 @@ public:
 	const Mesh& getMesh() const { return m_mesh; }
 
 
-	void renderSkybox(Camera& camera) 
+	void renderSkybox(Camera& camera)
 	{
 		m_skyboxPass.bindTexture("tex", m_tex.getResourceView());
 

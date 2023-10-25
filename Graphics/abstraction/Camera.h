@@ -64,8 +64,10 @@ struct OrthographicProjection : public Projection
 	{
 		type = ProjectionType::ORTHOGRAPHIC;
 		projMat = XMMatrixOrthographicRH(left - right, top - bot, znear, zfar);
-
 	}
+
+	[[nodiscard]] virtual Mat getProjMatrix() const noexcept override 
+	{ return XMMatrixOrthographicRH(left - right, top - bot, znear, zfar); }
 };
 
 
@@ -73,23 +75,27 @@ class Camera
 {
 private:
 
-	XMVECTOR m_position = { 0,0,-10.f,1.0f };
-	XMVECTOR m_up{ 0,1,0,1 };
-	XMVECTOR m_left{ 1,0,0,1 };
+	XMVECTOR m_position = XMVECTOR{ 0.f,0.f,-10.f,1.0f };
+	XMVECTOR m_up		= XMVECTOR{ 0.f,1.f,0.f,1.f };
+	XMVECTOR m_left		= XMVECTOR{ 1.f,0.f,0.f,1.f };
 
 	std::unique_ptr<Projection> m_projection;
 
-	struct _angles {
+	struct Angles {
 		float yaw = 0.F;
 		float pitch = 0.F;
 		float roll = 0.f;
 
-		XMVECTOR toVec() const { return { -pitch ,-yaw, -roll }; }
+		[[nodiscard]] XMVECTOR toVec() const { return XMVECTOR{
+			-pitch ,
+			-yaw,
+			-roll };
+		}
+
 	} m_angles;
 
-	Mat m_viewProjMatrix;
-	Mat m_viewMatrix;
-
+	Mat m_viewProjMatrix{};
+	Mat m_viewMatrix{};
 
 	float m_rotationSpeed = 1.f;
 
@@ -121,6 +127,9 @@ public:
 	{
 		m_projection = std::make_unique<_proj>(proj);
 	}
+	template<class _proj = PerspectiveProjection>
+		requires (std::derived_from<_proj, Projection>)
+	[[nodiscard]] const _proj& getProjection() const noexcept { return *reinterpret_cast<_proj*>(m_projection.get()); }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Directions and position
