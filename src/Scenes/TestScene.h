@@ -28,6 +28,7 @@
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
+#include "../../Physics/World/PhysicalObject.h"
 
 using namespace physx;
 
@@ -41,6 +42,8 @@ private:
 	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
+
+
 
 	Transform transform;
 	AABB aabb;
@@ -124,6 +127,8 @@ public:
 	TestScene() 
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
+
+		cube_P.setMesh(&ball);
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
@@ -225,6 +230,12 @@ public:
 			FrameBuffer::unbind();
 			Renderer::clearScreen();
 
+		//Renderer::renderAABB(cam, aabb);
+		cube_P.updateTransform();
+
+		Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
+
+		box.renderSkybox(cam);
 			Camera& cam = m_player.getCamera();
 			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
 			renderShader.bindTexture("tex", bb.getTexture());

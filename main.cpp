@@ -16,6 +16,8 @@
 
 #include "src/Scenes/AllScenes.h"
 
+#include "Physics/PhysicEngine.h"
+#include "Physics/physx_Impl/physx_impl.h"
 
 void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	IMGUI_CHECKVERSION();
@@ -61,14 +63,14 @@ int APIENTRY _tWinMain(
 		initImgui(rMoteur.getHwnd(), gfx);
 		Renderer::setImplementation<direct3D11_impl>();
 
-		SceneManager::registerScene<TestScene>("Test scene");
-		SceneManager::registerScene<SceneDeferred>("Deferred Rendering test");
-		SceneManager::registerScene<Rush3Scene>("RUSH3");
-		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::switchToScene(3);
+		SceneManager::registerScene<TestScene>("TEST");
+		SceneManager::registerScene<Rush2Scene>("RUSH2");
+		SceneManager::switchToScene(0);
+
 
 		rMoteur.run();
 		
+		PhysicEngine::cleanupPhysics(false);
 
 		shutdownImgui();
 		return 1;
