@@ -179,6 +179,14 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 		resMat.setCoefficients(mc);
 		resMat.setModel(mat.illum);
+
+		resMat.loadTextures(
+			{
+			{mat.diffuse_texname, TextureType::ALBEDO}
+			}
+		);
+
+
 		mats.emplace_back(resMat);
 
 	}

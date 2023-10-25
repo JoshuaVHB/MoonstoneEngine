@@ -46,7 +46,7 @@ public:
 	const Mesh& getMesh() const { return m_mesh; }
 
 
-	void renderSkybox(Camera& camera) 
+	void renderSkybox(Camera& camera)
 	{
 		m_skyboxPass.bindTexture("tex", m_tex.getResourceView());
 

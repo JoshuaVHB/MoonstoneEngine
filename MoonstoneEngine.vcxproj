@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
+    <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
     <ClCompile Include="Graphics\Blit.cpp" />
     <ClCompile Include="Graphics\d3d11_graphics.cpp" />
@@ -199,6 +200,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
     <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
@@ -250,6 +252,7 @@
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\Scenes\SceneDeferred.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Graphics\World\Managers\TextureManager.h" />

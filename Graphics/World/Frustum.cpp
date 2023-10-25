@@ -1,7 +1,5 @@
 #include "Frustum.h"
 
-
-
 #include "../../Utils/AABB.h"
 
 Frustum Frustum::createFrustumFromPerspectiveCamera(const Camera& cam)

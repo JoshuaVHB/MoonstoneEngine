@@ -33,6 +33,7 @@ public:
 	/// -- Constructor and stuff
 
 	Texture() = default;
+	Texture(nullptr_t) {};
 	void swap(Texture& other) noexcept;
 	Texture(const Texture& other);
 	Texture& operator=(const Texture& other);

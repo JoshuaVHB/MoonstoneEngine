@@ -61,7 +61,8 @@ int APIENTRY _tWinMain(
 		initImgui(rMoteur.getHwnd(), gfx);
 		Renderer::setImplementation<direct3D11_impl>();
 
-		SceneManager::registerScene<TestScene>("Deferred Rendering test");
+		SceneManager::registerScene<TestScene>("Test scene");
+		SceneManager::registerScene<SceneDeferred>("Deferred Rendering test");
 		SceneManager::registerScene<Rush3Scene>("RUSH3");
 		SceneManager::switchToScene(1);
 

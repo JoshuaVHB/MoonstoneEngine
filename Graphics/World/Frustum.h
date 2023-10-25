@@ -3,12 +3,18 @@
 #define _XM_NO_INTRINSICS_
 #include <directXmath.h>
 #include "../abstraction/Camera.h"
-#include "../../Utils/AABB.h"
+
+struct AABB;
+
+//=========================================================================================================================//
 
 struct Plan {
 
     DirectX::XMVECTOR normal;
     float distanceToOrigin;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+	/// -- Constructors
 
     Plan() :
         normal(), distanceToOrigin(0)
@@ -19,10 +25,15 @@ struct Plan {
         distanceToOrigin(XMVectorGetX(XMVector3Dot(normal, pl)))
     {}
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+	/// -- Operations
+
     inline float getSDToPlan(const DirectX::XMVECTOR& point) const {
         return XMVectorGetX(XMVector3Dot(normal, point)) - distanceToOrigin;
     }
 };
+
+//=========================================================================================================================//
 
 struct Frustum {
 
@@ -34,6 +45,9 @@ struct Frustum {
 
     Plan farFace;
     Plan nearFace;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// -- Operations
 
     bool            isOnFrustum(const AABB& boundingBox) const;
     static Frustum  createFrustumFromPerspectiveCamera(const Camera& cam);

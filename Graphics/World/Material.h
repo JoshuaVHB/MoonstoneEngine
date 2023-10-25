@@ -5,13 +5,9 @@
 #include "../abstraction/Texture.h"
 
 enum class TextureType {
-	ALBEDO,
-	NORMAL,
-	BUMP,
-	HEIGHT,
-	ROUGHNESS,
-	METALNESS,
-	SPECULAR,
+	ALBEDO,	NORMAL,	BUMP,
+	HEIGHT,	ROUGHNESS,	METALNESS,
+	SPECULAR,AO,
 };
 
 struct MaterialCoefs
@@ -25,7 +21,6 @@ struct MaterialCoefs
 	float transparency; // 1 - d
 
 	float padding;
-
 };
 
 class Material {
@@ -38,13 +33,21 @@ private:
 
 public:
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void setCoefficients(const MaterialCoefs& coefs)	noexcept { m_coefs = coefs; }
 	void setModel(const int model)							noexcept { m_illuminationModel = model; }
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	template<TextureType T>
-	[[nodiscard]] const Texture&		queryTexture()	  const noexcept	{ return m_textures.at(T);}
+	[[nodiscard]] Texture		queryTexture()	  const noexcept
+	{
+		if (!m_textures.contains(T)) return Texture{};
+		return m_textures.at(T);
+	}
+
+
 	[[nodiscard]] const MaterialCoefs&	getCoefficients() const noexcept	{ return m_coefs; }
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

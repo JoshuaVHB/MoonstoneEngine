@@ -56,9 +56,7 @@ private:
 	};
 
 	struct meshParams {
-
 		XMMATRIX worldMat;
-		XMMATRIX u_MVP;
 	};
 
 	Texture bb = Texture(L"res/textures/breadbug.dds");

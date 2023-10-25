@@ -3,6 +3,7 @@
 #include <utility>
 #include <directXmath.h>
 #include "../../Graphics/abstraction/Camera.h"
+#include "World/Mesh.h"
 
 using Vec = DirectX::XMVECTOR;
 
@@ -26,6 +27,9 @@ private:
 	Vec m_accelation;
 	float m_speed;
 
+	//Mesh m_mesh;
+
+
 
 
 public:
@@ -33,9 +37,10 @@ public:
 	Cloporte();
 
 	void handleInputs();
-	void draw();
+	void draw(Camera& cam);
 	void update(float deltaTime);
 
+	Camera& getCurrentCamera() noexcept { return (m_currentCamera == FIRST) ? m_cameras.first : m_cameras.second; }
 
 private:
 	void handleKeyboardInputs();

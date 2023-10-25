@@ -75,10 +75,10 @@ public:
 	CALL_IMPL(loadMeshFromFile) ;
 	CALL_IMPL(renderPBRMesh) ;
 	CALL_IMPL(renderAABB) ;
-	CALL_IMPL(renderDebugPerspectiveCameraOutline) ;
-	CALL_IMPL(showImGuiDebugData) ;
-	CALL_IMPL(setBackbufferToDefault) ;
-	CALL_IMPL(setDepthBuffer) ;
+	CALL_IMPL(renderDebugPerspectiveCameraOutline)	;
+	CALL_IMPL(showImGuiDebugData)					;
+	CALL_IMPL(setBackbufferToDefault)				;
+	CALL_IMPL(setDepthBuffer)						;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

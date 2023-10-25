@@ -161,7 +161,7 @@ private:
 		//pbrMeshEffect.sendCBufferToGPU("materialParams");
 
 
-		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>().getTexture());
+		pbrMeshEffect.bindTexture("albedo", mat.queryTexture<TextureType::ALBEDO>());
 
 
 		pbrMeshEffect.apply();

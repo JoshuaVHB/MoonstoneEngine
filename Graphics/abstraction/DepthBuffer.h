@@ -27,9 +27,9 @@ public:
 
 	~DepthBuffer()
 	{
-		DX_RELEASE(m_state)
-			DX_RELEASE(m_depthStencil)
-			DX_RELEASE(m_depthTexture)
+		//DX_RELEASE(m_state)
+		//DX_RELEASE(m_depthStencil)
+		//DX_RELEASE(m_depthTexture)
 	}
 
 	ID3D11DepthStencilState* getState() const { return m_state; }

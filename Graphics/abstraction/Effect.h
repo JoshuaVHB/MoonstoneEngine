@@ -19,6 +19,9 @@
 #define _XM_NO_INTRINSICS_
 #include <DirectXMath.h>
 
+#include "World/Lights/Lights.h"
+
+class Texture;
 using namespace DirectX;
 namespace fs = std::filesystem;
 
@@ -134,14 +137,43 @@ public:
 	// Returns the slot number of the newly created cbuffer
 	void addNewCBuffer(const std::string& name, uint32_t structSize);
 	void apply() const;
-	void bindTexture(std::string uniformName, ID3D11ShaderResourceView* tex);
+	void bindTexture(const std::string&uniformName, ID3D11ShaderResourceView* tex) const;
+	void bindTexture(const std::string& uniformName, const Texture& tex) const;
 
 	template<class ShaderParam>
 	void updateSubresource(const ShaderParam& sp, const std::string& cbuffName) const
 	{
-		if (!m_constantBuffers.contains(cbuffName)) throw;
+		if (!m_constantBuffers.contains(cbuffName)) throw std::runtime_error("Couldn't find cbuffer name " + cbuffName);
 		m_renderContext.context->UpdateSubresource(m_constantBuffers.at(cbuffName), 0, nullptr, &sp, 0, 0);
 	}
+
+	template<class ShaderParam>
+	void updateSubresource(const ShaderParam& sp, const std::string& cbuffName, size_t size) const
+	{
+		if (!m_constantBuffers.contains(cbuffName)) throw std::runtime_error("Couldn't find cbuffer name " + cbuffName);
+		m_renderContext.context->UpdateSubresource(m_constantBuffers.at(cbuffName), 0, nullptr, &sp, size, 0);
+	}
+
+
+	template<class cbufferParam>
+	void updateCbuffer(const cbufferParam& data, const std::string& cbuffName) const
+	{
+		D3D11_BUFFER_DESC desc{};
+		desc.ByteWidth = 2 *128 * sizeof(PointLight) ;
+		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+		ID3D11Buffer* buffer;
+
+		D3D11_SUBRESOURCE_DATA initData{};
+		initData.SysMemPitch = desc.ByteWidth;
+		initData.SysMemSlicePitch= 0;
+		initData.pSysMem = data;
+
+		m_renderContext.device->CreateBuffer(&desc, &initData, &buffer);
+		m_effect->GetConstantBufferByName(cbuffName.c_str())->SetConstantBuffer(buffer);
+		DX_RELEASE(buffer);
+	}
+
 
 	void sendCBufferToGPU(const std::string& cbuffName) const;
 

@@ -27,7 +27,6 @@ private:
 	std::pair<ID3D11RenderTargetView*, ID3D11ShaderResourceView*> m_unlitSrv{};
 
 #ifdef D3D11_IMPL
-	ID3D11RenderTargetView* m_target = nullptr;
 	ID3D11Texture2D* m_textures = nullptr;
 	d3d11_graphics::RenderingContext m_renderContext;
 #endif
@@ -105,7 +104,7 @@ public:
 #endif
 	}
 
-	void clear()
+	void clear() const 
 	{
 		m_depth.clearDepth();
 		const float color[4] = { 0,0,0,1 };
@@ -118,7 +117,7 @@ public:
 
 	}
 
-	void bind()
+	void bind() const
 	{
 #ifdef D3D11_IMPL
 		m_depth.bind();
@@ -127,10 +126,10 @@ public:
 
 	}
 
-	auto getRTV() { return m_target; }
-	//auto getTex() { return tex; }
+	std::vector<ID3D11RenderTargetView*> get_rtvs() const { return m_rtv;  }
+	std::vector<ID3D11ShaderResourceView*> get_srvs() const { return m_srv;  }
 
-	ID3D11ShaderResourceView* getResource(int slot=0)
+	ID3D11ShaderResourceView* getResource(int slot=0) const 
 	{
 		return m_srv[slot];
 	}

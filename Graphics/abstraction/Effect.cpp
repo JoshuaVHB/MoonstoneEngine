@@ -2,6 +2,9 @@
 #include "../../Platform/WindowsEngine.h"
 
 #include <d3dcompiler.h>
+#include <optional>
+
+#include "Texture.h"
 
 Effect::Effect() 
 	: m_effect(nullptr)
@@ -67,7 +70,7 @@ Effect::Effect()
 	void Effect::createSampler()
 	{
 		D3D11_SAMPLER_DESC samplerDesc{};
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -96,7 +99,7 @@ Effect::Effect()
 		bd.ByteWidth = structSize;
 		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		bd.CPUAccessFlags = 0;
-		m_renderContext.device->CreateBuffer(&bd, NULL, &constBuffer);
+		m_renderContext.device->CreateBuffer(&bd, nullptr, &constBuffer);
 		m_constantBuffers[name] = constBuffer;
 
 
@@ -113,14 +116,24 @@ Effect::Effect()
 
 	}
 
-	void Effect::bindTexture(std::string uniformName, ID3D11ShaderResourceView* tex)
+	void Effect::bindTexture(const std::string& uniformName, ID3D11ShaderResourceView* tex) const
 	{
 		if (!tex) return;
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
 	}
 
+
+	void Effect::bindTexture(const std::string& uniformName, const Texture& tex) const
+	{
+		if (!tex.getTexture()) return;
+		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex.getTexture());
+
+	}
+
+
+
 	void Effect::sendCBufferToGPU(const std::string& cbuffName) const
 	{
 		ID3DX11EffectConstantBuffer* pCB = m_effect->GetConstantBufferByName(cbuffName.c_str());
-		pCB->SetConstantBuffer(m_constantBuffers.at(cbuffName)); // **** Rendu de l’objet
+		pCB->SetConstantBuffer(m_constantBuffers.at(cbuffName)); 
 	}
