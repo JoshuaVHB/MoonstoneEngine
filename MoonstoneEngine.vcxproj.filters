@@ -151,6 +151,13 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp">
+    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\World\Body.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicEngine.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -381,6 +388,19 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h">
+    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\physx_Impl\physx_impl.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\World\Body.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\World\PhysicalObject.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicEngine.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
