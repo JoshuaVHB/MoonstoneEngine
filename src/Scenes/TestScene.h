@@ -23,8 +23,6 @@
 #include "../../Graphics/World/Managers/MeshManager.h"
 
 #include "../../Utils/Transform.h"
-
-#include <PxPhysicsAPI.h>
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
 
@@ -99,7 +97,6 @@ public:
 			
 			}
 		);		
-		mPhysic.onInit();
 		lastcam = m_player.getCamera();
 		
 	}
@@ -112,7 +109,6 @@ public:
 		elapsed += deltaTime;
 
 		m_player.step(elapsed);
-		mPhysic.onUpdate(deltaTime);
 		aabb.origin = transform.getPosition();
 		aabb.size = transform.getScale();
 
@@ -186,6 +182,5 @@ public:
 	}
 
 	~TestScene() {
-		mPhysic.cleanupPhysics(true);
 	}
 };

@@ -167,7 +167,9 @@
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
     <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
-    <ClCompile Include="src\Physics\PhysicModule.cpp" />
+    <ClCompile Include="Physics\PhysicEngine.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
+    <ClCompile Include="Physics\World\Body.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
@@ -203,7 +205,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\World\Frustum.h" />
-    <ClInclude Include="src\Physics\PhysicModule.h" />
+    <ClInclude Include="Physics\PhysicEngine.h" />
+    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_impl.h" />
+    <ClInclude Include="Physics\World\Body.h" />
+    <ClInclude Include="Physics\World\PhysicalObject.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />

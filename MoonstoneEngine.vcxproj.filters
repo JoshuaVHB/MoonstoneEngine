@@ -117,7 +117,13 @@
     <ClCompile Include="Graphics\abstraction\TextureCube.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\PhysicModule.cpp">
+    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\World\Body.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PhysicEngine.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -335,7 +341,19 @@
     <ClInclude Include="Utils\Vec2.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\PhysicModule.h">
+    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\physx_Impl\physx_impl.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\World\Body.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\World\PhysicalObject.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\PhysicEngine.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

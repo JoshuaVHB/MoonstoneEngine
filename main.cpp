@@ -16,6 +16,8 @@
 
 #include "src/Scenes/AllScenes.h"
 
+#include "Physics/PhysicEngine.h"
+#include "Physics/physx_Impl/physx_impl.h"
 
 void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	IMGUI_CHECKVERSION();
@@ -42,6 +44,7 @@ void shutdownImgui(){
 //	HINSTANCE hPrevInstance,
 //	LPTSTR    lpCmdLine,
 //	int       nCmdShow)
+// 
 //{
 //	UNREFERENCED_PARAMETER(hPrevInstance);
 //	UNREFERENCED_PARAMETER(lpCmdLine);
@@ -64,9 +67,12 @@ int main() {
 		SceneManager::registerScene<Rush2Scene>("RUSH2");
 		SceneManager::switchToScene(0);
 
+		PhysicEngine::setImplementation<Physx_Impl>();
+		PhysicEngine::onInit();
 
 		rMoteur.run();
 		
+		PhysicEngine::cleanupPhysics(false);
 
 		shutdownImgui();
 		return 1;

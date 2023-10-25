@@ -10,7 +10,7 @@
 #include "imgui_impl_dx11.h"
 
 #include "../src/Scenes/Scene.h"
-
+#include "../Physics/PhysicEngine.h"
 
 
 constexpr Timer::count_type FPS_COUNT = 60;
@@ -78,6 +78,7 @@ public:
 
 
 			SceneManager::onUpdate(deltaTime);
+			PhysicEngine::onUpdate(deltaTime);
 			SceneManager::onRender();
 			SceneManager::onImGuiRender();
 			p_renderingDevice->present();
