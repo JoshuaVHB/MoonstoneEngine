@@ -203,7 +203,7 @@ public:
 				case 'S':
 					{
 						
-					int tmpIndex = currentItemIndex - m_point.size();
+					int tmpIndex = currentItemIndex - static_cast<int>(m_point.size());
 					break;
 
 					}
