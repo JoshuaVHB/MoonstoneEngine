@@ -173,6 +173,9 @@
     <ClCompile Include="Graphics\World\Frustum.cpp" />
     <ClCompile Include="Graphics\World\Material.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="Physics\PhysicEngine.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
+    <ClCompile Include="Physics\World\Body.cpp" />
     <ClCompile Include="Graphics\World\Player.cpp" />
     <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
