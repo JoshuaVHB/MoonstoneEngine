@@ -17,7 +17,7 @@ private:
 	//XMVECTOR rotation{0,0,0};
 
 	float angles[3] = {};
-	float position[3] = {00, 10, 50};
+	float position[3] = {00, 20, 50};
 	float _scale[3] = {1,1,1};
 
 public:
@@ -89,8 +89,14 @@ public:
 	}
 
 	
-	void setPosition(float x, float y, float z) {
+	void setTranslation(float x, float y, float z) {
 		translation = DirectX::XMVectorSet(x, y, z, 0);
+	}
+	
+	void setAngles(float x, float y, float z) {
+		angles[0] = x;
+		angles[1] = y;
+		angles[2] = z;
 	}
 };
 

@@ -29,11 +29,13 @@ public:
 	}
 
 	void updateTransform() { 
-		PhysicEngine::iVec3 pos = PhysicEngine::getPosition(id);
+		PhysicEngine::iVec3 pos, rot;
+			
+		std::tie(pos, rot) = PhysicEngine::getTransform(id);
 		Transform& t = m_mesh->getTransform();
 		
-		t.setPosition(pos.x, pos.y, pos.z);
-
+		t.setTranslation(pos.x, pos.y, pos.z);
+		t.setAngles(rot.x, rot.y, rot.z);
 
 		//auto posT = t.getPosition();
 		//std::cout << "pos Physic: " << DirectX::XMVectorGetX(posT) << " " << DirectX::XMVectorGetY(posT) << " " << DirectX::XMVectorGetZ(posT) << std::endl;

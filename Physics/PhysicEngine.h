@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <PxPhysicsAPI.h>
+
 // Creates static function for the renderer 
 // that calls the implementation function of the same name
 
@@ -24,7 +25,7 @@ public:
 		virtual void onInit() = 0;
 		virtual void onUpdate(float deltaTime) = 0;
 		virtual void cleanupPhysics(bool /*interactive*/) = 0;
-		virtual iVec3 getPosition(std::string id) = 0;
+		virtual std::pair<iVec3, iVec3> getTransform(std::string id) = 0;
 		virtual bool addCube(const std::string& id, const iVec3 position, const iVec3 rotation, const iVec3 scale = iVec3{1,1,1}) = 0;
 
 	};
@@ -32,7 +33,7 @@ public:
 	PHYSIC_CALL_IMPL(onInit);
 	PHYSIC_CALL_IMPL(onUpdate);
 	PHYSIC_CALL_IMPL(cleanupPhysics);
-	PHYSIC_CALL_IMPL(getPosition);
+	PHYSIC_CALL_IMPL(getTransform);
 	PHYSIC_CALL_IMPL(addCube);
 	//PHYSIC_CALL_IMPL(addActor);
 
