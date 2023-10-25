@@ -25,7 +25,7 @@
 #include "../../Utils/Transform.h"
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
-
+#include "../../Physics/World/PhysicalObject.h"
 
 class TestScene : public Scene {
 
@@ -37,6 +37,8 @@ private:
 	Effect renderShader, blitFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
+
+
 
 	Transform transform;
 	AABB aabb;
@@ -68,7 +70,7 @@ private:
 	Camera lastcam;
 
 	
-
+	PhysicalObject cube_P;
 	
 
 public:
@@ -77,6 +79,8 @@ public:
 	{
 		ball = MeshManager::loadMeshFromFile("res/mesh/blenderCube.obj");
 		bunny = MeshManager::loadMeshFromFile("res/mesh/sponza.obj");
+
+		cube_P.setMesh(&ball);
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		blitFx.loadEffectFromFile("res/effects/blit.fx");
@@ -148,7 +152,11 @@ public:
 
 		if (renderSponza) Renderer::renderDebugPerspectiveCameraOutline(cam, lastcam);
 
-		Renderer::renderAABB(cam, aabb);
+		//Renderer::renderAABB(cam, aabb);
+		cube_P.updateTransform();
+
+		Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
+
 		box.renderSkybox(cam);
 
 

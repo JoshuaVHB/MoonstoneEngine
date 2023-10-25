@@ -170,6 +170,7 @@
     <ClCompile Include="Physics\PhysicEngine.cpp" />
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
     <ClCompile Include="Physics\World\Body.cpp" />
+    <ClCompile Include="Physics\World\PhysicalObject.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />

@@ -53,7 +53,9 @@ int main() {
 	try
 	{
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
-		
+
+		PhysicEngine::setImplementation<Physx_Impl>();
+		PhysicEngine::onInit();
 
 
 		//rMoteur.SetWindowsAppInstance(hInstance);
@@ -67,8 +69,6 @@ int main() {
 		SceneManager::registerScene<Rush2Scene>("RUSH2");
 		SceneManager::switchToScene(0);
 
-		PhysicEngine::setImplementation<Physx_Impl>();
-		PhysicEngine::onInit();
 
 		rMoteur.run();
 		

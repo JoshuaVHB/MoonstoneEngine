@@ -6,10 +6,8 @@
 #include <string> 
 #include <PxPhysicsAPI.h>
 #include <iostream>
-#include "../Physics/PhysicModule.h"
 class Scene {
 protected:
-	PhysicModule mPhysic;
 
 public:
 	virtual ~Scene() = default;

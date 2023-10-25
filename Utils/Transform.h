@@ -16,7 +16,7 @@ private:
 	XMVECTOR scale{1,1,1,1};
 
 	float angles[3] = {};
-	float position[3] = {};
+	float position[3] = {00, 10, 50};
 	float _scale[3] = {1,1,1};
 
 public:
@@ -62,5 +62,9 @@ public:
 		}
 	}
 
+	
+	void setPosition(float x, float y, float z) {
+		translation = DirectX::XMVectorSet(x, y, z, 0);
+	}
 };
 

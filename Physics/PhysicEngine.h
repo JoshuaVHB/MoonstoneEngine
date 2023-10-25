@@ -2,7 +2,7 @@
 
 #include <concepts>
 #include <memory>
-
+#include <string>
 #include <PxPhysicsAPI.h>
 // Creates static function for the renderer 
 // that calls the implementation function of the same name
@@ -15,6 +15,7 @@ static auto fnName(auto&& ...args)\
 }
 class PhysicEngine {
 public:
+	using iVec3 = physx::PxVec3;
 	struct _ImplPhysic
 	{
 		friend class PhysicEngine;
@@ -23,12 +24,16 @@ public:
 		virtual void onInit() = 0;
 		virtual void onUpdate(float deltaTime) = 0;
 		virtual void cleanupPhysics(bool /*interactive*/) = 0;
-		//virtual bool addActor(physx::PxActor* actor) = 0;
+		virtual iVec3 getPosition(std::string id) = 0;
+		virtual bool addCube(const std::string& id, const iVec3 position, const iVec3 rotation, const iVec3 scale = iVec3{1,1,1}) = 0;
+
 	};
 
 	PHYSIC_CALL_IMPL(onInit);
 	PHYSIC_CALL_IMPL(onUpdate);
 	PHYSIC_CALL_IMPL(cleanupPhysics);
+	PHYSIC_CALL_IMPL(getPosition);
+	PHYSIC_CALL_IMPL(addCube);
 	//PHYSIC_CALL_IMPL(addActor);
 
 
