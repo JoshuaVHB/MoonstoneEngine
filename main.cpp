@@ -54,7 +54,7 @@ int APIENTRY _tWinMain(
 
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
 
-		//rMoteur.SetWindowsAppInstance(hInstance);
+		rMoteur.SetWindowsAppInstance(hInstance);
 		rMoteur.init();
 
 		d3d11_graphics& gfx = rMoteur.getGraphics();
@@ -64,7 +64,8 @@ int APIENTRY _tWinMain(
 		SceneManager::registerScene<TestScene>("Test scene");
 		SceneManager::registerScene<SceneDeferred>("Deferred Rendering test");
 		SceneManager::registerScene<Rush3Scene>("RUSH3");
-		SceneManager::switchToScene(1);
+		SceneManager::registerScene<InGame>("InGame");
+		SceneManager::switchToScene(3);
 
 		rMoteur.run();
 		

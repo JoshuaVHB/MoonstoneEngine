@@ -35,9 +35,6 @@ void Player::onImGuiRender()
 {
 	ImGui::Begin("Player debug");
 
-	ImGui::SliderAngle("Yaw", &m_camera.getRawYaw());
-	ImGui::SliderAngle("Pitch", &m_camera.getRawPitch());
-
 	ImGui::End();
 }
 

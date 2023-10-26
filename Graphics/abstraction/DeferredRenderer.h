@@ -117,7 +117,7 @@ public:
 	 *
 	 */
 
-	void renderMesh(Camera& cam, const Mesh& mesh)
+	void renderMesh(Camera& cam, const Mesh&  mesh)
 	{
 
 		if (!mesh.getMaterials().empty())

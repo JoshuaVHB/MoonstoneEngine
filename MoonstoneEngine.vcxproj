@@ -169,7 +169,7 @@
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\2DRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Renderer2D.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Quad.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp" />
@@ -208,7 +208,7 @@
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
     <ClInclude Include="d3dx11effect.h" />
-    <ClInclude Include="Graphics\abstraction\2D\2DRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Renderer2D.h" />
     <ClInclude Include="Graphics\abstraction\2D\Billboard.h" />
     <ClInclude Include="Graphics\abstraction\2D\Quad.h" />
     <ClInclude Include="Graphics\abstraction\2D\Sprite.h" />

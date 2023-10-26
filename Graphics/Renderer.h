@@ -4,9 +4,10 @@
 
 #include <concepts>
 #include <type_traits>
-#include <tuple>
 #include <memory>
 #include <filesystem>
+#define _XM_NO_INTRINSICS_
+#include <DirectXMath.h>
 
 
 
@@ -58,6 +59,7 @@ public:
 		virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) = 0;
 		virtual void renderAABB(Camera& camera, const AABB&) = 0;
 		virtual void renderDebugPerspectiveCameraOutline(Camera& viewCamera, const Camera& outlinedCamera) = 0;
+		virtual void renderDebugLine(Camera& cam, DirectX::XMVECTOR from, DirectX::XMVECTOR to) = 0;
 		virtual void showImGuiDebugData() = 0;
 		virtual void setBackbufferToDefault() = 0;
 		virtual void draw(size_t count) = 0;
@@ -79,6 +81,7 @@ public:
 	CALL_IMPL(showImGuiDebugData)					;
 	CALL_IMPL(setBackbufferToDefault)				;
 	CALL_IMPL(setDepthBuffer)						;
+	CALL_IMPL(renderDebugLine)						;
 
 	
 	/////////////////////////////////////////////////////////////////////////////

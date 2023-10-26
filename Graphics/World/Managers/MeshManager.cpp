@@ -191,5 +191,5 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 	}
 	vertsIndex.clear();
-	return Mesh(vertices, indices, submeshesIndices , mats, submeshesMat);
+	return Mesh(vertices, indices, submeshesIndices, mats, submeshesMat);
 }

@@ -99,16 +99,19 @@ void Mesh::swap(Mesh& other) noexcept
 
 
 Mesh::Mesh(Mesh&& other) noexcept
-	: m_ibo(std::exchange(other.m_ibo, {}))
-	, m_transform(std::exchange(other.m_transform, {}))
-	, m_vbo(std::exchange(other.m_vbo, {}))
-	, m_materials(std::exchange(other.m_materials, std::vector<Material>()))
-	, m_submeshMats(std::exchange(other.m_submeshMats, std::vector<uint16_t>()))
-	, m_submeshes(std::exchange(other.m_submeshes, std::vector<IndexBuffer::size_type>()))
-	, m_boundingBox(std::exchange(other.m_boundingBox, {}))
-{}
+	: m_vbo			(std::exchange(other.m_vbo,			{}))
+	, m_ibo			(std::exchange(other.m_ibo,			{}))
+	, m_materials	(std::exchange(other.m_materials,	{}))
+	, m_submeshes	(std::exchange(other.m_submeshes,	{}))
+	, m_submeshMats	(std::exchange(other.m_submeshMats,	{}))
+	, m_transform	(std::exchange(other.m_transform,	{}))
+	, m_boundingBox	(std::exchange(other.m_boundingBox,	{}))
+{
+	
+}
 
 Mesh& Mesh::operator=(Mesh&& other) noexcept {
-	Mesh{ std::move(other) }.swap(*this);
+	Mesh hello{ std::move(other) } ;
+	hello.swap(*this);
 	return *this;
 }

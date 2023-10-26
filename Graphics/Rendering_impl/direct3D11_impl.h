@@ -207,9 +207,9 @@ private:
 		renderDebugLine(cam, o + x + y, o + z + x + y);
 	}
 
-	void renderDebugLine(Camera& cam, Vec from, Vec to) {
+	virtual void renderDebugLine(Camera& cam, Vec from, Vec to) override {
 				
-
+		setBackbufferToDefault();
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 		context->IASetInputLayout(debugLine.getVertexLayout());
 

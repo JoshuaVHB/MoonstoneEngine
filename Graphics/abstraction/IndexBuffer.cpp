@@ -58,3 +58,22 @@ IndexBuffer::IndexBuffer(const std::vector<size_type>& indices)
 #endif	
 	}
 
+
+
+
+IndexBuffer::IndexBuffer(IndexBuffer&& other) noexcept
+	: m_indices(std::exchange(other.m_indices, {}))
+	, m_renderContext(other.m_renderContext)
+	, m_ibo(std::exchange(other.m_ibo, nullptr))
+{	}
+
+IndexBuffer& IndexBuffer::operator=(IndexBuffer&& other) noexcept
+	{
+		IndexBuffer{ std::move(other) }.swap(*this);
+		return *this;
+	}
+
+	IndexBuffer::~IndexBuffer()
+	{
+		DX_RELEASE(m_ibo);
+	}

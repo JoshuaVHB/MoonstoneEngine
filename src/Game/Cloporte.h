@@ -1,33 +1,33 @@
 #pragma once
 
-#include <utility>
+#define _XM_NO_INTRINSICS_
 #include <directXmath.h>
 #include "../../Graphics/abstraction/Camera.h"
 #include "World/Mesh.h"
 
-using Vec = DirectX::XMVECTOR;
 
 class Cloporte
 {
 
 private:
 
-	// 2 Cameras 
-	// Mesh
-	// Rigidbody
-	// Inputs
 
-	enum CameraMode {FIRST, THIRD};
-	CameraMode m_currentCamera = THIRD;
+	Mesh m_mesh;
 
-	std::pair<Camera, Camera> m_cameras = std::make_pair(Camera{}, Camera{});
+	Camera m_firstPerson;
+	Camera m_thirdPerson;
+	Camera* m_currentCam;
 
-	Vec m_position;
-	Vec m_forward;
-	Vec m_accelation;
 	float m_speed;
+	float maxVelocity;
+	float currentVelocity;
+	float accelerationFactor;
+	float friction;
 
-	//Mesh m_mesh;
+	DirectX::XMVECTOR m_position	;
+	DirectX::XMVECTOR m_forward		;
+
+	
 
 
 
@@ -39,11 +39,25 @@ public:
 	void handleInputs();
 	void draw(Camera& cam);
 	void update(float deltaTime);
+	void updatePosition(float deltaTime);
 
-	Camera& getCurrentCamera() noexcept { return (m_currentCamera == FIRST) ? m_cameras.first : m_cameras.second; }
+	Camera& getCurrentCamera() noexcept { return m_thirdPerson; }
+
+	void switchView() noexcept
+	{
+		if (m_currentCam == &m_thirdPerson) m_currentCam = &m_firstPerson;
+		else m_currentCam = &m_thirdPerson;
+	}
+
+	
+	Mesh& getMesh()	{ return m_mesh; }
+
+
+	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
+	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
 
 private:
-	void handleKeyboardInputs();
+	void handleKeyboardInputs(float deltaTime);
 
 };
 

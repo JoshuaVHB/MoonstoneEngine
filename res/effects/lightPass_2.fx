@@ -85,8 +85,6 @@ VSOut lightPassVS(uint id : SV_VertexID)
 /////////////////////
 
 
-
-
 // -- Fragment Shader
 
 float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
@@ -112,22 +110,31 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
         // diffuse
         if (dist < lights[i].radius)
         {
-            
-            float3 lightDir = normalize(lights[i].position.rgb - fragPos.rgb);
-            float d = dot(fragnormal.rgb, lightDir) * diffuse.rgb
-            *lights[i].diffuse.rgb;
-            
-            
-            float3 halfwayDir = normalize(lightDir + viewDir);
-            float spec = pow(max(dot(fragnormal.rgb, halfwayDir), 0.0), 16.0);
-            float3 specular = lights[i].diffuse.rgb * spec * specularPixel;
-            // attenuation
-            float attenuation = 1.0 ;
-            d *= attenuation;
-            specular *= attenuation;
+        
+                // diffuse
+            float3 lightDir = normalize(lights[i].position - fragPos);
+            float3 ds = max(dot(fragnormal.xyz, lightDir), 0.0) * diffuse * lights[i].diffuse;
             
             
-            lighting += d + specular;
+            float attenuation = 1.0 / (dist * dist);
+            ds *= attenuation;
+            lighting += ds;
+            
+            //float3 lightDir = normalize(lights[i].position.rgb - fragPos.rgb);
+            //float d = dot(fragnormal.rgb, lightDir) * diffuse.rgb;
+            //lights[i].diffuse.rgb;
+            //
+            //
+            //float3 halfwayDir = normalize(lightDir + viewDir);
+            //float spec = pow(max(dot(fragnormal.rgb, halfwayDir), 0.0), 16.0);
+            //float3 specular = lights[i].diffuse.rgb * spec * specularPixel;
+            //// attenuation
+            //float attenuation = 1.0 ;
+            //d *= attenuation;
+            //specular *= attenuation;
+            //
+            //
+            //lighting += d + specular;
         }
     }   
     

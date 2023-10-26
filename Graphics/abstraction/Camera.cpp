@@ -1,6 +1,5 @@
 #include "Camera.h"
 
-#include <DirectXMath.h>
 #include <memory>
 #include <algorithm>
 #include <complex>
@@ -73,8 +72,6 @@ void Camera::setPitch(const float pitch) { m_angles.pitch = pitch; }
 DirectX::XMVECTOR Camera::getAngles() const noexcept { return m_angles.toVec(); }
 float Camera::getPitch() const noexcept { return m_angles.pitch; }
 float Camera::getYaw() const noexcept { return m_angles.yaw; }
-float& Camera::getRawYaw() { return m_angles.yaw; }
-float& Camera::getRawPitch() { return m_angles.pitch; }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// -- Constructors, move and stuff
@@ -93,10 +90,10 @@ Camera::Camera(const Camera& other)
 	: m_position(other.m_position)
 	, m_up(other.m_up)
 	, m_left(other.m_left)
-	, m_rotationSpeed(other.m_rotationSpeed)
 	, m_angles(other.m_angles)
 	, m_viewProjMatrix(other.m_viewProjMatrix)
 	, m_viewMatrix(other.m_viewMatrix)
+	, m_rotationSpeed(other.m_rotationSpeed)
 {}
 Camera& Camera::operator=(const Camera& other)
 {
@@ -108,10 +105,10 @@ Camera::Camera(Camera&& other) noexcept
 	: m_position(std::exchange(other.m_position, {}))
 	, m_up(std::exchange(other.m_up, {}))
 	, m_left(std::exchange(other.m_left, {}))
-	, m_rotationSpeed(std::exchange(other.m_rotationSpeed, 1.f))
 	, m_angles(std::exchange(other.m_angles, {}))
 	, m_viewProjMatrix(std::exchange(other.m_viewProjMatrix, {}))
 	, m_viewMatrix(std::exchange(other.m_viewMatrix, {}))
+	, m_rotationSpeed(std::exchange(other.m_rotationSpeed, 1.f))
 {}
 Camera& Camera::operator=(Camera&& other) noexcept
 {

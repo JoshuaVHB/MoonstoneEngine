@@ -2,11 +2,9 @@
 
 
 #include <vector>
-#include <memory>
 #include <variant>
 
 #include "Lights.h"
-#include "..\..\abstraction\Effect.h"
 
 /* Add this to the shader code to attach lights correctly :
 
@@ -192,12 +190,12 @@ public:
 				case 'P':
 					{						
 						int tmpIndex = currentItemIndex - 0;
-						ImGui::DragFloat3(("Position ##" +	std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].position.vector4_f32[0]);
-						ImGui::DragFloat3(("Range ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].range.vector4_f32[0]);
-						ImGui::DragFloat(("falloff ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].falloff);
-						ImGui::ColorEdit3(("Ambiant ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].ambiant.vector4_f32[0]);
-						ImGui::ColorEdit3(("Diffuse ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].diffuse.vector4_f32[0]);
-						ImGui::Checkbox(("IsOn ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].isOn);
+						//ImGui::DragFloat3(("Position ##" +	std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].position.vector4_f32[0]);
+						//ImGui::DragFloat3(("Range ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].range.vector4_f32[0]);
+						//ImGui::DragFloat(("falloff ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].falloff);
+						//ImGui::ColorEdit3(("Ambiant ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].ambiant.vector4_f32[0]);
+						//ImGui::ColorEdit3(("Diffuse ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].diffuse.vector4_f32[0]);
+						//ImGui::Checkbox(("IsOn ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].isOn);
 					break;
 					}
 				case 'S':

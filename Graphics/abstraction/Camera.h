@@ -45,9 +45,10 @@ struct PerspectiveProjection : Projection
 		type = ProjectionType::PERSPECTIVE;
 		projMat = XMMatrixPerspectiveFovLH(fov, aspectRatio, znear, zfar);
 	}
+	~PerspectiveProjection() override = default;
 };
 
-struct OrthographicProjection : public Projection 
+struct OrthographicProjection :  Projection 
 {
 	float left, right;
 	float top, bot;
@@ -66,8 +67,10 @@ struct OrthographicProjection : public Projection
 		projMat = XMMatrixOrthographicRH(left - right, top - bot, znear, zfar);
 	}
 
-	[[nodiscard]] virtual Mat getProjMatrix() const noexcept override 
+	[[nodiscard]]  Mat getProjMatrix() const noexcept override 
 	{ return XMMatrixOrthographicRH(left - right, top - bot, znear, zfar); }
+
+	~OrthographicProjection() override = default;
 };
 
 
@@ -75,9 +78,9 @@ class Camera
 {
 private:
 
-	XMVECTOR m_position = XMVECTOR{ 0.f,0.f,-10.f,1.0f };
-	XMVECTOR m_up		= XMVECTOR{ 0.f,1.f,0.f,1.f };
-	XMVECTOR m_left		= XMVECTOR{ 1.f,0.f,0.f,1.f };
+	XMVECTOR m_position { 0.f,0.f,0.0f,1.0f };
+	XMVECTOR m_up		{ 0.f,1.f,0.f,1.f };
+	XMVECTOR m_left		{ 1.f,0.f,0.f,1.f };
 
 	std::unique_ptr<Projection> m_projection;
 
@@ -102,13 +105,14 @@ private:
 
 public:
 
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Basic operations
 
 	void updateCam();
 	void move(const XMVECTOR& delta);
 	void setPosition(const XMVECTOR& pos);
-	void rotate(const float dx = 0.0F, const float dy = 0.0F, const float dz = 0.0F);
+	void rotate(float dx = 0.0F, float dy = 0.0F, float dz = 0.0F);
 	void lookAt(const XMVECTOR& target);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,13 +148,11 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Angles
 
-	void setYaw(const float yaw)					;
-	void setPitch(const float pitch)				;
-	[[nodiscard]] XMVECTOR getAngles()const noexcept;
-	[[nodiscard]] float getPitch() const noexcept	;
-	[[nodiscard]] float getYaw() const noexcept		;
-	[[nodiscard]] float& getRawYaw()				;
-	[[nodiscard]] float& getRawPitch()				;
+	void setYaw(float yaw)								;
+	void setPitch(float pitch)							;
+	[[nodiscard]] XMVECTOR getAngles()	const noexcept	;
+	[[nodiscard]] float getPitch()		const noexcept	;
+	[[nodiscard]] float getYaw()		const noexcept	;
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Constructors, move and stuff

@@ -1,5 +1,6 @@
 #include "Cloporte.h"
 
+#include "CameraController.h"
 #include "Renderer.h"
 #include "../../Graphics/abstraction/Camera.h"
 #include "../../Platform/WindowsEngine.h"
@@ -8,15 +9,19 @@
 extern std::unique_ptr<Mouse> wMouse;
 extern std::unique_ptr<Keyboard> wKbd;
 
-Cloporte::Cloporte() 
+Cloporte::Cloporte()
+	: m_mesh{MeshManager::loadMeshFromFile("res/mesh/Game/boule.obj")}
+	, m_speed(0), maxVelocity(3.f)
+	, accelerationFactor(0.05f), friction(0.1f)
+	, m_position{0, 0, 0, 0}
+	, m_forward {0, 0, 1 , 0}
+	, currentVelocity{0}
+
 {
+	m_currentCam = &m_thirdPerson;
 
-	m_cameras.first.setProjection<PerspectiveProjection>(PerspectiveProjection{});
-	m_cameras.second.setProjection<PerspectiveProjection>(PerspectiveProjection{});
-
-	//m_mesh = MeshManager::loadMeshFromFile("res/mesh/Game/boule.obj");
-
-
+	m_thirdPerson.setProjection<PerspectiveProjection>(PerspectiveProjection{});
+	m_firstPerson.setProjection<PerspectiveProjection>(PerspectiveProjection{});
 }
 
 void Cloporte::handleInputs() 
@@ -26,22 +31,71 @@ void Cloporte::handleInputs()
 
 	Keyboard::Event e = wKbd->readKey();
 
-	if (wKbd->isKeyPressed(VK_SPACE)) {
-	} 
+	
 
 }
 void Cloporte::draw(Camera& cam)
 {
-	//gPassFx.bindTexture("tex", bb.getTexture());
-	//Renderer::renderMesh(cam, bunny, gPassFx);
+
 }
 void Cloporte::update(float deltaTime)
 {
+	//computeForward();
+	handleKeyboardInputs(deltaTime);
+	updatePosition(deltaTime);
+
+
+	//CameraController::computeThirdPersonPosition(*this, *m_currentCam);
+	//getCurrentCamera().lookAt(m_position);
+	getCurrentCamera().setPosition(XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
+
+	getCurrentCamera().updateCam();
 
 }
 
-
-void Cloporte::handleKeyboardInputs() 
+void Cloporte::updatePosition(float deltaTime)
 {
+
+	m_position = XMVectorAdd(m_position, m_forward * currentVelocity * deltaTime * 100);
+	currentVelocity *= 0.9 ;
+
+	m_mesh.getTransform().setPosition(m_position);
+}
+
+
+void Cloporte::handleKeyboardInputs(float deltaTime)
+{
+	DirectX::XMVECTOR m_positionDelta{};
+	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('z')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('w')))
+	{
+		//float dx = std::clamp(XMVectorGetX(m_velocity) + accelerationFactor * XMVectorGetX(m_forward), 0.f, maxVelocity);
+		//float dz = std::clamp(XMVectorGetZ(m_velocity) + accelerationFactor * XMVectorGetZ(m_forward), 0.f, maxVelocity);
+
+		currentVelocity = std::clamp( currentVelocity + accelerationFactor, 0.f, maxVelocity);
+
+	}
+
+	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s')) )
+	{
+		currentVelocity = std::clamp( currentVelocity - accelerationFactor, 0.f, maxVelocity);
+		//float dx = std::clamp(XMVectorGetX(m_velocity) + accelerationFactor * -XMVectorGetX(m_forward), 0.f, maxVelocity);
+		//float dz = std::clamp(XMVectorGetZ(m_velocity) + accelerationFactor * -XMVectorGetZ(m_forward), 0.f, maxVelocity);
+		//m_velocity = XMVectorSetX(m_velocity, dx);
+		//m_velocity = XMVectorSetZ(m_velocity, dz);
+	}
+
+	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('a')))
+	{
+
+		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0,1,0 }, -0.05));
+
+	}
+
+	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d')) )
+	{
+
+		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0,1,0 }, 0.05));
+
+	}
 
 }

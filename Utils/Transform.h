@@ -1,6 +1,7 @@
 #pragma once
 
 #include "imgui.h"
+#define _XM_NO_INTRINSICS_
 #include <DirectXMath.h>
 
 using namespace DirectX;
@@ -11,9 +12,9 @@ class Transform
 {
 private:
 
-
 	XMVECTOR translation{0,0,0,0};
 	XMVECTOR scale{1,1,1,1};
+	//XMVECTOR rotation{0,0,0};
 
 	float angles[3] = {};
 	float position[3] = {};
@@ -30,11 +31,33 @@ public:
 		debug_count--;
 	}
 
-	XMVECTOR getPosition() const noexcept {
-		return XMVECTOR{ position[0], position[1], position[2] };
+	XMVECTOR& getPosition() noexcept {
+		return translation;
 	}
 
-	XMVECTOR getScale() const noexcept {
+	void setPosition(XMVECTOR pos)
+	{
+		translation = pos;
+		position[0] = XMVectorGetX(translation);
+		position[1] = XMVectorGetY(translation);
+		position[2] = XMVectorGetZ(translation);
+	}
+
+
+	void setRotation(XMVECTOR rot)
+	{
+		//rotation = rot;
+		angles[0] = XMVectorGetX(rot);
+		angles[1] = XMVectorGetY(rot);
+		angles[2] = XMVectorGetZ(rot);
+	}
+
+
+	const XMVECTOR& getPosition() const noexcept {
+		return translation;
+	}
+
+	XMVECTOR getScale() noexcept {
 		return XMVECTOR{ _scale[0], _scale[1], _scale[2] };
 	}
 
@@ -49,12 +72,15 @@ public:
 	{
 		std::string name = "Transform #" + std::to_string(debug_count);
 		if (ImGui::CollapsingHeader(name.c_str())) {
-			ImGui::DragFloat3("Rotation", angles, 0.1f);
-			if (ImGui::DragFloat3("Translation", position, 0.1f))
+			if (ImGui::DragFloat3("Rotation", angles, 0.1f))
 			{
-				translation = { position[0], position[1], position[2] };
-
+				//rotation = {angles[0], angles[1], angles[2]};
 			}
+			if (ImGui::DragFloat3("Translation", &position[0], 0.1f))
+			{
+				translation = { position[0] ,position[1] ,position[2] };
+			}
+
 			if (ImGui::DragFloat3("scale", _scale, 0.1F))
 			{
 				scale = { _scale[0], _scale[1], _scale[2] };

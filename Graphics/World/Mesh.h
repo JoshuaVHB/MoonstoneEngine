@@ -4,17 +4,18 @@
 
 #include "../abstraction/IndexBuffer.h"
 #include "../abstraction/VertexBuffer.h"
+#include "../World/Material.h"
 
 #include "../../Utils/Transform.h"
 #include "../../Utils/AABB.h"
 
 using namespace DirectX;
 
-class Material;
 
 class Mesh
 {
 private:
+	float A = 32.f;
 
 	VertexBuffer m_vbo;
 	IndexBuffer m_ibo;
@@ -24,7 +25,7 @@ private:
 	std::vector<IndexBuffer::size_type> m_submeshes;
 	std::vector<uint16_t> m_submeshMats;
 
-	Transform m_transform;
+	Transform m_transform{};
 	AABB m_boundingBox{};
 
 public:
@@ -71,10 +72,14 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void swap(Mesh& other) noexcept;
+
 	Mesh(const Mesh&) = delete;
 	Mesh& operator=(const Mesh&) = delete;
+
 	Mesh(Mesh&& other) noexcept;
 	Mesh& operator=(Mesh&& other) noexcept;
+
 	~Mesh()=default;
+
 
 };

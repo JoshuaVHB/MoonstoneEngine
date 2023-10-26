@@ -5,3 +5,4 @@
 #include "Sponza.h"
 #include "SceneDeferred.h"
 
+#include "src/game/GameScenes/InGame.h"
