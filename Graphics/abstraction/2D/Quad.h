@@ -19,10 +19,10 @@ private:
 	{
 		{
 			
-		Vertex{ {0,0}},
-		Vertex{ {1,0}},
-		Vertex{ {1,1}},
-		Vertex{ {0,1}},
+		Vertex{ XMVECTOR{0,0}},
+		Vertex{ XMVECTOR{1,0}},
+		Vertex{ XMVECTOR{1,1}},
+		Vertex{ XMVECTOR{0,1}},
 		}
 	};
 	const IndexBuffer m_ibo= IndexBuffer{

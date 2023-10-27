@@ -65,7 +65,7 @@ int APIENTRY _tWinMain(
 		SceneManager::registerScene<SceneDeferred>("Deferred Rendering test");
 		SceneManager::registerScene<Rush3Scene>("RUSH3");
 		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::switchToScene(3);
+		SceneManager::switchToScene(1);
 
 		rMoteur.run();
 		

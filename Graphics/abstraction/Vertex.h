@@ -10,3 +10,9 @@ struct Vertex
 	XMVECTOR normal;
 	XMVECTOR uv;
 };
+
+struct SpriteVertex
+{
+	XMVECTOR position;
+	XMVECTOR uv;
+};

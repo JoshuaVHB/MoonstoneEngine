@@ -24,6 +24,7 @@
 
 #include "../../Utils/Transform.h"
 #include "abstraction/DeferredRenderer.h"
+#include "../../Graphics/abstraction/2D/Sprite.h"
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
@@ -39,6 +40,7 @@ private:
 	Skybox box;
 	Player m_player;
 	DeferredRenderer m_renderer;
+	InstancedSprite m_instanced;
 
 
 public:
@@ -72,8 +74,13 @@ public:
 		Renderer::clearScreen();
 		m_renderer.clear();
 
-		m_renderer.renderDeferred([&]() {renderFn(); }, m_player.getCamera());
+		//m_renderer.renderDeferred([&]() {renderFn(); }, m_player.getCamera());
 		Renderer::setBackbufferToDefault();
+
+		m_instanced.bind();
+		m_instanced.render();
+
+
 
 	}
 	virtual void onImGuiRender() override {

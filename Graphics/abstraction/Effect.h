@@ -56,6 +56,7 @@ private:
 	};
 
 	UINT stride = 0;
+	UINT instancedStride = 0;
 
 	const std::vector<DXGI_FORMAT> formats{
 		DXGI_FORMAT_R32_FLOAT,
@@ -104,6 +105,21 @@ public:
 		);
 		stride += 16;
 	}
+
+	template<size_t floatCount>
+	void pushBackInstanced(Semantic elemType, UINT slot)
+	{
+		elems.push_back(
+			D3D11_INPUT_ELEMENT_DESC{
+				semantics_str[size_t(elemType)], slot,
+				formats[floatCount - 1],
+				slot, instancedStride,
+				D3D11_INPUT_PER_INSTANCE_DATA, slot
+			}
+		);
+		instancedStride += 16;
+	}
+
 };
 
 
@@ -177,5 +193,10 @@ public:
 
 	void sendCBufferToGPU(const std::string& cbuffName) const;
 
+	void unbindResources() const 
+	{
+		ID3D11ShaderResourceView* nullSRV =  nullptr ;
+		m_renderContext.context->PSSetShaderResources(0, 1, &nullSRV);
+	}
 
 };

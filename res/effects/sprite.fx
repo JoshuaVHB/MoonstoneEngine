@@ -54,7 +54,7 @@ float4 spritePS(VSOut vs) : SV_Target
 {
     
     
-    return float4(vs.uv, 0, 1);
+    return float4(1,1, 0, 1);
     
 }
 

@@ -129,6 +129,7 @@ private:
 
 		effect.apply();
 		mesh.draw();
+		effect.unbindResources();
 
 		triangleCount += mesh.getTriangleCount();
 

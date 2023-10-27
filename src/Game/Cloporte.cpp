@@ -87,14 +87,14 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('q')) || wKbd->isKeyPressed(Keyboard::letterCodeFromChar('a')))
 	{
 
-		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0,1,0 }, -0.05));
+		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0,1,0 }, -0.05f));
 
 	}
 
 	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('d')) )
 	{
 
-		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0,1,0 }, 0.05));
+		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0.f,1.f,0.f }, 0.05f));
 
 	}
 

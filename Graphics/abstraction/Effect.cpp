@@ -127,7 +127,6 @@ Effect::Effect()
 	{
 		if (!tex.getTexture()) return;
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex.getTexture());
-
 	}
 
 

@@ -188,6 +188,7 @@ public:
 		m_lightPass.apply();
 
 		Renderer::draw(6);
+		m_lightPass.unbindResources();
 
 	}
 
