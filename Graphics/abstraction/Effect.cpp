@@ -109,8 +109,8 @@ Effect::Effect()
 
 		m_pass->Apply(0, m_renderContext.context);
 
+		// TODO MAKE SAMPLERS CORRECTLY  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		ID3DX11EffectSamplerVariable* variableSampler;
-	// TODO MAKE SAMPLERS CORRECTLY  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		variableSampler = m_effect->GetVariableByName("SampleState")->AsSampler();
 		variableSampler->SetSampler(0, pSampleState);
 

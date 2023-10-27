@@ -1,12 +1,15 @@
 
+Texture2D tex;
 SamplerState SampleState; // l’état de sampling
 
 struct VertexInput
 {
-    float3 pos : POSITION;
-    float2 uv : TEXCOORD0;
-    float3 instancePos : TEXCOORD1;
-    float2 instanceUv : TEXCOORD2;
+    float3 pos          : POSITION;
+    float2 uv           : TEXCOORD0;
+    
+    float3 instancePos  : INSTANCE_POS;
+    float2 instanceSize : INSTANCE_SIZE;
+    
     
     
 };
@@ -15,20 +18,20 @@ struct VertexOut
 {
     float4 pos : SV_Position;
     float2 uv : TEXCOORD0;
-    
 };
 
 VertexOut sprite2DVS(VertexInput VSin) 
 {
     VertexOut vso;
-    vso.pos = float4(VSin.pos + VSin.instancePos, 0);
+    vso.pos = float4((VSin.pos.xy * VSin.instanceSize + VSin.instancePos.xy ),0, 1);
     vso.uv = VSin.uv;
     return vso;
 }
 
 float4 sprite2DPS(VertexOut vsin) : SV_Target
 {    
-    return float4(vsin.uv, 0, 1);
+   return float4(tex.Sample(SampleState, vsin.uv).rgb, 1);
+    //return float4(1,0,0, 1);
 }
 
 

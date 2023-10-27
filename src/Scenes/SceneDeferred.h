@@ -40,7 +40,7 @@ private:
 	Skybox box;
 	Player m_player;
 	DeferredRenderer m_renderer;
-	InstancedSprite m_instanced;
+	InstancedSprite* m_instanced=nullptr;
 
 
 public:
@@ -49,6 +49,11 @@ public:
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 		Renderer::setBackbufferToDefault();
+		m_instanced = new InstancedSprite(
+			{									// pos // size // uv
+				InstancedSprite::InstanceType{{-1.f,-1.f},{0.3f,0.3f}},
+				InstancedSprite::InstanceType{{0.f,0.f},{0.3f,0.3f}},
+			});
 	}
 
 	void renderFn()
@@ -74,11 +79,11 @@ public:
 		Renderer::clearScreen();
 		m_renderer.clear();
 
-		//m_renderer.renderDeferred([&]() {renderFn(); }, m_player.getCamera());
+		m_renderer.renderDeferred([&]() {renderFn(); }, m_player.getCamera());
 		Renderer::setBackbufferToDefault();
 
-		m_instanced.bind();
-		m_instanced.render();
+		m_instanced->bind();
+		m_instanced->render();
 
 
 

@@ -41,25 +41,31 @@ private:
 
 	d3d11_graphics::RenderingContext m_renderContext;
 
-	static const size_t m_instanceCount = 4;
-	using InstanceType = SpriteVertex;
+	size_t m_instanceCount;
 	InputLayout m_layout;
 	Effect m_spriteEffect;
+	Texture m_texture = Texture(L"res/textures/breadbug.dds");
 
 public:
 
-	InstancedSprite() {
+	struct InstanceType
+	{
+		XMVECTOR position;
+		XMVECTOR size;
+	};
+
+	InstancedSprite(const std::vector<InstanceType>& instances) {
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-
+		m_instanceCount = instances.size();
+		m_texture = Texture(L"res/textures/breadbug.dds");
 		{
-
-			SpriteVertex vertices[6]
+			const SpriteVertex vertices[6]
 			{
 				{{0,0},{0,0}},
+				{{1,1},{1,1}},
 				{{1,0},{1,0}},
-				{{1,1},{1,1}},
-				{{1,1},{1,1}},
 				{{0,1},{0,1}},
+				{{1,1},{1,1}},
 				{{0,0},{0,0}},
 			};
 
@@ -77,31 +83,17 @@ public:
 
 		/////
 		{
-
-			InstanceType instances[m_instanceCount];
-
-			instances[0].position = {-1,-1,0,0 };
-			instances[1].position = {0,-1,0,0 };
-			instances[3].position = {0,0,0,0 };
-			instances[2].position = {-1,0,0,0 };
-
-
-			instances[0].uv = {1,0};
-			instances[1].uv = {1,0};
-			instances[2].uv = {1,0};
-			instances[3].uv = {1,0};
-
 			D3D11_BUFFER_DESC desc_instance{};
 			D3D11_SUBRESOURCE_DATA initInstance{};
 			// -- Vertex buffer
 
 			desc_instance.Usage = D3D11_USAGE_DEFAULT;
-			desc_instance.ByteWidth = static_cast<UINT>(4) * sizeof(InstanceType);
+			desc_instance.ByteWidth = static_cast<UINT>(m_instanceCount) * sizeof(InstanceType);
 			desc_instance.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			desc_instance.CPUAccessFlags = 0;
 			desc_instance.StructureByteStride = 0;
 			desc_instance.MiscFlags = 0;
-			initInstance.pSysMem = &instances[0];
+			initInstance.pSysMem = instances.data();
 			m_renderContext.device->CreateBuffer(&desc_instance, &initInstance, &m_instancedBuffer);
 		}
 
@@ -109,8 +101,8 @@ public:
 		m_layout.pushBack<3>(InputLayout::Semantic::Position);
 		m_layout.pushBack<2>(InputLayout::Semantic::Texcoord);
 
-		m_layout.pushBackInstanced<3>(InputLayout::Semantic::Texcoord, 1);	// instance pos
-		m_layout.pushBackInstanced<2>(InputLayout::Semantic::Texcoord, 2); // instance uv
+		m_layout.pushBackInstanced<3>("INSTANCE_POS");	// instance pos
+		m_layout.pushBackInstanced<2>("INSTANCE_SIZE");	// instance size
 
 
 		m_spriteEffect.loadEffectFromFile("res/effects/sprite2D.fx");
@@ -141,12 +133,11 @@ public:
 
 	void render() {
 
+		m_spriteEffect.bindTexture("tex" , m_texture.getTexture());
 		m_renderContext.context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_renderContext.context->IASetInputLayout(m_spriteEffect.getVertexLayout());
 		m_spriteEffect.apply();
-
 		m_renderContext.context->DrawInstanced(6 , m_instanceCount, 0, 0);
-
 	}
 
 };

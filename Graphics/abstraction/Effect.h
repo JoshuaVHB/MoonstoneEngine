@@ -107,14 +107,20 @@ public:
 	}
 
 	template<size_t floatCount>
-	void pushBackInstanced(Semantic elemType, UINT slot)
+	void pushBackInstanced(const char* semanticName)
 	{
+
+
+
 		elems.push_back(
 			D3D11_INPUT_ELEMENT_DESC{
-				semantics_str[size_t(elemType)], slot,
-				formats[floatCount - 1],
-				slot, instancedStride,
-				D3D11_INPUT_PER_INSTANCE_DATA, slot
+				semanticName,						//     LPCSTR SemanticName;
+				0,									//     UINT SemanticIndex;
+				formats[floatCount - 1],			//     DXGI_FORMAT Format;
+				1,									//     UINT InputSlot;
+				instancedStride,					//     UINT AlignedByteOffset;
+				D3D11_INPUT_PER_INSTANCE_DATA,		//     D3D11_INPUT_CLASSIFICATION InputSlotClass;
+				1									//     UINT InstanceDataStepRate;
 			}
 		);
 		instancedStride += 16;
