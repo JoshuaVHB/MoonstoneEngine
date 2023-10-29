@@ -16,6 +16,8 @@
 #include "../World/Managers/MeshManager.h"
 #include "../World/Cube.h"
 
+#include "../abstraction/2D/TextRenderer.h"
+
 #include <vector>
 
 struct direct3D11_impl : public Renderer::_Impl {
@@ -35,7 +37,7 @@ private:
 
 	size_t verticesCount = 0;
 	size_t triangleCount = 0;
-
+	TextRenderer m_textRenderer;
 
 public:
 
@@ -277,5 +279,6 @@ private:
 		triangleCount = 0;
 
 	}
+
 
 };

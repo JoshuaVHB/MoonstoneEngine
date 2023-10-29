@@ -25,6 +25,7 @@
 #include "../../Utils/Transform.h"
 #include "abstraction/DeferredRenderer.h"
 #include "../../Graphics/abstraction/2D/Sprite.h"
+#include "../../Graphics/abstraction/2D/TextRenderer.h"
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
@@ -40,8 +41,7 @@ private:
 	Skybox box;
 	Player m_player;
 	DeferredRenderer m_renderer;
-	InstancedSprite* m_instanced=nullptr;
-
+	TextRenderer m_textRenderer;
 
 public:
 
@@ -49,11 +49,7 @@ public:
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 		Renderer::setBackbufferToDefault();
-		m_instanced = new InstancedSprite(
-			{									// pos // size // uv
-				InstancedSprite::InstanceType{{-1.f,-1.f},{0.3f,0.3f}},
-				InstancedSprite::InstanceType{{0.f,0.f},{0.3f,0.3f}},
-			});
+
 	}
 
 	void renderFn()
@@ -71,6 +67,7 @@ public:
 
 		m_player.step(elapsed);
 		m_renderer.update(m_player.getCamera());
+		m_textRenderer.clear();
 
 	}
 
@@ -82,10 +79,8 @@ public:
 		m_renderer.renderDeferred([&]() {renderFn(); }, m_player.getCamera());
 		Renderer::setBackbufferToDefault();
 
-		m_instanced->bind();
-		m_instanced->render();
-
-
+		m_textRenderer.writeTextOnScreen(std::to_string(elapsed), -500, -200, 1);
+		m_textRenderer.render();
 
 	}
 	virtual void onImGuiRender() override {

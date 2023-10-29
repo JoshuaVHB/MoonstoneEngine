@@ -9,9 +9,7 @@ struct VertexInput
     
     float3 instancePos  : INSTANCE_POS;
     float2 instanceSize : INSTANCE_SIZE;
-    
-    
-    
+    float4 instanceUV   : INSTANCE_UV;    
 };
 
 struct VertexOut
@@ -24,13 +22,14 @@ VertexOut sprite2DVS(VertexInput VSin)
 {
     VertexOut vso;
     vso.pos = float4((VSin.pos.xy * VSin.instanceSize + VSin.instancePos.xy ),0, 1);
-    vso.uv = VSin.uv;
+    vso.uv = VSin.uv * VSin.instanceUV.zw + VSin.instanceUV.xy;
+    //vso.uv = float2(vso.uv.x, 1 - vso.uv.y);
     return vso;
 }
 
 float4 sprite2DPS(VertexOut vsin) : SV_Target
 {    
-   return float4(tex.Sample(SampleState, vsin.uv).rgb, 1);
+   return float4(tex.Sample(SampleState, vsin.uv));
     //return float4(1,0,0, 1);
 }
 
