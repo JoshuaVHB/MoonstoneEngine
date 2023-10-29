@@ -1,6 +1,9 @@
 #pragma once
 
+#define _XM_NO_INTRINSICS_
+#include <algorithm>
 #include <DirectXMath.h>
+#include <array>
 
 using namespace DirectX;
 using Vec = XMVECTOR;
@@ -16,10 +19,6 @@ struct BoundingSphere : BoundingVolume
 
 	BoundingSphere() = default;
 	BoundingSphere(const Vec& center, float r) : origin(center), radius(r) {}
-
-
-
-
 
 };
 
@@ -68,6 +67,23 @@ struct AABB : BoundingVolume
 		XMVectorGetZ(first.origin) < XMVectorGetZ(second.origin) + XMVectorGetZ(second.size) && XMVectorGetZ(first.origin) + XMVectorGetZ(second.origin) > XMVectorGetZ(second.origin);
 
 	}
+
+	std::array<XMVECTOR, 8> getPoints() const
+	{
+		return {
+			origin,
+			origin + XMVECTOR{XMVectorGetX(size),	0,					0					},
+			origin + XMVECTOR{0,					0,					XMVectorGetZ(size)	},
+			origin + XMVECTOR{XMVectorGetX(size),	0,					XMVectorGetZ(size)	},
+			origin + XMVECTOR{0,					XMVectorGetY(size) ,0					},
+			origin + XMVECTOR{XMVectorGetX(size),	XMVectorGetY(size), 0					},
+			origin + XMVECTOR{0,					XMVectorGetY(size), XMVectorGetZ(size)	},
+			origin + size
+
+		};
+
+	}
+
 };
 
 
@@ -85,4 +101,51 @@ static AABB makeAABBFromSphere(const BoundingSphere& sphere)
 	Vec A = XMVectorSubtract(sphere.origin, Vec{ sphere.radius,sphere.radius,sphere.radius });
 	Vec B = XMVectorAdd(Vec{ sphere.radius,sphere.radius,sphere.radius }, sphere.origin);
 	return AABB::makeAABBFromPoints(A, B);
+}
+
+
+static float SquareDistanceToAABB(XMVECTOR point, const AABB& aabb)
+{
+	float sqDist = 0.0f;
+
+	auto vertices = aabb.getPoints();
+
+	auto minAxes = [&](int index) 
+	{
+		return XMVectorGetByIndex(*std::ranges::min_element(vertices, [&](XMVECTOR a, XMVECTOR b)->bool
+			{
+				return XMVectorGetByIndex(a, index) < XMVectorGetByIndex(b, index);
+			}), index);
+	};
+
+	auto maxAxes = [&](int index)
+	{
+		return XMVectorGetByIndex(*std::ranges::max_element(vertices, [&](XMVECTOR a, XMVECTOR b)->bool
+			{
+				return XMVectorGetByIndex(a, index) < XMVectorGetByIndex(b, index);
+			}), index);
+	};
+
+
+	for (int i = 0; i < 3; i++) {
+		// for each axis count any excess distance outside box extents
+		float v = XMVectorGetByIndex(point, i);
+
+
+		if (v < minAxes(i)) sqDist += (minAxes(i) - v) * (minAxes(i) - v);
+		if (v > maxAxes(i)) sqDist += (v - maxAxes(i)) * (v - maxAxes(i));
+	}
+	return sqDist;
+}
+
+
+static bool SphereAABBTest(const BoundingSphere& sphere, const AABB& aabb)
+{
+	// Compute squared distance between sphere center and AABB
+   // the sqrt(dist) is fine to use as well, but this is faster.
+	float sqDist = SquareDistanceToAABB(sphere.origin, aabb);
+
+	// Sphere and AABB intersect if the (squared) distance between them is
+	// less than the (squared) sphere radius.
+	return sqDist <= sphere.radius * sphere.radius;
 }

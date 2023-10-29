@@ -53,6 +53,7 @@ public:
 		virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) = 0;
 		virtual Mesh loadMeshFromFile(const std::filesystem::path& path) = 0;
 		virtual void renderMesh(Camera&, const Mesh&, const Effect&) = 0;
+		virtual void renderMesh(Camera&, const Mesh&) = 0;
 		virtual void renderCubemap(Camera&, const Mesh&, const Effect&) = 0;
 		virtual void clearScreen(float, float, float, float) = 0;
 		virtual void clearScreen() = 0;

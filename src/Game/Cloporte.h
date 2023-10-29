@@ -13,6 +13,7 @@ private:
 
 
 	Mesh m_mesh;
+	BoundingSphere m_boundingSphere; // use this for collision check, and mesh aabb for culling
 
 	Camera m_firstPerson;
 	Camera m_thirdPerson;
@@ -28,8 +29,6 @@ private:
 	DirectX::XMVECTOR m_forward		;
 
 	
-
-
 
 
 public:
@@ -53,6 +52,7 @@ public:
 	Mesh& getMesh()	{ return m_mesh; }
 
 
+	[[nodiscard]] BoundingSphere getBoundingSphere() const noexcept { return m_boundingSphere; }
 	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
 	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
 

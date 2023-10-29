@@ -154,6 +154,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp" />
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
@@ -203,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
     <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
     <ClInclude Include="Graphics\Blit.h" />

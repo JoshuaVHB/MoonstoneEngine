@@ -16,6 +16,7 @@ private:
 	DirectX::XMFLOAT3	m_position;
 	DirectX::XMVECTOR	m_positionDelta{};
 	bool				m_cursorIsConfined = false;
+	bool				m_inputsAreLocked = false;
 
 public:
 
@@ -25,6 +26,7 @@ public:
 
 	void step(float deltaTime);
 	void onImGuiRender();
+	void lockInputs(bool state);
 
 private:
 

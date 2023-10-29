@@ -33,7 +33,7 @@ private:
 		XMVECTOR ambiantMat; // la valeur diffuse de l’éclairage 
 		XMVECTOR diffuseMat; // la valeur diffuse du matériau 
 	};
-	Effect pbrMeshEffect, debugLine;
+	Effect pbrMeshEffect, debugLine, baseMesh;
 
 	size_t verticesCount = 0;
 	size_t triangleCount = 0;
@@ -52,6 +52,7 @@ public:
 		depth = gfx.getDepthBuffer().getView();
 		
 		pbrMeshEffect.loadEffectFromFile("res/effects/pbrMesh.fx");
+		baseMesh.loadEffectFromFile("res/effects/baseMesh.fx");
 		
 
 		InputLayout layout, debuglayout;
@@ -59,11 +60,14 @@ public:
 		layout.pushBack<3>(InputLayout::Semantic::Normal);
 		layout.pushBack<2>(InputLayout::Semantic::Texcoord);
 		pbrMeshEffect.bindInputLayout(layout);
+		baseMesh.bindInputLayout(layout);
 
 		pbrMeshEffect.addNewCBuffer("meshParams", sizeof(XMMATRIX));
 		pbrMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams));
 		pbrMeshEffect.addNewCBuffer("materialParams", sizeof(MaterialCoefs));
 
+		baseMesh.addNewCBuffer("worldParams", sizeof(worldParams));
+		baseMesh.addNewCBuffer("meshParams", sizeof(XMMATRIX));
 
 		debugLine.loadEffectFromFile("res/effects/debugLine.fx");
 		debuglayout.pushBack<3>(InputLayout::Semantic::Position);
@@ -121,6 +125,37 @@ private:
 	}
 
 
+	virtual void renderMesh(Camera& camera, const Mesh& mesh) override {
+
+		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		context->IASetInputLayout(baseMesh.getVertexLayout());
+
+
+		worldParams sp;
+
+		sp.viewProj = XMMatrixTranspose(camera.getVPMatrix());
+		sp.lightPos = XMVectorSet(-10.0f, 10.0f, -10.0f, 1.0f);
+		sp.cameraPos = camera.getPosition();
+		sp.ambiantLight = XMVectorSet(.2f, 0.2f, 0.2f, 1.0f);
+		sp.diffuseLight = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.ambiantMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+		sp.diffuseMat = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+
+		baseMesh.updateSubresource(sp, "worldParams");
+		baseMesh.sendCBufferToGPU("worldParams");
+
+		baseMesh.updateSubresource(XMMatrixTranspose(mesh.getTransform().getTransformationMatrix()), "meshParams"); // TODO make this more flexible
+		baseMesh.sendCBufferToGPU("meshParams");
+
+		baseMesh.apply();
+		mesh.draw();
+		baseMesh.unbindResources();
+
+		triangleCount += mesh.getTriangleCount();
+
+	}
+
+
 	virtual void renderMesh(Camera& camera, const Mesh& mesh, const Effect& effect) override {
 
 		context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -136,6 +171,7 @@ private:
 		triangleCount += mesh.getTriangleCount();
 
 	}
+
 
 
 	virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) override {

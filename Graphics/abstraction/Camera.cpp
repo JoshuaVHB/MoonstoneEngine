@@ -25,8 +25,8 @@ void Camera::rotate(const float dx /*= 0.0F*/, const float dy /*= 0.0f*/ , const
 void Camera::lookAt(const DirectX::XMVECTOR& target)
 {
 	const DirectX::XMVECTOR delta = XMVector4Normalize(target - m_position);
-	m_angles.pitch = std::asin(XMVectorGetY(delta));
-	m_angles.yaw = std::atan2(-XMVectorGetX(delta), -XMVectorGetZ(delta));
+	m_angles.pitch = std::asin(-XMVectorGetY(delta));
+	m_angles.yaw = std::atan2(XMVectorGetX(delta), XMVectorGetZ(delta));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

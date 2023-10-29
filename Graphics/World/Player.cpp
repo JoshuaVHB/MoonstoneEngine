@@ -23,10 +23,18 @@ Player::Player()
 }
 
 
+void  Player::lockInputs(bool state)
+{
+	m_inputsAreLocked = state;
+}
+
 void Player::step(float deltaTime)
 {
-	handleMouseEvents();
-	handleKeyboardEvents();
+	if (!m_inputsAreLocked)
+	{
+		handleMouseEvents();
+		handleKeyboardEvents();
+	}
 
 	m_camera.updateCam();
 }

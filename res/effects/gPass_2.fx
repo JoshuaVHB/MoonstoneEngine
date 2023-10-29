@@ -2,7 +2,6 @@
 
 // Uniforms
 
-Texture2D tex; // la texture
 Texture2D ambiantOcclusion; // la texture
 Texture2D albedo; // la texture
 Texture2D normalMap; // la texture
@@ -73,7 +72,7 @@ PSOut gPassPS(VSOut vs) : SV_Target
 {
     float3 outNormal = normalize(vs.Norm);
     float3 outAlbedo;
-    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
+    float3 texSample = albedo.Sample(SampleState, vs.uv).rgb;
     outAlbedo.rgb = texSample;
 
     PSOut pso;

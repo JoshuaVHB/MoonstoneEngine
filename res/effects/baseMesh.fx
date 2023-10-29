@@ -74,13 +74,13 @@ float4 baseMeshPS(VSOut vs) : SV_Target
     // Puissance de 4 - pour l’exemple
     float S = pow(saturate(dot(R, L)), 4.f);
 
-    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
+    //float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
     
-    couleur.rgb = texSample;
+    couleur.rgb = float3(1,0,0);
     couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
     couleur += S / 4.f; 
     
-    return float4(texSample, 1.0f);
+    return float4(float3(1, 0, 0), 1.0f);
     
 }
 

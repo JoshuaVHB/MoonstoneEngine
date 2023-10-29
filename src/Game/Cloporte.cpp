@@ -9,6 +9,8 @@
 extern std::unique_ptr<Mouse> wMouse;
 extern std::unique_ptr<Keyboard> wKbd;
 
+CameraController controller;
+
 Cloporte::Cloporte()
 	: m_mesh{MeshManager::loadMeshFromFile("res/mesh/Game/boule.obj")}
 	, m_speed(0), maxVelocity(3.f)
@@ -22,6 +24,7 @@ Cloporte::Cloporte()
 
 	m_thirdPerson.setProjection<PerspectiveProjection>(PerspectiveProjection{});
 	m_firstPerson.setProjection<PerspectiveProjection>(PerspectiveProjection{});
+	m_boundingSphere = BoundingSphere(m_position, XMVectorGetX(m_mesh.getTransform().getScale()));
 }
 
 void Cloporte::handleInputs() 
@@ -43,12 +46,10 @@ void Cloporte::update(float deltaTime)
 	//computeForward();
 	handleKeyboardInputs(deltaTime);
 	updatePosition(deltaTime);
-
-
-	//CameraController::computeThirdPersonPosition(*this, *m_currentCam);
-	//getCurrentCamera().lookAt(m_position);
-	getCurrentCamera().setPosition(XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
-
+	m_boundingSphere.origin = m_position;
+	//getCurrentCamera().setPosition(
+	//	XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
+	CameraController::computeThirdPersonPosition(*this, *m_currentCam);
 	getCurrentCamera().updateCam();
 
 }

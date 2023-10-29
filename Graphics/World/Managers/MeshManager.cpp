@@ -182,7 +182,11 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 
 		resMat.loadTextures(
 			{
-			{mat.diffuse_texname, TextureType::ALBEDO}
+			{mat.diffuse_texname, TextureType::ALBEDO},
+			{mat.normal_texname, TextureType::NORMAL},
+			{mat.roughness_texname, TextureType::ROUGHNESS},
+			{mat.ambient_texname, TextureType::AO},
+			{mat.specular_highlight_texname, TextureType::SPECULAR}
 			}
 		);
 
