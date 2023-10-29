@@ -159,7 +159,7 @@ public:
 	// Returns the slot number of the newly created cbuffer
 	void addNewCBuffer(const std::string& name, uint32_t structSize);
 	void apply() const;
-	void bindTexture(const std::string&uniformName, ID3D11ShaderResourceView* tex) const;
+	void bindTexture(const std::string& uniformName,const ID3D11ShaderResourceView* tex) const;
 	void bindTexture(const std::string& uniformName, const Texture& tex) const;
 
 	template<class ShaderParam>

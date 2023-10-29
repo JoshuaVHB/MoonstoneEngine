@@ -5,7 +5,7 @@
 #include <filesystem>
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/abstraction/Camera.h"
-#include "../../Graphics/abstraction/Framebuffer.h"
+#include "../../Graphics/abstraction/FrameBuffer.h"
 
 class Rush3Scene : public Scene {
 
@@ -37,7 +37,7 @@ private:
 	std::filesystem::file_time_type lastTime;
 	float m_elapsedTime = 0;
 
-	Framebuffer fbo;
+	FrameBuffer fbo;
 	bool m_disableAABBS = false;
 
 private:

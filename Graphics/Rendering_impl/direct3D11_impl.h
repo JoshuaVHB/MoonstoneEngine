@@ -80,7 +80,7 @@ private:
 	ID3D11Device* device = nullptr; // Used to create objects on the GPU
 	ID3D11DeviceContext* context = nullptr; // Issues rendering command + actual drawing
 	IDXGISwapChain* swapChain = nullptr; // Flips buffers
-	ID3D11RenderTargetView* rtv = nullptr; // Framebuffer
+	ID3D11RenderTargetView* rtv = nullptr; // FrameBuffer
 	ID3D11DepthStencilView* depth = nullptr;
 
 

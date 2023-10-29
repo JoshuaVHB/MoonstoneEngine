@@ -161,7 +161,7 @@ public:
 
 		static auto names = getAllLightsDebugName();
 		static const char* current_item = nullptr;
-		int currentItemIndex = 0;
+		size_t currentItemIndex = 0;
 
 
 		if (ImGui::BeginCombo("All lights", current_item, ImGuiComboFlags_NoArrowButton ))
@@ -201,7 +201,7 @@ public:
 				case 'S':
 					{
 						
-					int tmpIndex = currentItemIndex - m_point.size();
+					size_t tmpIndex = currentItemIndex - m_point.size();
 					break;
 
 					}

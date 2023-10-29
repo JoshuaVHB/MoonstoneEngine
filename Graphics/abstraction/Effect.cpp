@@ -116,10 +116,11 @@ Effect::Effect()
 
 	}
 
-	void Effect::bindTexture(const std::string& uniformName, ID3D11ShaderResourceView* tex) const
+	void Effect::bindTexture(const std::string& uniformName, const ID3D11ShaderResourceView* tex) const
 	{
 		if (!tex) return;
-		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex);
+		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(
+			(ID3D11ShaderResourceView*)(tex));
 	}
 
 

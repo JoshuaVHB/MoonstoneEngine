@@ -38,16 +38,16 @@ void TextRenderer::resizeBuffers()
 
 std::vector<TextRenderer::CharInstance> TextRenderer::generateText(const std::string& text, int x, int y, float scale)
 {
-	auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
+	const auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
 	std::vector<CharInstance> res;
-	int x_offset = 0;
+	float x_offset = 0;
 	for (char c : text)
 	{
 		CharInfos ch = fontChars[c];
 		CharInstance instance;
 
-		float xpos = (x + x_offset);// / winSize.first;
-		float ypos = (y - (ch.height - ch.originY));// / winSize.second;
+		const float xpos = (x + x_offset);// / winSize.first;
+		const float ypos = (y - (ch.height - ch.originY));// / winSize.second;
 
 		instance.position =
 		{ (2 * xpos / (winSize.first)),
@@ -151,7 +151,8 @@ void TextRenderer::render() const {
 	m_renderContext.context->IASetInputLayout(m_spriteEffect.getVertexLayout());
 	m_renderContext.context->OMSetBlendState(m_blendState, nullptr, 0xffffffff);
 	m_spriteEffect.apply();
-	m_renderContext.context->DrawInstanced(6, m_instanceCount, 0, 0);
+	m_renderContext.context->DrawInstanced(6, 
+		static_cast<UINT>(m_instanceCount), 0, 0);
 }
 
 TextRenderer:: ~TextRenderer()

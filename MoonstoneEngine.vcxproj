@@ -157,6 +157,7 @@
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
+    <ClCompile Include="Graphics\abstraction\FrameBuffer.cpp" />
     <ClCompile Include="Graphics\Blit.cpp" />
     <ClCompile Include="Graphics\d3d11_graphics.cpp" />
     <ClCompile Include="Graphics\abstraction\Effect.cpp" />
@@ -220,7 +221,7 @@
     <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
-    <ClInclude Include="Graphics\abstraction\Framebuffer.h" />
+    <ClInclude Include="Graphics\abstraction\FrameBuffer.h" />
     <ClInclude Include="Graphics\abstraction\Sampler.h" />
     <ClInclude Include="Graphics\abstraction\Effect.h" />
     <ClInclude Include="Graphics\abstraction\Texture.h" />

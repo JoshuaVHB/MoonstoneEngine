@@ -144,6 +144,9 @@
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\abstraction\FrameBuffer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -284,7 +287,7 @@
     <ClInclude Include="Graphics\World\Material.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Framebuffer.h">
+    <ClInclude Include="Graphics\abstraction\FrameBuffer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\World\Lights\Lights.h">

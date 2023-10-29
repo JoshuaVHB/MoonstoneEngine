@@ -6,7 +6,7 @@
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/abstraction/Camera.h"
 #include "..\..\Graphics\abstraction\Effect.h"
-#include "../../Graphics/abstraction/Framebuffer.h"
+#include "../../Graphics/abstraction/FrameBuffer.h"
 #include "../../Graphics/World/Mesh.h"
 #include "../../Graphics/World/Cube.h"
 #include "../../Graphics/World/Player.h"
@@ -42,7 +42,7 @@ private:
 	Transform transform;
 	AABB aabb;
 
-	Framebuffer fbo{3};
+	FrameBuffer fbo{3};
 
 	struct worldParams {
 		// la matrice totale 
@@ -165,7 +165,7 @@ public:
 		}
 		else {
 
-			Framebuffer::unbind();
+			FrameBuffer::unbind();
 			Renderer::clearScreen();
 
 			Camera& cam = m_player.getCamera();

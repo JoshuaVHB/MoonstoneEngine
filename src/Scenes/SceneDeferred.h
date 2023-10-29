@@ -1,30 +1,15 @@
 #pragma once
 
 #include "Scene.h"
-#include "../../Graphics/Rendering_impl/direct3D11_impl.h"
-
-#include "../../Graphics/World/Cube.h"
-#include "../../Graphics/abstraction/Camera.h"
-#include "..\..\Graphics\abstraction\Effect.h"
-#include "../../Graphics/abstraction/Framebuffer.h"
-#include "../../Graphics/World/Mesh.h"
-#include "../../Graphics/World/Cube.h"
 #include "../../Graphics/World/Player.h"
 #include "../../Graphics/World/WorldRendering/Skybox.h"
 
-#include "../../Platform/IO/Inputs.h"
 #include "../../Platform/WindowsEngine.h"
-#include <iostream>
-#include <memory>
-#include <directXmath.h>
 
-#include "../../Graphics/World/Material.h"
-#include "../../Graphics/World/Frustum.h"
 #include "../../Graphics/World/Managers/MeshManager.h"
 
 #include "../../Utils/Transform.h"
 #include "abstraction/DeferredRenderer.h"
-#include "../../Graphics/abstraction/2D/Sprite.h"
 #include "../../Graphics/abstraction/2D/TextRenderer.h"
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
@@ -46,10 +31,10 @@ private:
 public:
 
 	SceneDeferred()
+		: m_renderer{}
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 		Renderer::setBackbufferToDefault();
-
 	}
 
 	void renderFn()
@@ -94,6 +79,7 @@ public:
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();
 	}
+
 
 
 };

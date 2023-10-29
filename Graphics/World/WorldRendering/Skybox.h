@@ -18,7 +18,7 @@ private:
 	struct SkyboxParam {
 		XMMATRIX viewProj{};
 		XMVECTOR camPos{};
-	} m_params{};
+	};
 	Mesh	m_mesh		= Cube::getCubeMesh();
 	Effect	m_skyboxPass;
 
@@ -46,13 +46,15 @@ public:
 	const Mesh& getMesh() const { return m_mesh; }
 
 
-	void renderSkybox(Camera& camera)
+	void renderSkybox(Camera& camera) const 
 	{
+		static SkyboxParam skypar{};
+
 		m_skyboxPass.bindTexture("tex", m_tex.getResourceView());
 
-		m_params.viewProj = XMMatrixTranspose(camera.getVPMatrix());
-		m_params.camPos = camera.getPosition();
-		m_skyboxPass.updateSubresource(m_params, "SkyboxCbuffer");
+		skypar.viewProj = XMMatrixTranspose(camera.getVPMatrix());
+		skypar.camPos = camera.getPosition();
+		m_skyboxPass.updateSubresource(skypar, "SkyboxCbuffer");
 		m_skyboxPass.sendCBufferToGPU("SkyboxCbuffer");
 		m_skyboxPass.apply();
 		
