@@ -86,7 +86,7 @@ public:
 		m_orthoCam.setPosition(m_orthocamPos);
 		Terrain::TerrainParams& p = m_terrain.getParams();
 		p.height = 64;
-		p.xyScale = 3;
+		p.xyScale = 1;
 		m_terrain.rebuildMesh();
 		centerPoint = { (p.width * p.xyScale) / 2, 0.f, (p.height * p.xyScale) / 2};
 		m_orthoCam.updateCam();
