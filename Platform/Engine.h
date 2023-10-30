@@ -77,7 +77,7 @@ public:
 
 
 			SceneManager::onUpdate(deltaTime);
-			PhysicEngine::onUpdate(deltaTime);
+			PhysicsEngine::onUpdate(deltaTime);
 			SceneManager::onRender();
 			SceneManager::onImGuiRender();
 			ImGui::UpdatePlatformWindows();

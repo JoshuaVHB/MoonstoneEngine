@@ -8,7 +8,6 @@
 
 #include "../../Utils/Transform.h"
 #include "../../Utils/AABB.h"
-#include "Material.h"	
 
 using namespace DirectX;
 

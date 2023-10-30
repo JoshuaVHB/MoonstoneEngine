@@ -56,8 +56,8 @@ int APIENTRY _tWinMain(
 
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
 
-		PhysicEngine::setImplementation<Physx_Impl>();
-		PhysicEngine::onInit();
+		PhysicsEngine::setImplementation<Physx_Impl>();
+		PhysicsEngine::onInit();
 
 
 		rMoteur.SetWindowsAppInstance(hInstance);
@@ -71,12 +71,12 @@ int APIENTRY _tWinMain(
 		SceneManager::registerScene<Rush3Scene>("Terrain");
 		SceneManager::registerScene<SceneDeferred>("Deferred");
 		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::switchToScene(3);
+		SceneManager::switchToScene(1);
 
 
 		rMoteur.run();
 		
-		PhysicEngine::cleanupPhysics(false);
+		PhysicsEngine::cleanupPhysics(false);
 
 		shutdownImgui();
 		return 1;

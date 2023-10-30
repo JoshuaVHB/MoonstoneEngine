@@ -24,7 +24,6 @@
 
 #include "../../Utils/Transform.h"
 
-#include <PxPhysicsAPI.h>
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 

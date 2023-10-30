@@ -130,7 +130,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;winmm.lib;d3d11.lib;effects11d.lib;d3dcompiler.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysX_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCommon_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXCooking_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXExtensions_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXFoundation_64.lib;$(SolutionDir)Utils\vendor\physx\lib\PhysXPvdSDK_static_64.lib;$(SolutionDir)Utils\vendor\physx\lib\freeglutd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Utils/vendor/physx/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -173,6 +173,8 @@
     <ClCompile Include="Graphics\World\Frustum.cpp" />
     <ClCompile Include="Graphics\World\Material.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="Graphics\World\WorldRendering\HeightmapBuilder.cpp" />
+    <ClCompile Include="Physics\World\PhysicalHeightMap.cpp" />
     <ClCompile Include="Physics\PhysicEngine.cpp" />
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
     <ClCompile Include="Physics\World\Body.cpp" />
@@ -220,6 +222,7 @@
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
     <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
+    <ClInclude Include="Physics\World\PhysicalHeightMap.h" />
     <ClInclude Include="Physics\PhysicEngine.h" />
     <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
     <ClInclude Include="Physics\physx_Impl\physx_impl.h" />

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef TERRAIN_H
+#define TERRAIN_H
 
 #include "../Mesh.h"
 #include "Heightmap.h"
@@ -106,5 +108,8 @@ public:
 	}
 
 
-
+	[[nodiscard]] Heightmap& getHeightmap() { return m_map; }
 };
+
+
+#endif // !TERRAIN_H

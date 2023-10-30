@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace physx;
 
-struct Physx_Impl : public PhysicEngine::_ImplPhysic
+struct Physx_Impl : public PhysicsEngine::_ImplPhysic
 {
 private:
 	// -- Define physx objects
@@ -51,14 +51,20 @@ private:
 		return gScene->addActor(*actor);
 	}*/
 
-	virtual std::pair<PhysicEngine::iVec3, PhysicEngine::iVec3> getTransform(std::string id);
+	virtual std::pair<PhysicsEngine::iVec3, PhysicsEngine::iVec3> getTransform(std::string id);
 
 	virtual bool addCube(
 		const std::string& id, 
-		const PhysicEngine::iVec3 position, 
-		const PhysicEngine::iVec3 rotation, 
-		const PhysicEngine::iVec3 scale = PhysicEngine::iVec3{ 1,1,1 })
+		const PhysicsEngine::iVec3 position, 
+		const PhysicsEngine::iVec3 rotation, 
+		const PhysicsEngine::iVec3 scale = PhysicsEngine::iVec3{ 1,1,1 })
 	override;
+
+	virtual bool addHeightmap(
+		const std::string& id,
+		const PhysicsEngine::HeightMapData& data)
+		override;
+
 	// Getters
 	PxScene* getScene() { return gScene; }
 	PxPhysics* getPhysics() { return gPhysics; }

@@ -6,7 +6,8 @@
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/abstraction/Camera.h"
 #include "../../Graphics/abstraction/FrameBuffer.h"
-
+#include "../../Physics/World/PhysicalHeightMap.h"
+#include "../../Physics/World/PhysicalObject.h"
 class Rush3Scene : public Scene {
 
 
@@ -21,6 +22,8 @@ private:
 	Texture m_grass6Texture{ L"res/textures/breadbug.dds" };
 	Texture m_snow{ L"res/textures/snow.dds" };
 
+	PhysicalHeightMap phm;
+
 	// -- Effect and skybox
 	Effect	m_baseMeshEffect;
 	Skybox  m_skybox;
@@ -28,7 +31,7 @@ private:
 	// -- Camera
 	Player  m_player;					// Basically the 1st person camera
 	Camera	m_orthoCam;
-	Camera* currentCamera = &m_orthoCam;
+	Camera* currentCamera = &m_player.getCamera();
 	Vec m_orthocamPos = { 0,120,50 };	// For imgui purposes
 	float aspectRatio = 100;
 
@@ -39,6 +42,11 @@ private:
 
 	FrameBuffer fbo;
 	bool m_disableAABBS = false;
+
+
+	// -- Meshes
+	Mesh bunny;
+	PhysicalObject cube_P;
 
 private:
 
@@ -85,12 +93,20 @@ public:
 		);
 		m_orthoCam.setPosition(m_orthocamPos);
 		Terrain::TerrainParams& p = m_terrain.getParams();
-		p.height = 64;
-		p.xyScale = 1;
+			
 		m_terrain.rebuildMesh();
 		centerPoint = { (p.width * p.xyScale) / 2, 0.f, (p.height * p.xyScale) / 2};
 		m_orthoCam.updateCam();
 		m_orthoCam.lookAt(centerPoint);
+
+		phm.setTerrain(&m_terrain);
+
+
+		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
+		bunny.getTransform().setPosition({ +150, 200, +120 });
+		cube_P.setMesh(&bunny);
+
+
 		Renderer::setBackbufferToDefault();
 	}
 
@@ -119,6 +135,7 @@ public:
 			m_terrain.hotReloadMap();
 			ftime = lastTime;
 		}
+
 
 
 	}
@@ -153,8 +170,16 @@ public:
 			}
 		}
 
+
+		cube_P.updateTransform();
+		Renderer::renderMesh(cam, *cube_P.getMesh(), m_baseMeshEffect);
+
+
+
 		// Render skybox last (if first person)
 		if (currentCamera == &m_player.getCamera()) m_skybox.renderSkybox(cam);
+
+		
 
 	}
 
