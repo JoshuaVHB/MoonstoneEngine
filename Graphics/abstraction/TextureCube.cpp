@@ -25,10 +25,11 @@ TextureCube::TextureCube(const std::string& path)
 		, m_tex(nullptr)
 		, resource(nullptr)
 	{
+	bool exists = std::filesystem::exists(path);
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 
-		if (DirectX::CreateDDSTextureFromFileEx(
+		if (auto hr = DirectX::CreateDDSTextureFromFileEx(
 			m_renderContext.device,
 			m_renderContext.context,
 			widestring2string(path).c_str(),
@@ -40,7 +41,8 @@ TextureCube::TextureCube(const std::string& path)
 			DirectX::DDS_LOADER_DEFAULT,
 			&resource,
 			&m_srv
-		) != S_OK) throw;
+		); hr != S_OK) {
+		}
 
 #endif
 	}

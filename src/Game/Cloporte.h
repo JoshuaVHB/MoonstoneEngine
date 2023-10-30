@@ -40,7 +40,7 @@ public:
 	void update(float deltaTime);
 	void updatePosition(float deltaTime);
 
-	Camera& getCurrentCamera() noexcept { return m_thirdPerson; }
+	Camera& getCurrentCamera() noexcept { return *m_currentCam; }
 
 	void switchView() noexcept
 	{

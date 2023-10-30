@@ -6,6 +6,7 @@
 #include "abstraction/DeferredRenderer.h"
 
 #include "abstraction/2D/TextRenderer.h"
+#include "abstraction/2D/UI/UIRenderer.h"
 #include "World/WorldRendering/Skybox.h"
 #include "World/Player.h"
 
@@ -43,7 +44,23 @@ private:
 	Texture m_grass6Texture{ L"res/textures/breadbug.dds" };
 	Texture m_snow{ L"res/textures/snow.dds" };
 
+	UIRenderer m_ui;
+
+	struct ui_Button
+	{
+		int x, y;
+		int width, height;
+
+		bool isClicked();
+
+	};
+
+	bool tmp = false;
+
+	bool deferredRendering = false;
+
 public:
+
 
 	InGame()
 	{
@@ -64,6 +81,7 @@ public:
 		testlayout.pushBack<3>(InputLayout::Semantic::Normal);
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 		m_baseMeshEffect.bindInputLayout(testlayout);
+		m_ui.attachMouse(wMouse.get());
 
 
 
@@ -73,24 +91,23 @@ public:
 
 	virtual void onUpdate(float deltaTime) override
 	{
-		Camera& currentCam = m_playerCam.getCamera();
+		Camera& currentCam = m_player.getCurrentCamera();
 
-		if (lockInputs)
-			m_player.update(deltaTime);
-		m_playerCam.step(deltaTime);
-		//m_renderer.update(m_player.getCurrentCamera());
+		m_player.update(deltaTime);
+
+		m_renderer.update(currentCam);
 
 		sp.viewProj = XMMatrixTranspose(currentCam.getVPMatrix());
 		sp.lightPos = XMVectorSet(-100.0f, 1000.f, -1000.0f, 1.0f); // sun ?
 		sp.cameraPos = currentCam.getPosition();
 		m_baseMeshEffect.updateSubresource(sp, "worldParams");
 		m_baseMeshEffect.sendCBufferToGPU("worldParams");
-
+	
 
 
 
 	}
-	/*
+	
 	void renderSceneFn()
 	{
 		Camera& currentCam = m_player.getCurrentCamera();
@@ -98,7 +115,7 @@ public:
 		m_renderer.renderMesh(currentCam, m_player.getMesh());
 		m_renderer.renderSkybox(currentCam, m_skybox);
 	}
-	 */
+	 
 
 
 	virtual void onRender() override {
@@ -107,28 +124,26 @@ public:
 		Renderer::clearScreen();
 		m_textRenderer.clear();
 
-		//Camera& currentCam = m_playerCam.getCamera(); //m_player.getCurrentCamera();
-		Camera& currentCam = m_player.getCurrentCamera(); //m_player.getCurrentCamera();
+		Camera& currentCam = m_player.getCurrentCamera();
 
-		m_baseMeshEffect.bindTexture("tex", m_grassTexture.getTexture());
-		Renderer::renderMesh(currentCam, m_player.getMesh(), m_baseMeshEffect);
-		m_skybox.renderSkybox(currentCam);
-
-		/*
-		 *
-		m_renderer.clear();
-		m_renderer.renderDeferred([this]() {
-			auto& a = m_player;
-			renderSceneFn ();
-		}, currentCam);
-		*/
-		//Renderer::setBackbufferToDefault();
-		Renderer::renderAABB(currentCam, Endcheck);
+		if(deferredRendering)
+		{
+			m_renderer.clear();
+			m_renderer.renderDeferred([&]() {renderSceneFn(); }, currentCam);
+		}
+		else
+		{
+				
+			Renderer::renderMesh(currentCam, m_player.getMesh(), m_baseMeshEffect);
+			m_skybox.renderSkybox(currentCam);
+			Renderer::renderAABB(currentCam, Endcheck);
+		}
 		if (SphereAABBTest(m_player.getBoundingSphere(), Endcheck))
 		{
 			m_textRenderer.writeTextOnScreen("GG !!!!", 0, 0, 3);
 		}
-		
+
+		if (tmp) m_textRenderer.writeTextOnScreen("You have pressed on the button", 100, 100, 1);
 		m_textRenderer.render();
 	}
 
@@ -141,14 +156,30 @@ public:
 			m_playerCam.lockInputs(lockInputs);
 		}
 
+		
+
+		if (ImGui::Button("Switch camera view mode"))
+		{
+			m_player.switchView();
+		}
+
+		if (UIRenderer::Button(0, 0, 400, 400))
+		{
+			tmp = !tmp;
+		}
+
+
+		ImGui::Checkbox("Render deferred", &deferredRendering);
+		ImGui::Text("Has pressed the button ? %d", UIRenderer::Button(0, 0, 400, 400));
 		ImGui::Text("Has collided ? %d", SphereAABBTest(m_player.getBoundingSphere(), Endcheck));
 
-		//m_player.getMesh().getTransform().showControlWindow();
-		//auto v = m_player.getForward();
-		//auto c = m_player.getCurrentCamera().getPosition();
-		//PRINT_VECTOR("Player forward",v)
-		//PRINT_VECTOR("Campos",c)
+		m_player.getMesh().getTransform().showControlWindow();
+		auto v = m_player.getForward();
+		auto c = m_player.getCurrentCamera().getPosition();
+		PRINT_VECTOR("Player forward",v)
+		PRINT_VECTOR("Campos",c)
 		ImGui::End();
+		m_ui.renderUI();
 	}
 
 

@@ -49,7 +49,9 @@ void Cloporte::update(float deltaTime)
 	m_boundingSphere.origin = m_position;
 	//getCurrentCamera().setPosition(
 	//	XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
-	CameraController::computeThirdPersonPosition(*this, *m_currentCam);
+	CameraController::computeThirdPersonPosition(*this, m_thirdPerson);
+	CameraController::computeFirstPersonPosition(*this, m_firstPerson);
+
 	getCurrentCamera().updateCam();
 
 }
@@ -78,7 +80,9 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 
 	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s')) )
 	{
-		currentVelocity = std::clamp( currentVelocity - accelerationFactor, 0.f, maxVelocity);
+		//currentVelocity = std::clamp( currentVelocity - accelerationFactor, 0.f, maxVelocity);
+		//m_forward = XMVectorLerp(-m_forward, m_forward, 0.5f);
+
 		//float dx = std::clamp(XMVectorGetX(m_velocity) + accelerationFactor * -XMVectorGetX(m_forward), 0.f, maxVelocity);
 		//float dz = std::clamp(XMVectorGetZ(m_velocity) + accelerationFactor * -XMVectorGetZ(m_forward), 0.f, maxVelocity);
 		//m_velocity = XMVectorSetX(m_velocity, dx);
@@ -96,6 +100,24 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 	{
 
 		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0.f,1.f,0.f }, 0.05f));
+
+	}
+	// stupid workaround
+	static bool tmp = false;
+	if (wKbd->isKeyPressed(VK_SPACE))
+	{
+		if (!tmp)
+		{
+			
+		switchView();
+		tmp = true;
+		}
+
+	}
+
+	if (!wKbd->isKeyPressed(VK_SPACE))
+	{
+		tmp = false;
 
 	}
 

@@ -41,9 +41,9 @@ public:
 	const std::vector<ID3D11RenderTargetView*>& getRenderTargetViews()		const noexcept { return m_rtv;  }
 	const std::vector<ID3D11ShaderResourceView*>& getShaderResourceViews()	const noexcept { return m_srv;  }
 
-	ID3D11ShaderResourceView* getResource(const int slot = 0)  {	return m_srv[slot]; }
-	const ID3D11ShaderResourceView* getResource(const int slot = 0) const  {	return m_srv[slot]; }
-	const DepthBuffer& getDepth()									const noexcept {  return m_depth; }
+	ID3D11ShaderResourceView* getResource(const int slot = 0)						{ return m_srv[slot]; }
+	const ID3D11ShaderResourceView* getResource(const int slot = 0) const			{ return m_srv[slot]; }
+	const DepthBuffer& getDepth()									const noexcept	{ return m_depth; }
 
 	ID3D11ShaderResourceView* bindUnlitRTV();
 	static void unbind();

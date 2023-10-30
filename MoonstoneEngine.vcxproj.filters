@@ -1,418 +1,148 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp" />
+    <ClCompile Include="Graphics\abstraction\Camera.cpp" />
+    <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
+    <ClCompile Include="Graphics\abstraction\FrameBuffer.cpp" />
+    <ClCompile Include="Graphics\Blit.cpp" />
+    <ClCompile Include="Graphics\d3d11_graphics.cpp" />
+    <ClCompile Include="Graphics\abstraction\Effect.cpp" />
+    <ClCompile Include="Graphics\abstraction\Texture.cpp" />
+    <ClCompile Include="Graphics\abstraction\TextureCube.cpp" />
+    <ClCompile Include="Graphics\World\Frustum.cpp" />
+    <ClCompile Include="Graphics\World\Material.cpp" />
+    <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="Physics\PhysicEngine.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
+    <ClCompile Include="Physics\World\Body.cpp" />
+    <ClCompile Include="Graphics\World\Player.cpp" />
+    <ClCompile Include="Physics\World\PhysicalObject.cpp" />
+    <ClCompile Include="Platform\IO\Inputs.cpp" />
+    <ClCompile Include="src\Game\GameLogic.cpp" />
+    <ClCompile Include="src\Game\CameraController.cpp" />
+    <ClCompile Include="src\Game\Cloporte.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Renderer2D.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Quad.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\TextureAtlas.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
+    <ClCompile Include="Graphics\Renderer.cpp" />
+    <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
+    <ClCompile Include="Graphics\World\Managers\AssetManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
+    <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
+    <ClCompile Include="Platform\WindowsEngine.cpp" />
+    <ClCompile Include="src\Scenes\mess.cpp" />
+    <ClCompile Include="src\Scenes\Scene.cpp" />
+    <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Utils\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Utils\vendor\stdafx.cpp" />
+    <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\stdafx.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\Scene.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_impl_dx11.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_impl_win32.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_tables.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\vendor\imgui\imgui_widgets.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Renderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\Camera.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform\WindowsEngine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scenes\mess.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Managers\AssetManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Managers\TextureManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Managers\MeshManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\Renderer2D.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\Quad.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\TextureAtlas.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Cloporte.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\CameraController.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\GameLogic.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Mesh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\Effect.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\Texture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\TextureCube.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Material.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Player.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\World\Frustum.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform\IO\Inputs.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\d3d11_graphics.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Blit.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\FrameBuffer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp">
-    <ClCompile Include="Physics\physx_Impl\physx_impl.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\World\Body.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\PhysicEngine.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\World\PhysicalObject.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Utils\Singleton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\stdafx.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Timer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\d3d11_graphics.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Renderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Scene.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imconfig.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imgui.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imgui_impl_dx11.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imgui_impl_win32.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imgui_internal.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imstb_rectpack.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imstb_textedit.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\vendor\imgui\imstb_truetype.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\AllScenes.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\TestScene.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\VertexBuffer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Cube.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Vertex.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Camera.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Mesh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\IndexBuffer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\IO\Inputs.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\Engine.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\WindowsEngine.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Texture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\WorldRendering\Skybox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\WorldRendering\Terrain.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Debug.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform\IO\DDSTextureLoader11.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Sampler.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Sponza.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\TextureCube.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Player.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\WorldRendering\Heightmap.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\WorldRendering\HeightmapBuilder.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dx11effect.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Managers\AssetManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Managers\TextureManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Managers\MeshManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Material.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\FrameBuffer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Lights\Lights.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Lights\LightManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\Sprite.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\Renderer2D.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\Quad.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\TextureAtlas.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\Billboard.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\UI\Layer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Cloporte.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\CameraController.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\GameLogic.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\GameScenes\MainMenu.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\GameScenes\InGame.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\GameScenes\EndScreen.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Transform.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\AABB.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\World\Frustum.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\Effect.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Vec2.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\DepthBuffer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\Rush3Scene.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Blit.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\DeferredRenderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scenes\SceneDeferred.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\Font.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h">
-    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\physx_Impl\physx_impl.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\World\Body.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\World\PhysicalObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\PhysicEngine.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MoonstoneEngine.rc">
-      <Filter>Fichiers de ressources</Filter>
-    </ResourceCompile>
+    <ClInclude Include="Graphics\abstraction\2D\Font.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
+    <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
+    <ClInclude Include="Graphics\Blit.h" />
+    <ClInclude Include="Graphics\World\Frustum.h" />
+    <ClInclude Include="Physics\PhysicEngine.h" />
+    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_impl.h" />
+    <ClInclude Include="Physics\World\Body.h" />
+    <ClInclude Include="Physics\World\PhysicalObject.h" />
+    <ClInclude Include="src\Game\GameLogic.h" />
+    <ClInclude Include="src\Game\CameraController.h" />
+    <ClInclude Include="src\Game\Cloporte.h" />
+    <ClInclude Include="d3dx11effect.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Renderer2D.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Billboard.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Quad.h" />
+    <ClInclude Include="Graphics\abstraction\2D\Sprite.h" />
+    <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\TextureAtlas.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\Layer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
+    <ClInclude Include="Graphics\abstraction\Camera.h" />
+    <ClInclude Include="Graphics\abstraction\FrameBuffer.h" />
+    <ClInclude Include="Graphics\abstraction\Sampler.h" />
+    <ClInclude Include="Graphics\abstraction\Effect.h" />
+    <ClInclude Include="Graphics\abstraction\Texture.h" />
+    <ClInclude Include="Graphics\abstraction\TextureCube.h" />
+    <ClInclude Include="Graphics\abstraction\Vertex.h" />
+    <ClInclude Include="Graphics\d3d11_graphics.h" />
+    <ClInclude Include="Graphics\Renderer.h" />
+    <ClInclude Include="Graphics\Rendering_impl\direct3D11_impl.h" />
+    <ClInclude Include="Graphics\Rendering_impl\Rendering_impl.h" />
+    <ClInclude Include="Graphics\World\Cube.h" />
+    <ClInclude Include="Graphics\World\Lights\LightManager.h" />
+    <ClInclude Include="Graphics\World\Lights\Lights.h" />
+    <ClInclude Include="Graphics\World\Material.h" />
+    <ClInclude Include="Graphics\World\Mesh.h" />
+    <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
+    <ClInclude Include="Graphics\World\Player.h" />
+    <ClInclude Include="Graphics\World\Managers\AssetManager.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\Heightmap.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\HeightmapBuilder.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
+    <ClInclude Include="Graphics\World\WorldRendering\Terrain.h" />
+    <ClInclude Include="Graphics\World\Managers\MeshManager.h" />
+    <ClInclude Include="Platform\Engine.h" />
+    <ClInclude Include="Platform\IO\DDSTextureLoader11.h" />
+    <ClInclude Include="Platform\IO\Inputs.h" />
+    <ClInclude Include="Platform\WindowsEngine.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Game\GameScenes\EndScreen.h" />
+    <ClInclude Include="src\Game\GameScenes\InGame.h" />
+    <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
+    <ClInclude Include="src\Scenes\AllScenes.h" />
+    <ClInclude Include="src\Scenes\Rush3Scene.h" />
+    <ClInclude Include="src\Scenes\Scene.h" />
+    <ClInclude Include="src\Scenes\SceneDeferred.h" />
+    <ClInclude Include="src\Scenes\Sponza.h" />
+    <ClInclude Include="src\Scenes\TestScene.h" />
+    <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
+    <ClInclude Include="Utils\AABB.h" />
+    <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\Singleton.h" />
+    <ClInclude Include="Utils\Timer.h" />
+    <ClInclude Include="Utils\Transform.h" />
+    <ClInclude Include="Utils\Vec2.h" />
+    <ClInclude Include="Utils\vendor\imgui\imconfig.h" />
+    <ClInclude Include="Utils\vendor\imgui\imgui.h" />
+    <ClInclude Include="Utils\vendor\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="Utils\vendor\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Utils\vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="Utils\vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Utils\vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="Utils\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="Utils\vendor\stdafx.h" />
+    <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MoonstoneEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ private:
 
 public:
 
-	Skybox(const std::string& path = "res/textures/cosmos.dds") {
+	Skybox(const std::string& path = "res/textures/ex.dds") {
 
 		m_tex = std::move(TextureCube{ path });
 		m_skyboxPass.loadEffectFromFile("res/effects/skybox.fx");

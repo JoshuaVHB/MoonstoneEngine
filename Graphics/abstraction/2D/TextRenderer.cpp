@@ -63,7 +63,7 @@ std::vector<TextRenderer::CharInstance> TextRenderer::generateText(const std::st
 			(ch.height) / fontHeight };
 
 
-		x_offset += (ch.advance) * scale;
+		x_offset += (ch.advance + ch.originX) * scale;
 		res.push_back(instance);
 
 

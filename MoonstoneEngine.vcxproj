@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -51,6 +52,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -160,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp" />
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
@@ -215,6 +218,7 @@
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
     <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />

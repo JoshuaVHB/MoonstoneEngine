@@ -95,6 +95,7 @@ private:
 			-roll };
 		}
 
+
 	} m_angles;
 
 	Mat m_viewProjMatrix{};
