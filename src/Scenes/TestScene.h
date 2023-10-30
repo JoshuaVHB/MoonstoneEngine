@@ -72,55 +72,9 @@ private:
 
 	Camera lastcam;
 
-	// -- Define physx objects
-	PxScene*				gScene		= NULL;
-	PxDefaultAllocator		gAllocator;
-	PxDefaultErrorCallback	gErrorCallback;
-	PxFoundation*			gFoundation = NULL;
-	PxPhysics*				gPhysics	= NULL;
-	PxDefaultCpuDispatcher* gDispatcher = NULL;
-	PxPvd*					gPvd		= NULL;
+	PhysicalObject cube_P;
 
-	void initPhysics() {
-		gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
-
-		// For debugging physx
-		gPvd = PxCreatePvd(*gFoundation);
-#define PVD_HOST "127.0.0.1"
-		PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-		gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
-
-		gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
-
-		PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
-		sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-		gDispatcher = PxDefaultCpuDispatcherCreate(2);
-		sceneDesc.cpuDispatcher = gDispatcher;
-
-		gScene = gPhysics->createScene(sceneDesc);
-
-		PxPvdSceneClient* pvdClient = gScene->getScenePvdClient();
-		if (pvdClient)
-		{
-			pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-			pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-			pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
-		}
-	}
-
-	void cleanupPhysics(bool /*interactive*/)
-	{
-		PX_RELEASE(gScene);
-		PX_RELEASE(gDispatcher);
-		PX_RELEASE(gPhysics);
-		if (gPvd)
-		{
-			PxPvdTransport* transport = gPvd->getTransport();
-			gPvd->release();	gPvd = NULL;
-			PX_RELEASE(transport);
-		}
-		PX_RELEASE(gFoundation);
-	}
+	
 
 public:
 
@@ -128,7 +82,7 @@ public:
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
-		cube_P.setMesh(&ball);
+		cube_P.setMesh(&bunny);
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
@@ -156,11 +110,6 @@ public:
 
 
 		lastcam = m_player.getCamera();		
-	}
-
-	virtual void onPhysicSimulation(float deltaTime) override {
-		gScene->simulate(deltaTime);
-		gScene->fetchResults(true);
 	}
 
 	virtual void onUpdate(float deltaTime) override
@@ -199,12 +148,12 @@ public:
 	virtual void onRender() override {
 	
 		Renderer::clearScreen();
+		Camera& cam = m_player.getCamera();
 		if (renderSponza)
 		{
 			fbo.clear();
 			fbo.bind();
 
-			Camera& cam = m_player.getCamera();
 			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
 
 			gPassFx.bindTexture("tex", bb.getTexture());
@@ -230,17 +179,17 @@ public:
 			FrameBuffer::unbind();
 			Renderer::clearScreen();
 
-		//Renderer::renderAABB(cam, aabb);
-		cube_P.updateTransform();
+			//Renderer::renderAABB(cam, aabb);
+			cube_P.updateTransform();
 
-		Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
+			Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
 
-		box.renderSkybox(cam);
-			Camera& cam = m_player.getCamera();
-			Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
-			renderShader.bindTexture("tex", bb.getTexture());
-			Renderer::renderMesh(cam, bunny, renderShader);
 			box.renderSkybox(cam);
+				Camera& cam = m_player.getCamera();
+				Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+				renderShader.bindTexture("tex", bb.getTexture());
+				Renderer::renderMesh(cam, bunny, renderShader);
+				box.renderSkybox(cam);
 
 		}
 

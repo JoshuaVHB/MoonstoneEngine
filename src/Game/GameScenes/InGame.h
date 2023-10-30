@@ -107,7 +107,8 @@ public:
 		Renderer::clearScreen();
 		m_textRenderer.clear();
 
-		Camera& currentCam = m_playerCam.getCamera(); //m_player.getCurrentCamera();
+		//Camera& currentCam = m_playerCam.getCamera(); //m_player.getCurrentCamera();
+		Camera& currentCam = m_player.getCurrentCamera(); //m_player.getCurrentCamera();
 
 		m_baseMeshEffect.bindTexture("tex", m_grassTexture.getTexture());
 		Renderer::renderMesh(currentCam, m_player.getMesh(), m_baseMeshEffect);

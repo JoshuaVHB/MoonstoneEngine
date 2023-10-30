@@ -53,7 +53,12 @@ private:
 
 	virtual std::pair<PhysicEngine::iVec3, PhysicEngine::iVec3> getTransform(std::string id);
 
-	virtual bool addCube(const std::string& id, const PhysicEngine::iVec3 position, const PhysicEngine::iVec3 rotation, const PhysicEngine::iVec3 scale = PhysicEngine::iVec3{ 1,1,1 }) override;
+	virtual bool addCube(
+		const std::string& id, 
+		const PhysicEngine::iVec3 position, 
+		const PhysicEngine::iVec3 rotation, 
+		const PhysicEngine::iVec3 scale = PhysicEngine::iVec3{ 1,1,1 })
+	override;
 	// Getters
 	PxScene* getScene() { return gScene; }
 	PxPhysics* getPhysics() { return gPhysics; }

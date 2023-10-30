@@ -17,7 +17,8 @@ public:
 	~PhysicalObject() = default;
 
 	Mesh* getMesh() { return m_mesh.get(); }
-	void setMesh(Mesh* mesh) { 
+	void setMesh(Mesh* mesh) {
+
 		m_mesh.reset(mesh); 
 		Transform t = m_mesh->getTransform();
 		auto pos_Render = t.getPosition();

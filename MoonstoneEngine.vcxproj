@@ -121,7 +121,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS; _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>
@@ -143,7 +143,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions);D3D11_IMPL;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS; _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
@@ -177,6 +177,7 @@
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
     <ClCompile Include="Physics\World\Body.cpp" />
     <ClCompile Include="Graphics\World\Player.cpp" />
+    <ClCompile Include="Physics\World\PhysicalObject.cpp" />
     <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
@@ -219,6 +220,11 @@
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
     <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
+    <ClInclude Include="Physics\PhysicEngine.h" />
+    <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_impl.h" />
+    <ClInclude Include="Physics\World\Body.h" />
+    <ClInclude Include="Physics\World\PhysicalObject.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
