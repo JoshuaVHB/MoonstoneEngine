@@ -1,0 +1,48 @@
+[
+  {
+    "j_Objet": "Cloporte",
+    "j_spec": {
+      "j_path": "res/mesh/Game/boule.obj",
+      "j_speed": 0.0,
+      "j_maxVelocity": 3.0,
+      "j_accelerationFactor": 0.05,
+      "j_friction": 0.1,
+      "j_position": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "n": 0
+      },
+      "j_forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1,
+        "n": 0.0
+      },
+      "j_currentVelocity": 0
+    }
+  },
+  {
+    "j_Objet": "Bunny",
+"j_spec": {
+      "j_path": "res/mesh/Game/bunny.obj",
+      "j_speed": 0.0,
+      "j_maxVelocity": 0.0,
+      "j_accelerationFactor": 0.0,
+      "j_friction": 0.1,
+      "j_position": {
+        "x": 10,
+        "y": 0,
+        "z": 0,
+        "n": 0
+      },
+      "j_forward": {
+        "x": 0,
+        "y": 0,
+        "z": 1,
+        "n": 0.0
+      },
+      "j_currentVelocity": 0
+    }
+  }
+]

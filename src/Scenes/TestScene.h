@@ -39,6 +39,7 @@ private:
 	float dt = 0 , elapsed = 0;
 
 	Mesh bunny;
+	Mesh sib;
 	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
@@ -73,6 +74,7 @@ private:
 	Camera lastcam;
 
 	PhysicalObject cube_P;
+	PhysicalObject cube_P2;
 
 	
 
@@ -81,8 +83,11 @@ public:
 	TestScene() 
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
+		sib = MeshManager::loadMeshFromFile("res/mesh/boule.obj");
 
 		cube_P.setMesh(&bunny);
+		cube_P2.setMesh(&sib);
+		
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
@@ -158,6 +163,10 @@ public:
 
 			gPassFx.bindTexture("tex", bb.getTexture());
 			Renderer::renderMesh(cam, bunny, gPassFx);
+			bunny.getTransform().setPosition({ 0,0,0 });
+
+			//Renderer::renderMesh(cam, sib, gPassFx);
+			//sib.getTransform().setPosition({ 10,10,10 });
 
 			auto SRVLit = fbo.bindUnlitRTV();
 			box.renderSkybox(cam);			
@@ -183,6 +192,7 @@ public:
 			cube_P.updateTransform();
 
 			Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
+			Renderer::renderMesh(cam, *(cube_P2.getMesh()), renderShader);
 
 			box.renderSkybox(cam);
 				Camera& cam = m_player.getCamera();

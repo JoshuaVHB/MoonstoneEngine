@@ -214,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="src\Scenes\Position.json" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -275,6 +276,7 @@
     <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
+    <ClInclude Include="src\Scenes\JsonParser.h" />
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
