@@ -1,6 +1,6 @@
 #include "PhysicalHeightMap.h"
 #include <algorithm>
-
+#include "../physx_Impl/physx_shape.h"
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/World/WorldRendering/Heightmap.h"
 void PhysicalHeightMap::setTerrain(Terrain* _terrain)
@@ -9,7 +9,6 @@ void PhysicalHeightMap::setTerrain(Terrain* _terrain)
 	Heightmap hmap = _terrain->getHeightmap();
 	Terrain::TerrainParams p = terrain->getParams();
 	PhysicsEngine::HeightMapData data;
-
 
 	data.length = hmap.getHeigth();
 	data.width = hmap.getWidth();
@@ -24,8 +23,8 @@ void PhysicalHeightMap::setTerrain(Terrain* _terrain)
 		}
 	);
 
-	bool success = PhysicsEngine::addHeightmap(id, data);
-
-
-
+	PxShape * shape = physx_shape::getHeightmap(data);
+	
+	m_actor->attachShape(*shape);
+	PhysicsEngine::addActor(m_actor);
 }

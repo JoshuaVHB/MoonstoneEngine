@@ -2,21 +2,19 @@
 #ifndef LANDSCAPEPHYSICS
 #define LANDSCAPEPHYSICS
 
-#include "PhysicalObject.h"
+#include "StaticObject.h"
 
 class Terrain;
 
-class PhysicalHeightMap : public PhysicalObject
+class PhysicalHeightMap : public StaticObject
 {
 private:
 	std::unique_ptr<Terrain> terrain;
 public :
-	PhysicalHeightMap() : PhysicalObject() {};
+	PhysicalHeightMap() : StaticObject() {};
 	virtual void setMesh(Mesh* mesh) override { m_mesh.release(); };
 
 	void setTerrain(Terrain* _terrain);
-
-
 };
 
 

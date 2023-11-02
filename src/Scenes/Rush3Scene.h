@@ -7,7 +7,8 @@
 #include "../../Graphics/abstraction/Camera.h"
 #include "../../Graphics/abstraction/FrameBuffer.h"
 #include "../../Physics/World/PhysicalHeightMap.h"
-#include "../../Physics/World/PhysicalObject.h"
+#include "../../Physics/World/DynamicObject.h"
+#include "../../Physics/physx_Impl/physx_shape.h"
 class Rush3Scene : public Scene {
 
 
@@ -46,7 +47,7 @@ private:
 
 	// -- Meshes
 	Mesh bunny;
-	PhysicalObject cube_P;
+	DynamicObject cube_P;
 
 private:
 
@@ -105,6 +106,9 @@ public:
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 		bunny.getTransform().setPosition({ +150, 200, +120 });
 		cube_P.setMesh(&bunny);
+		cube_P.addShape(physx_shape::getBall());
+		
+		
 
 
 		Renderer::setBackbufferToDefault();
@@ -135,8 +139,6 @@ public:
 			m_terrain.hotReloadMap();
 			ftime = lastTime;
 		}
-
-
 
 	}
 

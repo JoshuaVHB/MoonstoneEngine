@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Physics\World\DynamicObject.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp" />
@@ -177,9 +178,9 @@
     <ClCompile Include="Physics\World\PhysicalHeightMap.cpp" />
     <ClCompile Include="Physics\PhysicEngine.cpp" />
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
-    <ClCompile Include="Physics\World\Body.cpp" />
     <ClCompile Include="Graphics\World\Player.cpp" />
     <ClCompile Include="Physics\World\PhysicalObject.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_shape.cpp" />
     <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
+    <ClCompile Include="Physics\World\StaticObject.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
@@ -215,6 +217,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Physics\World\DynamicObject.h" />
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
@@ -226,8 +229,8 @@
     <ClInclude Include="Physics\PhysicEngine.h" />
     <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
     <ClInclude Include="Physics\physx_Impl\physx_impl.h" />
-    <ClInclude Include="Physics\World\Body.h" />
     <ClInclude Include="Physics\World\PhysicalObject.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_shape.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
@@ -280,6 +283,7 @@
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
+    <ClInclude Include="Physics\World\StaticObject.h" />
     <ClInclude Include="Utils\AABB.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />
