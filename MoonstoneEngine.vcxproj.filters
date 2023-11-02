@@ -52,6 +52,7 @@
     <ClCompile Include="Utils\vendor\stdafx.cpp" />
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
+    <ClCompile Include="src\Scenes\JsonParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />

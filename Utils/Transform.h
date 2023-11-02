@@ -52,6 +52,13 @@ public:
 		angles[2] = XMVectorGetZ(rot);
 	}
 
+	void setScale(XMVECTOR sc)
+	{
+		scale = sc;
+		_scale[0] = XMVectorGetX(scale);
+		_scale[1] = XMVectorGetY(scale);
+		_scale[2] = XMVectorGetZ(scale);
+	}
 
 	const XMVECTOR& getPosition() const noexcept {
 		return translation;

@@ -199,6 +199,7 @@
     <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
+    <ClCompile Include="src\Scenes\JsonParser.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
@@ -309,4 +310,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

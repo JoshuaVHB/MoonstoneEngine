@@ -5,11 +5,15 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <vector>
+#include <DirectXMath.h>
 
-struct Format {
+struct FormatJson {
 	std::string nameObj;
 	std::string pathObj;
-
+	DirectX::XMVECTOR positionObj;
+	DirectX::XMVECTOR forwardObj;
+	DirectX::XMVECTOR scaleObj;
 };
 
 class JsonParser
@@ -20,22 +24,16 @@ private:
 
 	std::ifstream m_file;
 
-	std::vector<Format>objs;
-	
+	std::vector<FormatJson>objs;
+
 
 public:
-	JsonParser(std::string fileName) {
-		m_fileName = fileName;
-	}
+	JsonParser(std::string fileName) : m_fileName(fileName) {};
 
-	void loadFile() {
-		m_file.open(m_fileName);
-		m_file >> m_json;
-		m_file.close();
-	}
+	void openFile();
 
-	void updateList() {
+	void updateList(); 
 
-	}
+	[[nodiscard]] std::vector<FormatJson> getObjs();
 
 };

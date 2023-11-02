@@ -30,6 +30,8 @@
 
 #include "../../Physics/World/PhysicalObject.h"
 
+#include "JsonParser.h"
+
 using namespace physx;
 
 class TestScene : public Scene {
@@ -39,7 +41,9 @@ private:
 	float dt = 0 , elapsed = 0;
 
 	Mesh bunny;
-	Mesh sib;
+
+	std::vector<Mesh> meshes{};
+
 	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
@@ -74,7 +78,12 @@ private:
 	Camera lastcam;
 
 	PhysicalObject cube_P;
-	PhysicalObject cube_P2;
+
+	std::vector<PhysicalObject> cubes{};
+
+	JsonParser parser{ "src/Scenes/Position.json" };
+
+	std::vector<FormatJson> objs = parser.getObjs();
 
 	
 
@@ -83,10 +92,18 @@ public:
 	TestScene() 
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
-		sib = MeshManager::loadMeshFromFile("res/mesh/boule.obj");
+
+		std::for_each(objs.begin(), objs.end(), [&](FormatJson& obj) {
+			meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
+		});
 
 		cube_P.setMesh(&bunny);
-		cube_P2.setMesh(&sib);
+
+		/*std::for_each(meshes.begin(), meshes.end(), [&](Mesh& mesh) {
+			PhysicalObject cube_new;
+			cube_new.setMesh(&mesh);
+			cubes.push_back(cube_new);
+		});*/
 		
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
@@ -165,8 +182,7 @@ public:
 			Renderer::renderMesh(cam, bunny, gPassFx);
 			bunny.getTransform().setPosition({ 0,0,0 });
 
-			//Renderer::renderMesh(cam, sib, gPassFx);
-			//sib.getTransform().setPosition({ 10,10,10 });
+			setPosObjs(cam);
 
 			auto SRVLit = fbo.bindUnlitRTV();
 			box.renderSkybox(cam);			
@@ -192,7 +208,6 @@ public:
 			cube_P.updateTransform();
 
 			Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
-			Renderer::renderMesh(cam, *(cube_P2.getMesh()), renderShader);
 
 			box.renderSkybox(cam);
 				Camera& cam = m_player.getCamera();
@@ -217,6 +232,15 @@ public:
 
 		m_player.onImGuiRender();
 		Renderer::showImGuiDebugData();
+	}
+
+	void setPosObjs(Camera cam) {
+		for (int i = 0; i < objs.size(); i++) {
+			Renderer::renderMesh(cam, meshes[i], gPassFx);
+			meshes[i].getTransform().setPosition(objs[i].positionObj);
+			meshes[i].getTransform().setRotation(objs[i].forwardObj);
+			meshes[i].getTransform().setScale(objs[i].scaleObj);
+		}
 	}
 
 
