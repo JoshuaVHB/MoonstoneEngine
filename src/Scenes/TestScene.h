@@ -30,7 +30,7 @@
 
 #include "../../Physics/World/PhysicalObject.h"
 
-#include "JsonParser.h"
+#include "../../Platform/IO/JsonParser.h"
 
 using namespace physx;
 

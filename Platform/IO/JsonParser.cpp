@@ -5,6 +5,7 @@ void JsonParser::openFile()
 {
 	m_file.open(m_fileName);
 	m_file >> m_json;
+	m_file.close();
 }
 
 void JsonParser::updateList()
@@ -25,7 +26,6 @@ void JsonParser::updateList()
 	else
 		std::cout << "Error: Json file is not an array" << std::endl;
 
-	m_file.close();
 }
 
 std::vector<FormatJson> JsonParser::getObjs()

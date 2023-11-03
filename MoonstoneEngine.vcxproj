@@ -199,7 +199,7 @@
     <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
-    <ClCompile Include="src\Scenes\JsonParser.cpp" />
+    <ClCompile Include="Platform\IO\JsonParser.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
@@ -277,7 +277,7 @@
     <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
-    <ClInclude Include="src\Scenes\JsonParser.h" />
+    <ClInclude Include="Platform\IO\JsonParser.h" />
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />

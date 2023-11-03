@@ -52,7 +52,7 @@
     <ClCompile Include="Utils\vendor\stdafx.cpp" />
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
-    <ClCompile Include="src\Scenes\JsonParser.cpp" />
+    <ClCompile Include="Platform\IO\JsonParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -136,7 +136,7 @@
     <ClInclude Include="Utils\vendor\stdafx.h" />
     <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
-    <ClInclude Include="src\Scenes\JsonParser.h" />
+    <ClInclude Include="Platform\IO\JsonParser.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
