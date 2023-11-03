@@ -30,7 +30,8 @@ class Engine : public Singleton<_Platform>
 public:
 	virtual void run()
 	{
-
+		m_nextTime = static_cast<Timer::count_type>(getTimePlatform()); // not sure about this cast
+		m_previousTime = m_nextTime;
 		bool isRunning = true;
 
 		while (isRunning)

@@ -55,9 +55,10 @@ void Physx_Impl::onInit()
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	physics.gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = physics.gDispatcher;
-	sceneDesc.filterShader = CustomFilterShader;
-	Physx_Collision* callback = new Physx_Collision();
-	sceneDesc.simulationEventCallback = callback;
+	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+	//sceneDesc.filterShader = CustomFilterShader;
+	//Physx_Collision* callback = new Physx_Collision();
+	//sceneDesc.simulationEventCallback = callback;
 	physics.gScene = physics.gPhysics->createScene(sceneDesc);
 
 	PxPvdSceneClient* pvdClient = physics.gScene->getScenePvdClient();

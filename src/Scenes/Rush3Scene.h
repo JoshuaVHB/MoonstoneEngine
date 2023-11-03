@@ -108,7 +108,7 @@ public:
 
 
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
-		bunny.getTransform().setPosition({ +498 , + 25, +984 });
+		bunny.getTransform().setPosition({ +498 , + 40, +984 });
 		cube_P.setMesh(&bunny);
 		cube_P.addShape(physx_shape::getBall());
 		
