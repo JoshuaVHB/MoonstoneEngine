@@ -17,11 +17,14 @@ public:
 	void setId(std::string id) { this->id = id; m_actor->setName(id.c_str()); }
 
 	virtual void updateTransform() override;
+	void setTransform(Transform& _transform);
+	void majTransformPhysics();
 
 	void addForce(PhysicsEngine::fVec3 force);
 	void addTorque(PhysicsEngine::fVec3 Torque);
 	void clearForce();
 	void clearTorque();
 	PhysicsEngine::fVec3 getLinearValocity();	
+	PhysicsEngine::fVec3 getForwardVector();
 };
 

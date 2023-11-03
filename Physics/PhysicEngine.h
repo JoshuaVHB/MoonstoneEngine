@@ -35,6 +35,7 @@ public:
 			eCheckpoint = (1 << 1),
 			eFinish = (1 << 2),
 			eOther = (1 << 3),
+			eAll = (1 << 4)
 		};
 	};
 

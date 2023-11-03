@@ -10,6 +10,8 @@
 #include "../../Physics/World/DynamicObject.h"
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
+
+#include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
 
 
@@ -47,10 +49,8 @@ private:
 
 
 	// -- Meshes
-	Mesh bunny;
-	DynamicObject cube_P;
-
 	TriggerBox start;
+	Cloporte clop;
 
 private:
 
@@ -70,7 +70,8 @@ private:
 public:
 
 	Rush3Scene() :
-		start{PhysicsEngine::FilterGroup::eFinish}
+		start{PhysicsEngine::FilterGroup::eFinish},
+		clop{}
 	{
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
@@ -106,12 +107,9 @@ public:
 
 		phm.setTerrain(&m_terrain);
 
-
-		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
-		bunny.getTransform().setPosition({ +498 , + 40, +984 });
-		cube_P.setMesh(&bunny);
-		cube_P.addShape(physx_shape::getBall());
+		currentCamera = &clop.getCurrentCamera();
 		
+		clop.setPosition(+498.f , + 40.f, +984.f);
 		
 		
 
@@ -124,12 +122,13 @@ public:
 		m_elapsedTime += deltaTime;
 
 		// Update cameras and handle inputs
-		if (currentCamera != &m_orthoCam) m_player.step(deltaTime);
-		else {
-			m_orthoCam.updateCam();
-			m_orthoCam.lookAt(centerPoint);
-		}
+		//if (currentCamera != &m_orthoCam) m_player.step(deltaTime);
+		//else {
+		//	m_orthoCam.updateCam();
+		//	m_orthoCam.lookAt(centerPoint);
+		//}
 		// -- Send world data to baseMesh effect
+		clop.update(deltaTime);
 		sp.viewProj = XMMatrixTranspose(currentCamera->getVPMatrix());
 		sp.lightPos = XMVectorSet(-100.0f, 1000.f, -1000.0f, 1.0f); // sun ?
 		sp.cameraPos = currentCamera->getPosition();
@@ -177,9 +176,10 @@ public:
 		}
 
 
-		cube_P.updateTransform();
-		Renderer::renderMesh(cam, *cube_P.getMesh(), m_baseMeshEffect);
+		//cube_P.updateTransform();
 
+		Renderer::renderMesh(cam, clop.getMesh(), m_baseMeshEffect);
+		
 
 
 		// Render skybox last (if first person)

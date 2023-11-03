@@ -29,7 +29,6 @@ public:
         auto pos = player.getPosition();
         
         DirectX::XMVECTOR camPos = pos - (distanceFromPlayer * forward) + XMVECTOR{0, 5, 0};
-        //camPos = XMVectorAdd(camPos, { 0,distance,0 });
         static const float MAX_DISTANCE = 200.f;
         camPos = XMVectorLerp(
             cam.getPosition(), 
