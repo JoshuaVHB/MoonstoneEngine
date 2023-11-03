@@ -26,6 +26,7 @@ private:
 	static ModulePhysics physics;
 
 	static ModulePhysics& getModulePhysics();
+
 private:
 	// Getters
 	PxScene* getScene() { return physics.gScene; }

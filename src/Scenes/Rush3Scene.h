@@ -8,6 +8,7 @@
 #include "../../Graphics/abstraction/FrameBuffer.h"
 #include "../../Physics/World/PhysicalHeightMap.h"
 #include "../../Physics/World/DynamicObject.h"
+#include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
 class Rush3Scene : public Scene {
 
@@ -49,6 +50,8 @@ private:
 	Mesh bunny;
 	DynamicObject cube_P;
 
+	TriggerBox start;
+
 private:
 
 	// -- Define constant buffers
@@ -66,7 +69,8 @@ private:
 
 public:
 
-	Rush3Scene()
+	Rush3Scene() :
+		start{PhysicsEngine::FilterGroup::eFinish}
 	{
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
@@ -104,12 +108,12 @@ public:
 
 
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
-		bunny.getTransform().setPosition({ +498 , + 115, +984 });
+		bunny.getTransform().setPosition({ +498 , + 25, +984 });
 		cube_P.setMesh(&bunny);
 		cube_P.addShape(physx_shape::getBall());
 		
 		
-
+		
 
 		Renderer::setBackbufferToDefault();
 	}

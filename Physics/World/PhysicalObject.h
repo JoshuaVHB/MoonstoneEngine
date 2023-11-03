@@ -11,6 +11,7 @@
 
 
 
+
 class PhysicalObject
 {
 protected:
@@ -20,7 +21,17 @@ protected:
 protected:
 	std::unique_ptr<Mesh> m_mesh;
 	PhysicsEngine::Actor* m_actor = nullptr;
+	PhysicsEngine::FilterGroup::Enum mFilterGroup 
+		= PhysicsEngine::FilterGroup::eOther;
+	PhysicsEngine::FilterGroup::Enum mMaskGroup 
+		= PhysicsEngine::FilterGroup::eOther;
+
 	PhysicalObject() : id{ std::string("PhysicalObject_") + std::to_string(++count) } {};
+	PhysicalObject(PhysicsEngine::FilterGroup::Enum _filterGroup,
+		PhysicsEngine::FilterGroup::Enum _maskGroup		)
+		: id{ std::string("PhysicalObject_") + std::to_string(++count) }, 
+			mFilterGroup{ _filterGroup }, mMaskGroup{ _maskGroup }
+	{};
 public:
 	~PhysicalObject() = default;
 	bool operator==(const PhysicalObject& other) const { return id == other.id; }
@@ -34,6 +45,10 @@ public:
 	std::string& getId() { return id; }
 
 	virtual void addShape(PxShape* shape) {
+		PxFilterData filterData;
+		filterData.word0 = mFilterGroup;
+		filterData.word1 = mMaskGroup;
+		shape->setQueryFilterData(filterData);
 		if(m_actor)
 			m_actor->attachShape(*shape);
 	}

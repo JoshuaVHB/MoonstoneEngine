@@ -9,11 +9,36 @@
 #include "../../Utils/Transform.h"
 #include <PxPhysics.h>
 #include <PxPhysicsAPI.h>
-
+#include "physx_collision.h"
 Physx_Impl::ModulePhysics Physx_Impl::physics = Physx_Impl::ModulePhysics();
 Physx_Impl::ModulePhysics& Physx_Impl::getModulePhysics()
 {
 	return physics;
+}
+
+PxFilterFlags CustomFilterShader(
+	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	// let triggers through
+	if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1))
+	{
+		pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		return PxFilterFlag::eDEFAULT;
+	}
+
+	// Check if it is a trigger interaction 
+	if (filterData0.word0 & PhysicsEngine::FilterGroup::eFinish || filterData1.word0 & PhysicsEngine::FilterGroup::eFinish ||
+		filterData0.word0 & PhysicsEngine::FilterGroup::eCheckpoint || filterData1.word0 & PhysicsEngine::FilterGroup::eCheckpoint)
+	{
+		if ((filterData0.word0 & filterData1.word1) && (filterData0.word1 & filterData1.word0))
+
+			pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
+		return PxFilterFlag::eSUPPRESS;
+	}
+
+	return PxFilterFlag::eDEFAULT;
 }
 
 void Physx_Impl::onInit()
@@ -30,8 +55,9 @@ void Physx_Impl::onInit()
 	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 	physics.gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = physics.gDispatcher;
-	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
-
+	sceneDesc.filterShader = CustomFilterShader;
+	Physx_Collision* callback = new Physx_Collision();
+	sceneDesc.simulationEventCallback = callback;
 	physics.gScene = physics.gPhysics->createScene(sceneDesc);
 
 	PxPvdSceneClient* pvdClient = physics.gScene->getScenePvdClient();
@@ -91,7 +117,7 @@ std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3> Physx_Impl::getTransform(s
 	}
 	std::cout << "Actor not found" << std::endl;
 	return std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3>{};
-
-	
 }
+
+
 

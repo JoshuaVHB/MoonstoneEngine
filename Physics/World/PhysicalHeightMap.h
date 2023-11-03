@@ -12,7 +12,7 @@ private:
 	std::unique_ptr<Terrain> terrain;
 public :
 	PhysicalHeightMap() : StaticObject() {};
-	virtual void setMesh(Mesh* mesh) override { m_mesh.release(); };
+	virtual void setMesh(Mesh*) override {};
 
 	void setTerrain(Terrain* _terrain);
 };

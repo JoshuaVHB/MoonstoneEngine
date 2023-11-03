@@ -27,6 +27,18 @@ public:
 		float maxHeight;
 	};
 
+	struct FilterGroup
+	{
+		enum Enum
+		{
+			ePlayer = (1 << 0),
+			eCheckpoint = (1 << 1),
+			eFinish = (1 << 2),
+			eOther = (1 << 3),
+		};
+	};
+
+
 	struct _ImplPhysic
 	{
 		friend class PhysicsEngine;		

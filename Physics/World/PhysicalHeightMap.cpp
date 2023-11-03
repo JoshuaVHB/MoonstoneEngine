@@ -26,5 +26,5 @@ void PhysicalHeightMap::setTerrain(Terrain* _terrain)
 	PxShape * shape = physx_shape::getHeightmap(data);
 	
 	m_actor->attachShape(*shape);
-	PhysicsEngine::addActor(m_actor);
+	
 }

@@ -55,6 +55,8 @@
     <ClCompile Include="Physics\physx_Impl\physx_shape.cpp" />
     <ClCompile Include="Physics\World\DynamicObject.cpp" />
     <ClCompile Include="Physics\World\StaticObject.cpp" />
+    <ClCompile Include="Physics\World\TriggerBox.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -140,6 +142,8 @@
     <ClInclude Include="Physics\physx_Impl\physx_shape.h" />
     <ClInclude Include="Physics\World\DynamicObject.h" />
     <ClInclude Include="Physics\World\StaticObject.h" />
+    <ClInclude Include="Physics\World\TriggerBox.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_collision.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
