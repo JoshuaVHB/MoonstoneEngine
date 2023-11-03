@@ -34,14 +34,12 @@
     <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
-    <ClCompile Include="Graphics\World\Managers\AssetManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
-    <ClCompile Include="Graphics\World\Managers\TextureManager.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
@@ -97,7 +95,6 @@
     <ClInclude Include="Graphics\World\Mesh.h" />
     <ClInclude Include="Graphics\abstraction\IndexBuffer.h" />
     <ClInclude Include="Graphics\World\Player.h" />
-    <ClInclude Include="Graphics\World\Managers\AssetManager.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Heightmap.h" />
     <ClInclude Include="Graphics\World\WorldRendering\HeightmapBuilder.h" />
     <ClInclude Include="Graphics\World\WorldRendering\Skybox.h" />
@@ -117,7 +114,6 @@
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
     <ClInclude Include="src\Scenes\Sponza.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
-    <ClInclude Include="Graphics\World\Managers\TextureManager.h" />
     <ClInclude Include="Utils\AABB.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Singleton.h" />

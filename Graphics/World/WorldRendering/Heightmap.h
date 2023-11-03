@@ -54,8 +54,7 @@ public:
 		m_values[v * m_width + u] = value;
 	}
 
-	// TODO, UNUSED
-	void normalize() {}
+
 
 public:
 	int getWidth() const { return m_width; }
@@ -100,6 +99,7 @@ private:
 	int m_height;
 
 	float* m_values;
+
 
 };
 

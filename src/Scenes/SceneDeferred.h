@@ -34,14 +34,17 @@ public:
 		: m_renderer{}
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
+
+		MeshManager::feed(&bunny);
+
 		Renderer::setBackbufferToDefault();
 	}
 
 	void renderFn()
 	{
-		m_renderer.renderMesh(m_player.getCamera(), bunny);
+		static auto deferredRenderLambda = [&](Camera& cam, const Mesh& mesh)	{	m_renderer.renderMesh(cam, mesh);	};
+		MeshManager::render(m_player.getCamera(), deferredRenderLambda);
 		m_renderer.renderSkybox(m_player.getCamera(), box);
-
 	}
 
 
@@ -70,11 +73,8 @@ public:
 	}
 	virtual void onImGuiRender() override {
 		ImGui::Begin("Debug");
-		ImGui::Text("MY BELOVED TEST SCENE !!! THIS IS HIGHLY EXPERIMENTAL");
 		bunny.getTransform().showControlWindow();
-
 		ImGui::End();
-
 		m_player.onImGuiRender();
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();

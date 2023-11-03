@@ -28,7 +28,7 @@ private:
 	// -- Camera
 	Player  m_player;					// Basically the 1st person camera
 	Camera	m_orthoCam;
-	Camera* currentCamera = &m_orthoCam;
+	Camera* currentCamera = &m_player.getCamera();
 	Vec m_orthocamPos = { 0,120,50 };	// For imgui purposes
 	float aspectRatio = 100;
 

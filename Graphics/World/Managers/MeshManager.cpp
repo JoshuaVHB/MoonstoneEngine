@@ -12,6 +12,8 @@
 #include <set>
 #include <unordered_set>
 
+std::vector<const Mesh*> MeshManager::m_meshes = {};
+
 
 void ReportError(const rapidobj::Error& error)
 {

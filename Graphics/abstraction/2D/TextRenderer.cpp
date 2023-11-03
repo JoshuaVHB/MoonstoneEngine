@@ -107,7 +107,7 @@ TextRenderer::TextRenderer() {
 	m_layout.pushBackInstanced<4>("INSTANCE_UV");	// instance uv
 
 
-	m_spriteEffect.loadEffectFromFile("res/effects/sprite2D.fx");
+	m_spriteEffect.loadEffectFromFile("res/effects/font.fx");
 
 	m_spriteEffect.bindInputLayout(m_layout);
 

@@ -43,7 +43,7 @@ struct InputLayout
 private:
 
 
-	LPCSTR semantics_str[9] = {
+	LPCSTR semantics_str[10] = {
 		"BINORMAL",
 		"BLENDINDICES",
 		"BLENDWEIGHT",
@@ -52,7 +52,8 @@ private:
 		"POSITIONT",
 		"PSIZE",
 		"TANGENT",
-		"TEXCOORD"
+		"TEXCOORD",
+		"COLOR"
 	};
 
 	UINT stride = 0;
@@ -77,7 +78,8 @@ public:
 		PositionT,
 		PSize,
 		Tangent,
-		Texcoord
+		Texcoord,
+		Color
 	};
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> elems;

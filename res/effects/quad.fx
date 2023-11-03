@@ -1,5 +1,3 @@
-
-
 //////////////////////
 
 // Uniforms
@@ -9,9 +7,10 @@ SamplerState SampleState; // l’état de sampling
 
 struct VSIn
 {
-    uint vertexId;
-    uint vertexTexid;
-
+    float4 pos : POSITION;
+    float4 uv : TEXCOORD;
+    float4 col : COLOR;
+    float4 texId : SV
 };
 
 // -- VSOUT
@@ -54,7 +53,7 @@ float4 spritePS(VSOut vs) : SV_Target
 {
     
     
-    return float4(1,1, 0, 1);
+    return float4(1, 1, 0, 1);
     
 }
 
@@ -62,7 +61,7 @@ float4 spritePS(VSOut vs) : SV_Target
 
 // -- Technique
 
-technique11 sprite
+technique11 quad
 {
     pass pass0
     {

@@ -54,3 +54,4 @@ void SceneManager::switchToScene(size_t sceneIndex)
     s_activeScene = provider();
     s_activeSceneIndex = sceneIndex;
 }
+//ahah
