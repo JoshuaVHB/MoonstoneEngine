@@ -97,14 +97,7 @@ public:
 			meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
 
-		cube_P.setMesh(&bunny);
-
-		/*std::for_each(meshes.begin(), meshes.end(), [&](Mesh& mesh) {
-			PhysicalObject cube_new;
-			cube_new.setMesh(&mesh);
-			cubes.push_back(cube_new);
-		});*/
-		
+		cube_P.setMesh(&bunny);		
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
@@ -208,6 +201,8 @@ public:
 			cube_P.updateTransform();
 
 			Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
+
+			setPosObjs(cam);
 
 			box.renderSkybox(cam);
 				Camera& cam = m_player.getCamera();
