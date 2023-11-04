@@ -19,7 +19,10 @@ protected:
 	std::string id;
 
 protected:
-	std::unique_ptr<Mesh> m_mesh;
+
+
+	Mesh* m_mesh = nullptr;
+
 	PhysicsEngine::Actor* m_actor = nullptr;
 	PhysicsEngine::FilterGroup::Enum mFilterGroup 
 		= PhysicsEngine::FilterGroup::eOther;
@@ -36,7 +39,7 @@ public:
 	~PhysicalObject() = default;
 	bool operator==(const PhysicalObject& other) const { return id == other.id; }
 
-	Mesh* getMesh() { return m_mesh.get(); }
+	Mesh* getMesh() { return m_mesh; }
 	virtual void setMesh(Mesh* mesh);
 
 	virtual void updateTransform() = 0;

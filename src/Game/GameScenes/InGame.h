@@ -173,7 +173,7 @@ public:
 		ImGui::Text("Has pressed the button ? %d", UIRenderer::Button(0, 0, 400, 400));
 		ImGui::Text("Has collided ? %d", SphereAABBTest(m_player.getBoundingSphere(), Endcheck));
 
-		m_player.getMesh().getTransform().showControlWindow();
+		//m_player.getMesh().getTransform().showControlWindow();
 		auto v = m_player.getForward();
 		auto c = m_player.getCurrentCamera().getPosition();
 		PRINT_VECTOR("Player forward",v)

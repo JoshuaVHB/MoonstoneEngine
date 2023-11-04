@@ -27,7 +27,6 @@ private:
 
 	DirectX::XMVECTOR m_position	;
 	DirectX::XMVECTOR m_forward		;
-
 	
 
 

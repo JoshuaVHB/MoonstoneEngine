@@ -5,8 +5,6 @@
 #include <string>
 #include <PxPhysicsAPI.h>
 #include <vector>
-// Creates static function for the renderer 
-// that calls the implementation function of the same name
 
 
 #define PHYSIC_CALL_IMPL(fnName)\

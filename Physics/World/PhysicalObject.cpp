@@ -4,7 +4,8 @@ int PhysicalObject::count = 0;
 
 void PhysicalObject::setMesh(Mesh* mesh)
 {
-	m_mesh.reset(mesh);
+	//m_mesh.reset(mesh);
+	m_mesh = mesh;
 	if (m_actor) {
 		Transform t = m_mesh->getTransform();
 		auto pos_Render = t.getTranslation();

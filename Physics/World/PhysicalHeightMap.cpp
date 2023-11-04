@@ -3,10 +3,10 @@
 #include "../physx_Impl/physx_shape.h"
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/World/WorldRendering/Heightmap.h"
-void PhysicalHeightMap::setTerrain(Terrain* _terrain)
+void PhysicalHeightMap::setTerrain(const Terrain* _terrain)
 {
-	terrain.reset(_terrain);
-	Heightmap hmap = _terrain->getHeightmap();
+	terrain = _terrain;
+	Heightmap hmap = terrain->getHeightmap();
 	Terrain::TerrainParams p = terrain->getParams();
 	PhysicsEngine::HeightMapData data;
 

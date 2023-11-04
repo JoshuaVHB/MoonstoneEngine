@@ -129,7 +129,8 @@ public:
 	}
 
 
-	[[nodiscard]] Heightmap& getHeightmap() { return m_map; }
+	[[nodiscard]] Heightmap getHeightmap() { return m_map; }
+	[[nodiscard]] const Heightmap& getHeightmap() const { return m_map; }
 };
 
 

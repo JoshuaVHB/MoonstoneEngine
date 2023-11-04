@@ -64,7 +64,7 @@ void Cloporte::update(float deltaTime)
 void Cloporte::updatePosition(float deltaTime)
 {
 	
-	m_object.getTransform().getPosition() = XMVectorAdd(m_object.getTransform().getPosition(), m_forward * currentVelocity * deltaTime * 100);
+	m_object.getTransform().getPosition() = XMVectorAdd(m_object.getTransform().getPosition(), m_forward * currentVelocity * deltaTime);
 	m_position = m_object.getTransform().getPosition();
 	currentVelocity *= 0.9 ;
 	m_object.updateTransform();

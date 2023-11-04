@@ -9,12 +9,12 @@ class Terrain;
 class PhysicalHeightMap : public StaticObject
 {
 private:
-	std::unique_ptr<Terrain> terrain;
+	const Terrain* terrain = nullptr; // don't hold a unique pointer that steal ownership
 public :
 	PhysicalHeightMap() : StaticObject() {};
 	virtual void setMesh(Mesh*) override {};
 
-	void setTerrain(Terrain* _terrain);
+	void setTerrain(const Terrain* _terrain);
 };
 
 

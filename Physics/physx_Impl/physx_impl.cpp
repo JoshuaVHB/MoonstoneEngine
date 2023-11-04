@@ -91,7 +91,6 @@ void Physx_Impl::cleanupPhysics(bool)
 	}
 	PX_RELEASE(physics.gFoundation);
 }
-#include <vector>
 std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3> Physx_Impl::getTransform(std::string id)
 {
 	const PxU32 nbActors = physics.gScene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
