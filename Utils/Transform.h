@@ -53,8 +53,13 @@ public:
 	}
 
 
-	const XMVECTOR& getPosition() const noexcept {
+	const XMVECTOR& getTranslation() const noexcept {
 		return translation;
+	}
+	const XMVECTOR& getAngles() const noexcept {
+		XMVECTOR ang{};
+		ang = XMVectorSet(angles[0], angles[1], angles[2], 0);
+		return ang;
 	}
 
 	XMVECTOR getScale() noexcept {

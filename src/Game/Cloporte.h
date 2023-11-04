@@ -4,7 +4,7 @@
 #include <directXmath.h>
 #include "../../Graphics/abstraction/Camera.h"
 #include "World/Mesh.h"
-
+#include "../../Physics/World/DynamicObject.h"
 
 class Cloporte
 {
@@ -12,7 +12,7 @@ class Cloporte
 private:
 
 
-	Mesh m_mesh;
+	DynamicObject m_object;
 	BoundingSphere m_boundingSphere; // use this for collision check, and mesh aabb for culling
 
 	Camera m_firstPerson;
@@ -49,12 +49,19 @@ public:
 	}
 
 	
-	Mesh& getMesh()	{ return m_mesh; }
+	const Mesh& getMesh()	{ 		
+		return *(m_object.getMesh()); 
+	}
 
 
 	[[nodiscard]] BoundingSphere getBoundingSphere() const noexcept { return m_boundingSphere; }
 	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
 	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
+
+	void setPosition(float x, float y, float z) {
+		m_object.getTransform().setPosition({x,y,z});
+		m_object.majTransformPhysics();
+	}
 
 private:
 	void handleKeyboardInputs(float deltaTime);

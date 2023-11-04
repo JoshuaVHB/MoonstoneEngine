@@ -30,7 +30,8 @@ class Engine : public Singleton<_Platform>
 public:
 	virtual void run()
 	{
-
+		m_nextTime = static_cast<Timer::count_type>(getTimePlatform()); // not sure about this cast
+		m_previousTime = m_nextTime;
 		bool isRunning = true;
 
 		while (isRunning)
@@ -77,7 +78,7 @@ public:
 
 
 			SceneManager::onUpdate(deltaTime);
-			PhysicEngine::onUpdate(deltaTime);
+			PhysicsEngine::onUpdate(deltaTime);
 			SceneManager::onRender();
 			SceneManager::onImGuiRender();
 			ImGui::UpdatePlatformWindows();

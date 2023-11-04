@@ -1,3 +1,3 @@
 #include "PhysicEngine.h"
 
-std::unique_ptr<PhysicEngine::_ImplPhysic> PhysicEngine::implementation{};
+std::unique_ptr<PhysicsEngine::_ImplPhysic> PhysicsEngine::implementation{};

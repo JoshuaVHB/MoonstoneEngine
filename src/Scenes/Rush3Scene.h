@@ -6,7 +6,12 @@
 #include "../../Graphics/World/WorldRendering/Terrain.h"
 #include "../../Graphics/abstraction/Camera.h"
 #include "../../Graphics/abstraction/FrameBuffer.h"
+#include "../../Physics/World/PhysicalHeightMap.h"
+#include "../../Physics/World/DynamicObject.h"
+#include "../../Physics/World/TriggerBox.h"
+#include "../../Physics/physx_Impl/physx_shape.h"
 
+#include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
 
 
@@ -20,6 +25,8 @@ private:
 	Texture m_grassTexture{ L"res/textures/seamless.dds" };
 	Texture m_grass6Texture{ L"res/textures/breadbug.dds" };
 	Texture m_snow{ L"res/textures/snow.dds" };
+
+	PhysicalHeightMap phm;
 
 	// -- Effect and skybox
 	Effect	m_baseMeshEffect;
@@ -40,6 +47,11 @@ private:
 	FrameBuffer fbo;
 	bool m_disableAABBS = false;
 
+
+	// -- Meshes
+	TriggerBox start;
+	Cloporte clop;
+
 private:
 
 	// -- Define constant buffers
@@ -57,7 +69,9 @@ private:
 
 public:
 
-	Rush3Scene()
+	Rush3Scene() :
+		start{PhysicsEngine::FilterGroup::eFinish},
+		clop{}
 	{
 		// -- Import the baseMesh effect
 		m_baseMeshEffect.loadEffectFromFile("res/effects/terrain.fx");
@@ -85,12 +99,20 @@ public:
 		);
 		m_orthoCam.setPosition(m_orthocamPos);
 		Terrain::TerrainParams& p = m_terrain.getParams();
-		p.height = 64;
-		p.xyScale = 1;
+			
 		m_terrain.rebuildMesh();
 		centerPoint = { (p.width * p.xyScale) / 2, 0.f, (p.height * p.xyScale) / 2};
 		m_orthoCam.updateCam();
 		m_orthoCam.lookAt(centerPoint);
+
+		phm.setTerrain(&m_terrain);
+
+		currentCamera = &clop.getCurrentCamera();
+		
+		clop.setPosition(+498.f , + 40.f, +984.f);
+		
+		
+
 		Renderer::setBackbufferToDefault();
 	}
 
@@ -100,12 +122,13 @@ public:
 		m_elapsedTime += deltaTime;
 
 		// Update cameras and handle inputs
-		if (currentCamera != &m_orthoCam) m_player.step(deltaTime);
-		else {
-			m_orthoCam.updateCam();
-			m_orthoCam.lookAt(centerPoint);
-		}
+		//if (currentCamera != &m_orthoCam) m_player.step(deltaTime);
+		//else {
+		//	m_orthoCam.updateCam();
+		//	m_orthoCam.lookAt(centerPoint);
+		//}
 		// -- Send world data to baseMesh effect
+		clop.update(deltaTime);
 		sp.viewProj = XMMatrixTranspose(currentCamera->getVPMatrix());
 		sp.lightPos = XMVectorSet(-100.0f, 1000.f, -1000.0f, 1.0f); // sun ?
 		sp.cameraPos = currentCamera->getPosition();
@@ -119,7 +142,6 @@ public:
 			m_terrain.hotReloadMap();
 			ftime = lastTime;
 		}
-
 
 	}
 
@@ -153,8 +175,17 @@ public:
 			}
 		}
 
+
+		//cube_P.updateTransform();
+
+		Renderer::renderMesh(cam, clop.getMesh(), m_baseMeshEffect);
+		
+
+
 		// Render skybox last (if first person)
 		if (currentCamera == &m_player.getCamera()) m_skybox.renderSkybox(cam);
+
+		
 
 	}
 

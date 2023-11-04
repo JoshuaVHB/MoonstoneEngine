@@ -40,27 +40,27 @@ void shutdownImgui(){
 	ImGui::DestroyContext();
 }
 
-int APIENTRY _tWinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPTSTR    lpCmdLine,
-	int       nCmdShow)
-{
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
+//int APIENTRY _tWinMain(
+//	HINSTANCE hInstance,
+//	HINSTANCE hPrevInstance,
+//	LPTSTR    lpCmdLine,
+//	int       nCmdShow)
+//{
+//	UNREFERENCED_PARAMETER(hPrevInstance);
+//	UNREFERENCED_PARAMETER(lpCmdLine);
+//	UNREFERENCED_PARAMETER(nCmdShow);
 
-//int main() {
+int main() {
 	try
 	{
 
 		WindowsEngine& rMoteur = WindowsEngine::getInstance();
 
-		PhysicEngine::setImplementation<Physx_Impl>();
-		PhysicEngine::onInit();
+		PhysicsEngine::setImplementation<Physx_Impl>();
+		PhysicsEngine::onInit();
 
 
-		rMoteur.SetWindowsAppInstance(hInstance);
+		//rMoteur.SetWindowsAppInstance(hInstance);
 		rMoteur.init();
 
 		d3d11_graphics& gfx = rMoteur.getGraphics();
@@ -71,12 +71,12 @@ int APIENTRY _tWinMain(
 		SceneManager::registerScene<Rush3Scene>("Terrain");
 		SceneManager::registerScene<SceneDeferred>("Deferred");
 		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::switchToScene(3);
+		SceneManager::switchToScene(1);
 
 
 		rMoteur.run();
 		
-		PhysicEngine::cleanupPhysics(false);
+		PhysicsEngine::cleanupPhysics(false);
 
 		shutdownImgui();
 		return 1;
@@ -99,7 +99,7 @@ int APIENTRY _tWinMain(
 	{
 
 		wchar_t szErrMsg[MAX_LOADSTRING];// Un message d'erreur selon le code
-		::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
+		//::LoadString(hInstance, err, szErrMsg, MAX_LOADSTRING);
 		::MessageBox(nullptr, szErrMsg, L"Erreur", MB_ICONWARNING);
 		(void)err;
 		return (int)99; // POURQUOI 99???

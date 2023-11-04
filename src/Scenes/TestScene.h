@@ -24,11 +24,10 @@
 
 #include "../../Utils/Transform.h"
 
-#include <PxPhysicsAPI.h>
 
 #define DRAGFLOAT(flt) ImGui::DragFloat(#flt, &flt, 1,-100,100);
 
-#include "../../Physics/World/PhysicalObject.h"
+#include "../../Physics/World/DynamicObject.h"
 
 using namespace physx;
 
@@ -72,7 +71,7 @@ private:
 
 	Camera lastcam;
 
-	PhysicalObject cube_P;
+	DynamicObject cube_P;
 
 	
 

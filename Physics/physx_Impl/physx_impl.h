@@ -3,36 +3,42 @@
 #include "../PhysicEngine.h"
 #include <PxPhysicsAPI.h>
 #include <iostream>
+#include "physx_shape.h"
 using namespace physx;
 
-struct Physx_Impl : public PhysicEngine::_ImplPhysic
+struct Physx_Impl : public PhysicsEngine::_ImplPhysic
 {
-private:
-	// -- Define physx objects
-	PxScene*				gScene			= NULL;
-	PxDefaultAllocator		gAllocator;
-	PxDefaultErrorCallback	gErrorCallback;
-	PxFoundation*			gFoundation		= NULL;
-	PxPhysics*				gPhysics		= NULL;
-	PxDefaultCpuDispatcher* gDispatcher		= NULL;
-	PxPvd*					gPvd			= NULL;
-	PxMaterial*				gMaterial		= NULL;
-
-	void createVehicule(const PxTransform& t, PxU32 size, PxReal halfExtent)
-	{
-
-		PxTransform vehiculeTransform(PxVec3(PxReal(0), PxReal(2 * halfExtent), PxReal(0)));
-		PxBoxGeometry vehiculeGeometry(PxBoxGeometry(2 * halfExtent, 2 * halfExtent, 2 * halfExtent));
-		PxRigidDynamic* vehicule = PxCreateDynamic(*gPhysics, t.transform(vehiculeTransform), vehiculeGeometry, *gMaterial, 10000.f);
-
-		vehicule->setLinearVelocity(PxVec3(0));
-
-		vehicule->setName("Vehicule");
-		if (!gScene->addActor(*vehicule)) std::cout << "Echec de creation du vehicule" << std::endl;
-
-	}
 public:
+	friend class physx_shape;
 
+	// -- Define physx objects
+	struct ModulePhysics {
+		PxScene* gScene = NULL;
+		PxDefaultAllocator		gAllocator;
+		PxDefaultErrorCallback	gErrorCallback;
+		PxFoundation* gFoundation = NULL;
+		PxPhysics* gPhysics = NULL;
+		PxDefaultCpuDispatcher* gDispatcher = NULL;
+		PxPvd* gPvd = NULL;
+		PxMaterial* gMaterial = NULL;
+	};
+private:
+	static ModulePhysics physics;
+
+	static ModulePhysics& getModulePhysics();
+
+private:
+	// Getters
+	PxScene* getScene() { return physics.gScene; }
+	PxPhysics* getPhysics() { return physics.gPhysics; }
+	PxMaterial* getMaterial() { return physics.gMaterial; }
+	PxDefaultCpuDispatcher* getDispatcher() { return physics.gDispatcher; }
+	PxDefaultAllocator* getAllocator() { return &physics.gAllocator; }
+	PxDefaultErrorCallback* getErrorCallback() { return &physics.gErrorCallback; }
+	PxFoundation* getFoundation() { return physics.gFoundation; }
+	PxPvd* getPvd() { return physics.gPvd; }
+
+public:
 	Physx_Impl() {};
 	~Physx_Impl() { cleanupPhysics(false); };
 
@@ -41,8 +47,8 @@ private:
 	virtual void onInit() override;
 
 	virtual void onUpdate(float deltaTime) override {
-		gScene->simulate(deltaTime);
-		gScene->fetchResults(true);
+		physics.gScene->simulate(deltaTime);
+		physics.gScene->fetchResults(true);
 	}
 
 	virtual  void cleanupPhysics(bool /*interactive*/) override;
@@ -51,23 +57,26 @@ private:
 		return gScene->addActor(*actor);
 	}*/
 
-	virtual std::pair<PhysicEngine::iVec3, PhysicEngine::iVec3> getTransform(std::string id);
+	virtual std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3> getTransform(std::string id);
 
-	virtual bool addCube(
-		const std::string& id, 
-		const PhysicEngine::iVec3 position, 
-		const PhysicEngine::iVec3 rotation, 
-		const PhysicEngine::iVec3 scale = PhysicEngine::iVec3{ 1,1,1 })
-	override;
-	// Getters
-	PxScene* getScene() { return gScene; }
-	PxPhysics* getPhysics() { return gPhysics; }
-	PxMaterial* getMaterial() { return gMaterial; }
-	PxDefaultCpuDispatcher* getDispatcher() { return gDispatcher; }
-	PxDefaultAllocator* getAllocator() { return &gAllocator; }
-	PxDefaultErrorCallback* getErrorCallback() { return &gErrorCallback; }
-	PxFoundation* getFoundation() { return gFoundation; }
-	PxPvd* getPvd() { return gPvd; }
+	virtual bool addActor(PhysicsEngine::Actor* actor) override {
+		return physics.gScene->addActor(*actor);
+	}
+
+	virtual PhysicsEngine::Actor* createStaticActor(
+		const PhysicsEngine::fVec3 position = PhysicsEngine::fVec3{ 0,0,0 }) override {
+		PxRigidActor * a = physics.gPhysics->createRigidStatic(PxTransform(position));
+		addActor(a);
+		return a;
+	}		
+	virtual PhysicsEngine::Actor* createDynamicActor(
+		const PhysicsEngine::fVec3 position = PhysicsEngine::fVec3{ 0,0,0 }) override {
+		PxRigidActor* a = physics.gPhysics->createRigidDynamic(PxTransform(position));
+		addActor(a);
+		return a;
+	}
+
+
 
 
 };
