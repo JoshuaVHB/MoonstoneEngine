@@ -74,21 +74,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Utils/vendor/physx;$(SolutionDir)Graphics;$(SolutionDir)Utils/vendor/physx/include/physx/include;$(SolutionDir)Utils/vendor/physx/include/physx/graphics/include;$(SolutionDir)Utils/vendor/physx/freeglut-windows</IncludePath>
+    <IncludePath>$(SolutionDir)Utils/vendor;$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Utils/vendor/physx;$(SolutionDir)Graphics;$(SolutionDir)Utils/vendor/physx/include/physx/include;$(SolutionDir)Utils/vendor/physx/include/physx/graphics/include;$(SolutionDir)Utils/vendor/physx/freeglut-windows</IncludePath>
     <LibraryPath>$(SolutionDir)Utils/vendor/physx/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Utils/vendor/physx;$(SolutionDir)Graphics;</IncludePath>
+    <IncludePath>$(SolutionDir)Utils/vendor;$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Utils/vendor/physx;$(SolutionDir)Graphics;</IncludePath>
     <LibraryPath>$(SolutionDir)Utils/vendor/physx/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
+    <IncludePath>$(SolutionDir)Utils/vendor;$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PublicIncludeDirectories>$(PublicIncludeDirectories);</PublicIncludeDirectories>
-    <IncludePath>$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
+    <IncludePath>$(SolutionDir)Utils/vendor;$(SolutionDir)src/Scenes;$(SolutionDir)Utils\vendor\stbi;$(IncludePath);$(SolutionDir)Utils/vendor/imgui;$(SolutionDir)Utils/vendor/rapidobj;$(SolutionDir)Graphics</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
