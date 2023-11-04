@@ -109,6 +109,21 @@ public:
 	}
 
 	template<size_t floatCount>
+	void pushBack(const char* semanticName)
+	{
+		elems.push_back(
+			D3D11_INPUT_ELEMENT_DESC{
+				semanticName, 0,
+				formats[floatCount - 1],
+				0, stride,
+				D3D11_INPUT_PER_VERTEX_DATA, 0
+			}
+		);
+		stride += 16;
+	}
+
+
+	template<size_t floatCount>
 	void pushBackInstanced(const char* semanticName)
 	{
 
@@ -162,6 +177,7 @@ public:
 	void addNewCBuffer(const std::string& name, uint32_t structSize);
 	void apply() const;
 	void bindTexture(const std::string& uniformName,const ID3D11ShaderResourceView* tex) const;
+	void bindTextureArray(const std::string& uniformName, const std::vector<ID3D11ShaderResourceView*>& tex) const;
 	void bindTexture(const std::string& uniformName, const Texture& tex) const;
 
 	template<class ShaderParam>
