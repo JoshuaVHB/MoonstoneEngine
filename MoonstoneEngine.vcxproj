@@ -205,6 +205,7 @@
     <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
+    <ClCompile Include="Platform\IO\JsonParser.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
@@ -219,6 +220,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="src\Scenes\Position.json" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -284,6 +286,7 @@
     <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
+    <ClInclude Include="Platform\IO\JsonParser.h" />
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
@@ -1048,4 +1051,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

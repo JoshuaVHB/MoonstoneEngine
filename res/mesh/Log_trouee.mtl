@@ -1,0 +1,35 @@
+# Blender 3.6.3 MTL File: 'Log_trouee.blend'
+# www.blender.org
+
+newmtl material0
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd wood-chopping-trunk-base/source/chopping-log.jpg
+map_Bump -bm 1.000000 wood-chopping-trunk-base/source/chopping-log_normal.jpg
+
+newmtl material1
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd wood-chopping-trunk-base/source/chopping-log1.jpg
+map_Bump -bm 1.000000 wood-chopping-trunk-base/source/chopping-log_normal1.jpg
+
+newmtl material2
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd wood-chopping-trunk-base/source/chopping-log2.jpg
+map_Bump -bm 1.000000 wood-chopping-trunk-base/source/chopping-log_normal2.jpg

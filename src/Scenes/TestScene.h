@@ -29,6 +29,8 @@
 
 #include "../../Physics/World/DynamicObject.h"
 
+#include "../../Platform/IO/JsonParser.h"
+
 using namespace physx;
 
 class TestScene : public Scene {
@@ -38,6 +40,9 @@ private:
 	float dt = 0 , elapsed = 0;
 
 	Mesh bunny;
+
+	std::vector<Mesh> meshes{};
+
 	Effect renderShader, blitFx, gPassFx, lightPassFx;
 	Texture breadbug = Texture(L"res/textures/breadbug.dds");
 	Skybox box;
@@ -73,6 +78,12 @@ private:
 
 	DynamicObject cube_P;
 
+	std::vector<PhysicalObject> cubes{};
+
+	JsonParser parser{ "src/Scenes/Position.json" };
+
+	std::vector<FormatJson> objs = parser.getObjs();
+
 	
 
 public:
@@ -81,7 +92,11 @@ public:
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
-		cube_P.setMesh(&bunny);
+		std::for_each(objs.begin(), objs.end(), [&](FormatJson& obj) {
+			meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
+		});
+
+		cube_P.setMesh(&bunny);		
 
 		renderShader.loadEffectFromFile("res/effects/baseMesh.fx");
 		lightPassFx.loadEffectFromFile("res/effects/lightPass.fx");
@@ -157,6 +172,9 @@ public:
 
 			gPassFx.bindTexture("tex", bb.getTexture());
 			Renderer::renderMesh(cam, bunny, gPassFx);
+			bunny.getTransform().setPosition({ 0,0,0 });
+
+			setPosObjs(cam);
 
 			auto SRVLit = fbo.bindUnlitRTV();
 			box.renderSkybox(cam);			
@@ -183,6 +201,8 @@ public:
 
 			Renderer::renderMesh(cam, *(cube_P.getMesh()), renderShader);
 
+			setPosObjs(cam);
+
 			box.renderSkybox(cam);
 				Camera& cam = m_player.getCamera();
 				Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
@@ -206,6 +226,15 @@ public:
 
 		m_player.onImGuiRender();
 		Renderer::showImGuiDebugData();
+	}
+
+	void setPosObjs(Camera cam) {
+		for (int i = 0; i < objs.size(); i++) {
+			Renderer::renderMesh(cam, meshes[i], gPassFx);
+			meshes[i].getTransform().setPosition(objs[i].positionObj);
+			meshes[i].getTransform().setRotation(objs[i].forwardObj);
+			meshes[i].getTransform().setScale(objs[i].scaleObj);
+		}
 	}
 
 
