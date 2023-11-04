@@ -11,6 +11,8 @@
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
 
+#include "Platform/IO/JsonParser.h"
+
 #include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
 
@@ -45,6 +47,12 @@ private:
 
 	// -- Meshes
 	TriggerBox start;
+
+
+	// -- Objs and JsonParser
+	JsonParser m_parser{ "res/json/Position.json" };
+	std::vector<FormatJson> m_objs = m_parser.getObjs();
+	std::vector<Mesh> m_meshes{};
 private:
 
 	// -- Define constant buffers
@@ -86,6 +94,10 @@ public:
 		currentCamera = &clop.getCurrentCamera();		
 		clop.setPosition(+498.f , + 40.f, +984.f);
 		Renderer::setBackbufferToDefault();
+
+		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
+			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
+		});
 	}
 
 
@@ -133,7 +145,9 @@ public:
 		}
 
 		Renderer::renderMesh(cam, clop.getMesh(), m_terrainEffect);		
-		m_skybox.renderSkybox(cam);		
+		m_skybox.renderSkybox(cam);	
+
+		setPosObjs(cam);
 
 	}
 
@@ -145,6 +159,15 @@ public:
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 
+	}
+
+	void setPosObjs(Camera cam) {
+		for (int i = 0; i < m_objs.size(); i++) {
+			Renderer::renderMesh(cam, m_meshes[i], m_terrainEffect);
+			m_meshes[i].getTransform().setPosition(m_objs[i].positionObj);
+			m_meshes[i].getTransform().setRotation(m_objs[i].forwardObj);
+			m_meshes[i].getTransform().setScale(m_objs[i].scaleObj);
+		}
 	}
 
 };

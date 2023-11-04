@@ -102,9 +102,6 @@ public:
 		sp.cameraPos = currentCam.getPosition();
 		m_baseMeshEffect.updateSubresource(sp, "worldParams");
 		m_baseMeshEffect.sendCBufferToGPU("worldParams");
-	
-
-
 
 	}
 	
@@ -137,6 +134,7 @@ public:
 			Renderer::renderMesh(currentCam, m_player.getMesh(), m_baseMeshEffect);
 			m_skybox.renderSkybox(currentCam);
 			Renderer::renderAABB(currentCam, Endcheck);
+
 		}
 		if (SphereAABBTest(m_player.getBoundingSphere(), Endcheck))
 		{
@@ -181,6 +179,5 @@ public:
 		ImGui::End();
 		m_ui.renderUI();
 	}
-
 
 };

@@ -9,15 +9,15 @@
     "j_Objet": "Arbre",
     "j_path": "res/mesh/Arbre.obj",
     "j_position": {
-      "x": 30,
-      "y": -30,
-      "z": 1,
+      "x": 315.476,
+      "y": 22.5294,
+      "z": 428.666,
       "n": 0
     },
     "j_scale": {
-      "x": 20.0,
-      "y": 20.0,
-      "z": 20.0,
+      "x": 25.0,
+      "y": 25.0,
+      "z": 25.0,
       "n": 0
     }
   },
@@ -31,9 +31,9 @@
     "j_Objet": "Log_trouee",
     "j_path": "res/mesh/Log_trouee.obj",
     "j_position": {
-      "x": 30,
-      "y": 30,
-      "z": 0,
+      "x": 334.468,
+      "y": 60.8319,
+      "z": 817.558,
       "n": 0
     },
     "j_scale": {
@@ -75,9 +75,9 @@
     "j_Objet": "Ronces",
     "j_path": "res/mesh/Ronces.obj",
     "j_position": {
-      "x": 50,
-      "y": 50,
-      "z": 0,
+      "x": 165.726,
+      "y": 1,
+      "z": 251.33,
       "n": 0
     },
     "j_scale": {

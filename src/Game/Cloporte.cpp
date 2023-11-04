@@ -15,8 +15,8 @@ CameraController controller;
 
 Cloporte::Cloporte()
 	: m_object{ PhysicsEngine::FilterGroup::ePlayer, PhysicsEngine::FilterGroup::eAll }
-	, m_speed(0), maxVelocity(3.f)
-	, accelerationFactor(0.05f), friction(0.1f)
+	, m_speed(0), maxVelocity(25.0f)
+	, accelerationFactor(0.05f), friction(0.2f)
 	, m_position{0, 0, 0, 0}
 	, m_forward {0, 0, 1 , 0}
 	, currentVelocity{0}
@@ -31,6 +31,14 @@ Cloporte::Cloporte()
 	m_object.setMesh(std::move(&m_mesh));
 	m_object.addShape(physx_shape::getBall(XMVectorGetX(m_object.getTransform().getScale())));
 	m_boundingSphere = BoundingSphere(m_position, XMVectorGetX(m_object.getTransform().getScale()));
+
+	//Set max velocity
+	m_object.setMaxLinearVelocity(maxVelocity);
+	m_object.setMaxAngularVelocity(2.0f);
+
+	//Set Velocity
+	m_object.setLinearVelocity({ 0.5f,0.5f,0.5f });
+	m_object.setAngularVelocity({ 0.5f,0.5f,0.5f });
 }
 
 void Cloporte::handleInputs() 
@@ -58,6 +66,12 @@ void Cloporte::update(float deltaTime)
 	CameraController::computeFirstPersonPosition(*this, m_firstPerson);
 
 	getCurrentCamera().updateCam();
+
+	//Afficher vitesse 
+	//m_object.displayLinearVelocity();
+
+	//Afficher position
+	//m_object.displayPosition();
 
 }
 

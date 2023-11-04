@@ -80,7 +80,7 @@ private:
 
 	std::vector<PhysicalObject> cubes{};
 
-	JsonParser parser{ "src/Scenes/Position.json" };
+	JsonParser parser{ "res/json/Position.json" };
 
 	std::vector<FormatJson> objs = parser.getObjs();
 

@@ -20,11 +20,23 @@ public:
 	void setTransform(Transform& _transform);
 	void majTransformPhysics();
 
+	void setMaxLinearVelocity(float maxLinearVelocity);
+	void setMaxAngularVelocity(float maxAngularVelocity);
+
+	void setLinearVelocity(PhysicsEngine::fVec3 linearVelocity);
+	void setAngularVelocity(PhysicsEngine::fVec3 angularVelocity);
+
 	void addForce(PhysicsEngine::fVec3 force);
 	void addTorque(PhysicsEngine::fVec3 Torque);
 	void clearForce();
 	void clearTorque();
+
 	PhysicsEngine::fVec3 getLinearValocity();	
 	PhysicsEngine::fVec3 getForwardVector();
+
+	void displayLinearVelocity();
+	void displayAngularVelocity();
+
+	void displayPosition();
 };
 

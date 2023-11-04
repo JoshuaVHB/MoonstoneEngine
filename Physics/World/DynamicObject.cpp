@@ -31,10 +31,38 @@ void DynamicObject::majTransformPhysics()
 	}
 }
 
+void DynamicObject::setMaxLinearVelocity(float maxLinearVelocity)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->setMaxLinearVelocity(maxLinearVelocity);
+	}
+}
+
+void DynamicObject::setMaxAngularVelocity(float maxAngularVelocity)
+{
+if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->setMaxAngularVelocity(maxAngularVelocity);
+	}
+}
+
+void DynamicObject::setLinearVelocity(PhysicsEngine::fVec3 linearVelocity)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->setLinearVelocity(linearVelocity);
+	}
+}
+
+void DynamicObject::setAngularVelocity(PhysicsEngine::fVec3 angularVelocity)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->setAngularVelocity(angularVelocity);
+	}
+}
+
 void DynamicObject::addForce(PhysicsEngine::fVec3 force)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
-		m_actor->is<PxRigidDynamic>()->addForce(force);
+		m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
 	}
 }
 
@@ -65,6 +93,30 @@ PhysicsEngine::fVec3 DynamicObject::getLinearValocity()
 		return m_actor->is<PxRigidDynamic>()->getLinearVelocity();
 	}
 	return PhysicsEngine::fVec3{};
+}
+
+void DynamicObject::displayLinearVelocity()
+{
+if (m_actor && m_actor->is<PxRigidDynamic>()) {
+	auto v = m_actor->is<PxRigidDynamic>()->getLinearVelocity().magnitude();
+	std::cout << "Linear Velocity : " << v << std::endl;
+	}
+}
+
+void DynamicObject::displayAngularVelocity()
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		auto v = m_actor->is<PxRigidDynamic>()->getAngularVelocity().magnitude();
+		std::cout << "Angular Velocity : " << v << std::endl;
+	}
+}
+
+void DynamicObject::displayPosition()
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		auto v = m_actor->is<PxRigidDynamic>()->getGlobalPose().p;
+		std::cout << "Position : " << v.x << " " << v.y << " " << v.z << std::endl;
+	}
 }
 
 
