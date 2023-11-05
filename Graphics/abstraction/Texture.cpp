@@ -10,7 +10,15 @@
 #include "../../Platform/IO/DDSTextureLoader11.h"
 #include "../../Platform/WindowsEngine.h"
 
-inline std::wstring widestring2string2(const std::string& string)
+inline std::string narrow(const std::wstring& string)
+{
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	return converter.to_bytes(string);
+}
+
+
+inline std::wstring widen(const std::string& string)
 {
 	using convert_type = std::codecvt_utf8<wchar_t>;
 	std::wstring_convert<convert_type, wchar_t> converter;
@@ -56,6 +64,8 @@ Texture Texture::toTextureArray(
 Texture::Texture(const std::wstring& path)
 : m_path(path), m_texture(nullptr)
 {
+	if (!std::filesystem::exists(path))
+		std::cout << "WARNING : texture" << narrow(path) << " not found. Check for typo !" << std::endl;
 #ifdef D3D11_IMPL
 	m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 	DirectX::CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
@@ -63,8 +73,16 @@ Texture::Texture(const std::wstring& path)
 #endif
 }
 
-Texture::Texture(const std::string& path) : Texture(widestring2string2(path))
+Texture::Texture(const std::string& path) : Texture(widen(path))
 {}
+
+
+Texture::Texture(ID3D11ShaderResourceView* srv)
+{
+	m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
+	m_texture = srv;
+}
+
 
 Texture::Texture(int width, int height)
 	: m_texture(nullptr)

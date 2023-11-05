@@ -45,6 +45,11 @@ private:
 
 	// -- Meshes
 	TriggerBox start;
+
+	Texture m_screenShot;
+
+
+
 private:
 
 	// -- Define constant buffers

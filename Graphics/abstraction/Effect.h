@@ -180,6 +180,8 @@ public:
 	void bindTextureArray(const std::string& uniformName, const std::vector<ID3D11ShaderResourceView*>& tex) const;
 	void bindTexture(const std::string& uniformName, const Texture& tex) const;
 
+	void setUniformVector(const std::string& uniformName, const DirectX::XMVECTOR& value) const;
+
 	template<class ShaderParam>
 	void updateSubresource(const ShaderParam& sp, const std::string& cbuffName) const
 	{

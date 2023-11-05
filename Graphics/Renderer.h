@@ -26,6 +26,7 @@ class Mesh;
 class Effect;
 class Camera;
 class Material;
+class Texture;
 struct AABB;
 struct ID3D11DepthStencilView;
 
@@ -50,37 +51,59 @@ public:
 	
 	protected:
 
+		// -- Core
+
 		virtual void drawIndexed(size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation) = 0;
-		virtual Mesh loadMeshFromFile(const std::filesystem::path& path) = 0;
+		virtual void draw(size_t count) = 0;
+		virtual void clearScreen(float, float, float, float) = 0;
+		virtual void clearScreen() = 0;
+		virtual void clearText() = 0;
+		virtual void setBackbufferToDefault() = 0;
+		virtual void setDepthBuffer(ID3D11DepthStencilView* other) = 0;
+
+		// -- Render
+
 		virtual void renderMesh(Camera&, const Mesh&, const Effect&) = 0;
 		virtual void renderMesh(Camera&, const Mesh&) = 0;
 		virtual void renderCubemap(Camera&, const Mesh&, const Effect&) = 0;
-		virtual void clearScreen(float, float, float, float) = 0;
-		virtual void clearScreen() = 0;
 		virtual void renderPBRMesh(Camera& camera, const Mesh& mesh, const Material& mat) = 0;
+		virtual void blitTexture(const Texture&, const DirectX::XMVECTOR& = { 1,1,1,1 }) = 0;
+		virtual void writeTextOnScreen(const std::string& text, int screenX, int screenY, float scale) = 0;
+		virtual void renderText() = 0;
+
+		// -- Debug
+
 		virtual void renderAABB(Camera& camera, const AABB&) = 0;
 		virtual void renderDebugPerspectiveCameraOutline(Camera& viewCamera, const Camera& outlinedCamera) = 0;
 		virtual void renderDebugLine(Camera& cam, DirectX::XMVECTOR from, DirectX::XMVECTOR to) = 0;
 		virtual void showImGuiDebugData() = 0;
-		virtual void setBackbufferToDefault() = 0;
-		virtual void draw(size_t count) = 0;
-		virtual void setDepthBuffer(ID3D11DepthStencilView* other) = 0;
 
-	private:
 
 
 	};
+	// size_t count
 	CALL_IMPL(draw);
+	// size_t count, uint32_t startIndexLocation, uint32_t baseVertexLocation
 	CALL_IMPL(drawIndexed) ;
+	CALL_IMPL(blitTexture) ;
 	CALL_IMPL(clearScreen) ;
 	CALL_IMPL(renderMesh) ;
 	CALL_IMPL(renderCubemap) ;
-	CALL_IMPL(loadMeshFromFile) ;
 	CALL_IMPL(renderPBRMesh) ;
 	CALL_IMPL(renderAABB) ;
 	CALL_IMPL(renderDebugPerspectiveCameraOutline)	;
+
 	CALL_IMPL(showImGuiDebugData)					;
 	CALL_IMPL(setBackbufferToDefault)				;
+
+	CALL_IMPL(clearText)						;
+	CALL_IMPL(renderText)						;
+
+	// const std::string& text,
+	// int screenX, int screenY
+	// float scale
+	CALL_IMPL(writeTextOnScreen)						;
+
 	CALL_IMPL(setDepthBuffer)						;
 	CALL_IMPL(renderDebugLine)						;
 

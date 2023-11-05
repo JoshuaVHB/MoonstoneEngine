@@ -92,6 +92,21 @@ d3d11_graphics::d3d11_graphics(HWND hWnd, GRAPHICS_MODE mode)
 	DX_RELEASE(pRasterizerState);
 
 
+	/////////////////////////////////////////////////////////////////
+	D3D11_BLEND_DESC blendDesc{};
+	ID3D11BlendState* m_blendState = nullptr;
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	m_context.device->CreateBlendState(&blendDesc, &m_blendState);
+	m_context.context->OMSetBlendState(m_blendState, nullptr, 0xffffffff);
+	DX_RELEASE(m_blendState);
+
 }
 
 d3d11_graphics::~d3d11_graphics() {

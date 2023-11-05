@@ -123,6 +123,8 @@ Effect::Effect()
 			(ID3D11ShaderResourceView*)(tex));
 	}
 
+
+
 	void Effect::bindTextureArray(const std::string& uniformName, const std::vector<ID3D11ShaderResourceView*>& tex) const
 	{
 		if (tex.empty()) return;
@@ -135,6 +137,10 @@ Effect::Effect()
 		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResource(tex.getTexture());
 	}
 
+	void Effect::setUniformVector(const std::string& uniformName,const DirectX::XMVECTOR& value) const
+	{
+		m_effect->GetVariableByName(uniformName.c_str())->AsVector()->SetFloatVector(value.vector4_f32);
+	}
 
 
 	void Effect::sendCBufferToGPU(const std::string& cbuffName) const

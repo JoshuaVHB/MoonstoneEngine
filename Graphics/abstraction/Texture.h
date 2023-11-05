@@ -25,6 +25,7 @@ public:
 	Texture(const std::wstring& path);
 	Texture(const std::string& path);
 	Texture(int width, int height);
+	Texture(ID3D11ShaderResourceView*);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Basic operations

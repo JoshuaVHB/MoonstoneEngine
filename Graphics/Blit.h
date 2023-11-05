@@ -18,8 +18,10 @@ public:
 	}
 
 
-	static void blitTextureToScreen(const Texture& tex)
+	void blitTextureToScreen(const Texture& tex)
 	{
-		
+
+		m_blitFx.bindTexture("source", tex);
+		m_blitFx.apply();
 	}
 };
