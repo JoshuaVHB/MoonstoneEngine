@@ -71,7 +71,8 @@ int main() {
 		SceneManager::registerScene<Rush3Scene>("Terrain");
 		SceneManager::registerScene<SceneDeferred>("Deferred");
 		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::switchToScene(1);
+		SceneManager::registerScene<UITestScene>("UITestScene");
+		SceneManager::switchToScene(4);
 
 
 		rMoteur.run();
