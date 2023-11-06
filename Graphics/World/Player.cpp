@@ -101,7 +101,7 @@ void Player::handleMouseEvents() {
 
 	while ((me = wMouse->read()).isValid())
 	{
-		if (me.getType() == Mouse::Event::Type::RPRESS) {
+		if (me.getType() == Mouse::Event::Type::RDOWN) {
 
 			if (m_cursorIsConfined) {
 				wMouse->freeCursor();

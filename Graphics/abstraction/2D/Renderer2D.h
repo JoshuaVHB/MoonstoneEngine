@@ -79,11 +79,11 @@ public:
 		for (int i = 0; i < MaxIndicesCount; i += 6) {
 
 			m_batchedIndices[i + 0] = 0 + offset;
-			m_batchedIndices[i + 1] = 2 + offset;
-			m_batchedIndices[i + 2] = 1 + offset;
+			m_batchedIndices[i + 1] = 1 + offset;
+			m_batchedIndices[i + 2] = 2 + offset;
 
-			m_batchedIndices[i + 3] = 3 + offset;
-			m_batchedIndices[i + 4] = 2 + offset;
+			m_batchedIndices[i + 3] = 2 + offset;
+			m_batchedIndices[i + 4] = 3 + offset;
 			m_batchedIndices[i + 5] = 0 + offset;
 
 			offset += 4;
@@ -132,20 +132,20 @@ public:
 		XMVECTOR positions[4] =
 		{
 				{ (XMVectorGetX(position))/ winSize.first * 2 - 1
-						, XMVectorGetY(position) / winSize.second * 2 -1
+						, -2 * (XMVectorGetY(position) / winSize.second) +1
 						, quadTexId },
 
 
 			{		(XMVectorGetX(position) + XMVectorGetX(size)) / winSize.first * 2 - 1,
-						XMVectorGetY(position) / winSize.second * 2 - 1,
+						-2 * (XMVectorGetY(position) / winSize.second) + 1,
 						quadTexId },
 
 			{ (XMVectorGetX(position) + XMVectorGetX(size)) / winSize.first * 2 - 1,
-				(XMVectorGetY(position) + XMVectorGetY(size)) / winSize.second * 2 -1 ,
+				-2 * ((XMVectorGetY(position) + XMVectorGetY(size)) / winSize.second ) +1,
 				quadTexId },
 
 			{ (XMVectorGetX(position)) / winSize.first * 2 - 1,
-				(XMVectorGetY(position) + XMVectorGetY(size)) / winSize.second * 2 - 1 ,
+				-2 * ((XMVectorGetY(position) + XMVectorGetY(size)) / winSize.second)+1 ,
 				quadTexId }
 		};
 
@@ -182,7 +182,7 @@ public:
 
 	void EndBatch() {
 
-
+		if (m_batchedVertices.empty()) return;
 		DX_RELEASE(m_vbo);
 		D3D11_BUFFER_DESC descriptor{};
 		D3D11_SUBRESOURCE_DATA m_initData{};
@@ -204,6 +204,7 @@ public:
 	}
 	void Flush() {
 
+		if (m_batchedVertices.empty()) return;
 		bindTextures();
 		m_quadEffect.apply();
 		// bind textures srv
@@ -219,7 +220,7 @@ public:
 
 
 
-		WindowsEngine::getInstance().getGraphics().getContext().context->DrawIndexed(m_ibo.getBufferSize(), 0, 0);
+		WindowsEngine::getInstance().getGraphics().getContext().context->DrawIndexed(m_batchedVertices.size() * 1.5, 0, 0);
 
 
 		m_batchedVertices.clear();

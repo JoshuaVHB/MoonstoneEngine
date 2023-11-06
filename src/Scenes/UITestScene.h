@@ -28,7 +28,7 @@ public:
 
 	virtual void onUpdate(float deltaTime) override
 	{
-
+		if (wMouse->isLeftPressed()) std::cout << "HELLO" << std::endl;
 		if (!wKbd->isKeyPressed(VK_ESCAPE)) m_hasEscBeenReleased = true;
 		if (wKbd->isKeyPressed(VK_ESCAPE) && m_hasEscBeenReleased)
 		{
@@ -57,7 +57,7 @@ public:
 
 		if (UIRenderer::Button(0,0,400,400))
 		{
-			std::cout << "Hello" << std::endl;
+			std::cout << "Bonjour je suis le bouton" << std::endl;
 		}
 
 
@@ -79,7 +79,13 @@ public:
 
 	}
 
-	virtual void onImGuiRender() override {}
+	virtual void onImGuiRender() override
+	{
+		ImGui::Text("LP : %d, LD : %d", wMouse->isLeftPressed(), wMouse->isLeftDown());
+		ImGui::Text("RP : %d, RD : %d", wMouse->isRightPressed(), wMouse->isRightDown());
+		wMouse->clearPress();
+
+	}
 
 
 };

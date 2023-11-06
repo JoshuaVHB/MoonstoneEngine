@@ -144,6 +144,7 @@ bool WindowsEngine::runPlatform()
 	// Y-a-t'il un message Windows à traiter?
 	if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
+		
 		// Est-ce un message de fermeture ?
 		if (msg.message == WM_QUIT)
 		{
@@ -157,7 +158,6 @@ bool WindowsEngine::runPlatform()
 			::DispatchMessage(&msg);
 		}
 	}
-	
 	
 	
 	
@@ -223,7 +223,6 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 	// Raw mouse input
 	case WM_INPUT:
 	{
-
 		static std::vector<char> rawbuffer;
 
 		UINT size;
@@ -251,8 +250,9 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 		wMouse->onMouseMoved(pt.x, pt.y);
 		break; 
 	}
+
 	case WM_LBUTTONDOWN:
-		{
+	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		wMouse->onLeftPress(pt.x, pt.y);
 		break;

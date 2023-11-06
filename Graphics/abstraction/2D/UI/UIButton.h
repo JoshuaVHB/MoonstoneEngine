@@ -18,6 +18,7 @@ struct UIButton : public UIElement
 	int width, height;
 	UIFrame* m_parent = nullptr;
 	bool hovered = false;
+	bool clicked = false;
 	
 
 public:

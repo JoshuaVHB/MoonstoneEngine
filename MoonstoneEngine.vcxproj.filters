@@ -60,6 +60,7 @@
     <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_debug.cpp" />
     <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_render.cpp" />
     <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_core.cpp" />
+    <ClCompile Include="src\Scenes\SceneTransition.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -928,6 +929,7 @@
     <ClInclude Include="Utils\vendor\stbi\stb_image.h" />
     <ClInclude Include="Utils\vendor\stbi\stb_image_write.h" />
     <ClInclude Include="Utils\vendor\stdafx.h" />
+    <ClInclude Include="src\Scenes\SceneTransition.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />

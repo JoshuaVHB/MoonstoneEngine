@@ -212,6 +212,7 @@
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
+    <ClCompile Include="src\Scenes\SceneTransition.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
+    <ClInclude Include="src\Scenes\SceneTransition.h" />
     <ClInclude Include="src\Scenes\UITestScene.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Utils\AABB.h" />
