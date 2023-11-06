@@ -33,12 +33,14 @@ Cloporte::Cloporte()
 	m_boundingSphere = BoundingSphere(m_position, XMVectorGetX(m_object.getTransform().getScale()));
 
 	//Set max velocity
-	m_object.setMaxLinearVelocity(maxVelocity);
-	m_object.setMaxAngularVelocity(2.0f);
+	//m_object.setMaxLinearVelocity(maxVelocity);
+	m_object.setMaxAngularVelocity(100.0f);
 
 	//Set Velocity
 	m_object.setLinearVelocity({ 0.5f,0.5f,0.5f });
 	m_object.setAngularVelocity({ 0.5f,0.5f,0.5f });
+	m_object.setMass(2.5f);
+	m_object.setMaterial(1.f, 0.4f, 0.1f);
 }
 
 void Cloporte::handleInputs() 
@@ -97,7 +99,10 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 		PhysicsEngine::fVec3 linearVelocity = m_object.getLinearValocity();
 		//linearVelocity.normalize();
 		PhysicsEngine::fVec3 forward { XMVectorGetX(m_forward), XMVectorGetY(m_forward), XMVectorGetZ(m_forward) };
-		m_object.addForce(forward * 100);
+		physx::PxVec3 rotationAxis = forward.cross(m_object.getPosition());
+
+		m_object.addTorque(-rotationAxis * 10);
+		m_object.addForce(forward * 10 );
 
 	}
 

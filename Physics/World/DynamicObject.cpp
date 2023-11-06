@@ -31,6 +31,18 @@ void DynamicObject::majTransformPhysics()
 	}
 }
 
+void DynamicObject::addShape(PxShape* shape)
+{
+	PxFilterData filterData;
+	filterData.word0 = mFilterGroup;
+	filterData.word1 = mMaskGroup;
+	shape->setQueryFilterData(filterData);
+	if(material) 
+		shape->setMaterials(&material, 1);
+	if (m_actor)
+		m_actor->attachShape(*shape);
+}
+
 void DynamicObject::setMaxLinearVelocity(float maxLinearVelocity)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
@@ -61,9 +73,13 @@ void DynamicObject::setAngularVelocity(PhysicsEngine::fVec3 angularVelocity)
 
 void DynamicObject::addForce(PhysicsEngine::fVec3 force)
 {
+	
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
-		m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
+		PxRigidBodyExt::addForceAtPos(*m_actor->is<PxRigidDynamic>(), force, PxVec3(0.f, 10.f, 0.f));
+		//m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
 	}
+	//m_actor->is<PxRigidDynamic>()->
+	
 }
 
 void DynamicObject::addTorque(PhysicsEngine::fVec3 torque)
@@ -95,6 +111,47 @@ PhysicsEngine::fVec3 DynamicObject::getLinearValocity()
 	return PhysicsEngine::fVec3{};
 }
 
+PhysicsEngine::fVec3 DynamicObject::getPosition()
+{
+	return m_actor->getGlobalPose().p;
+}
+
+void DynamicObject::setMass(float mass)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		PxRigidBodyExt::setMassAndUpdateInertia(*m_actor->is<PxRigidDynamic>(), mass);
+	}
+}
+
+void DynamicObject::setMaterial(float staticFriction, float restitution, float dynamicFriction)
+{
+	// Création d'un descripteur de matériau
+	if(!material)
+	{
+		PxMaterial* material = PhysicsEngine::createMaterial(restitution, staticFriction, dynamicFriction);
+		if (m_actor && m_actor->is<PxRigidDynamic>()) {
+			const physx::PxU32 numShapes = m_actor->getNbShapes();
+			physx::PxShape** shapes = new physx::PxShape * [numShapes];
+			m_actor->getShapes(shapes, numShapes);
+
+			for (physx::PxU32 i = 0; i < numShapes; i++) {
+				shapes[i]->setMaterials(&material, 1);
+			}
+
+			delete[] shapes;
+		}
+	}
+	else {
+		material->setStaticFriction(staticFriction);
+		material->setRestitution(restitution);
+		material->setDynamicFriction(dynamicFriction);
+	}
+
+	
+
+}
+
+
 void DynamicObject::displayLinearVelocity()
 {
 if (m_actor && m_actor->is<PxRigidDynamic>()) {
@@ -116,7 +173,7 @@ void DynamicObject::displayPosition()
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		auto v = m_actor->is<PxRigidDynamic>()->getGlobalPose().p;
 		std::cout << "Position : " << v.x << " " << v.y << " " << v.z << std::endl;
-	}
+	}	
 }
 
 
