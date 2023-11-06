@@ -23,7 +23,10 @@ private:
 	
 public:
 
-	UITestScene() {}
+	UITestScene() {
+	
+		UIRenderer::attachMouse(wMouse.get());
+	}
 
 
 	virtual void onUpdate(float deltaTime) override
@@ -41,7 +44,7 @@ public:
 		
 
 		elapsed += deltaTime;
-		UIRenderer::attachMouse(wMouse.get());
+	
 	}
 
 	virtual void onRender() override {
@@ -81,10 +84,7 @@ public:
 
 	virtual void onImGuiRender() override
 	{
-		ImGui::Text("LP : %d, LD : %d", wMouse->isLeftPressed(), wMouse->isLeftDown());
-		ImGui::Text("RP : %d, RD : %d", wMouse->isRightPressed(), wMouse->isRightDown());
 		wMouse->clearPress();
-
 	}
 
 

@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "abstraction/Texture.h"
 #include "Scene.h"
 
 enum TransitionType
