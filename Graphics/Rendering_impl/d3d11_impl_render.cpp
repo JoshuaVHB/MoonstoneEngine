@@ -103,6 +103,7 @@ void direct3D11_impl::blitTexture(const Texture& tex, const DirectX::XMVECTOR& c
 	blit.setUniformVector("colorShift", colorShift);
 	blit.apply();
 	Renderer::draw(6);
+	blit.unbindResources();
 
 }
 

@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "Renderer.h"
 #include "abstraction/Texture.h"
+#include "abstraction/2D/Renderer2D.h"
+#include "abstraction/2D/UI/UIRenderer.h"
 
 #define _XM_NO_INTRINSICS_
 #include <directXmath.h>
@@ -17,6 +19,8 @@ private:
 	bool m_hasEscBeenReleased = false;
 	float elapsed = 0;
 
+	Renderer2D m_dd;
+	
 public:
 
 	UITestScene() {}
@@ -24,9 +28,6 @@ public:
 
 	virtual void onUpdate(float deltaTime) override
 	{
-
-
-
 
 		if (!wKbd->isKeyPressed(VK_ESCAPE)) m_hasEscBeenReleased = true;
 		if (wKbd->isKeyPressed(VK_ESCAPE) && m_hasEscBeenReleased)
@@ -37,7 +38,10 @@ public:
 
 		if (m_isPaused) return;
 
+		
+
 		elapsed += deltaTime;
+		UIRenderer::attachMouse(wMouse.get());
 	}
 
 	virtual void onRender() override {
@@ -47,6 +51,20 @@ public:
 		Renderer::blitTexture(m_bb, DirectX::XMVECTOR{1,1,1,1});
 		Renderer::writeTextOnScreen(std::to_string(elapsed), -500, -200, 1);
 
+		
+
+		m_dd.BeginBatch();
+
+		if (UIRenderer::Button(0,0,400,400))
+		{
+			std::cout << "Hello" << std::endl;
+		}
+
+
+
+		m_dd.EndBatch();
+		m_dd.Flush();
+
 		if (m_isPaused)
 		{
 			m_fbo.unbind();
@@ -55,7 +73,9 @@ public:
 			Renderer::blitTexture(screenShot, DirectX::XMVECTOR{1,1,1,0.5});
 			Renderer::writeTextOnScreen("Pause", 0, 0, 1);
 		}
+		 
 		Renderer::renderText();
+		UIRenderer::renderUI();
 
 	}
 

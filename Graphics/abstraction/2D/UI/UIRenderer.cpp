@@ -2,4 +2,6 @@
 
 
 Mouse* UIRenderer::attachedMouse = nullptr;
-std::vector<UIElement*> UIRenderer::m_renderList = std::vector<UIElement*>{};
+std::vector<std::unique_ptr<UIElement>>UIRenderer::m_renderList {};
+
+Renderer2D* UIRenderer::m_renderer = nullptr;
