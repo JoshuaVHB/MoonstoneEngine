@@ -2,6 +2,8 @@
 #include "DepthBuffer.h"
 #include <d3d11.h>
 
+#include "FrameBufferStack.h"
+
 
 
 #pragma warning(suppress : 6387) // removes useless intellisense warning
@@ -98,6 +100,7 @@ FrameBuffer::FrameBuffer(int texCount/*=1*/)
 #ifdef D3D11_IMPL
 		m_depth.bind();
 		m_renderContext.context->OMSetRenderTargets(m_texCount, m_rtv.data(), m_depth.getView());
+		FrameBufferStack::getInstance().pushFBO(this);
 #endif
 
 	}
@@ -111,9 +114,13 @@ FrameBuffer::FrameBuffer(int texCount/*=1*/)
 
 	void FrameBuffer::unbind()
 	{
+		/*
 		auto renderContext = WindowsEngine::getInstance().getGraphics().getContext();
 		renderContext.context->OMSetRenderTargets(1,
 			&renderContext.rtv,
 			WindowsEngine::getInstance().getGraphics().getDepthBuffer().getView());
+		*/
+		FrameBufferStack::getInstance().popFBO();
+
 	}
 
