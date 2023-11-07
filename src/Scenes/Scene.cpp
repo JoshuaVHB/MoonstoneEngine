@@ -3,18 +3,34 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 
+#include "SceneTransition.h"
 
+SceneTransition* SceneManager::s_currentTransition = nullptr;
 std::vector<SceneBuilder> SceneManager::s_availableScenes{};
 size_t SceneManager::s_activeSceneIndex		= -1;
 Scene* SceneManager::s_activeScene			= nullptr;
 
 void SceneManager::onRender() 
 {
+    if (s_currentTransition) return;
 	s_activeScene->onRender();
 }
 
 void SceneManager::onUpdate(float deltaTime)
 {
+    if (s_currentTransition)
+    {
+		// returns true if the the transition is still ongoing
+        bool onGoing = s_currentTransition->step(deltaTime);
+        if (!onGoing)
+        {
+            s_currentTransition->release();
+            s_currentTransition = nullptr;
+			std::cout << "Finished scene transition" << std::endl;
+        }
+        return;
+    }
+
 	s_activeScene->onUpdate(deltaTime);
 }
 
@@ -47,11 +63,19 @@ void SceneManager::registerScene(const std::string& name, const SceneBuildFn& pr
     s_availableScenes.emplace_back(std::make_pair(name, provider));
 }
 
+
 void SceneManager::switchToScene(size_t sceneIndex)
 {
-    delete s_activeScene;
-    auto& [name, provider] = s_availableScenes[sceneIndex];
-    s_activeScene = provider();
+	auto& [name, provider] = s_availableScenes[sceneIndex];
+    Scene* destination = provider();
+
+    if (!s_currentTransition && s_activeScene)
+    {
+        s_currentTransition = new SceneTransition(s_activeScene, destination, TransitionCurve::LINEAR, TransitionType::FADE);
+        s_currentTransition->setDuration(2);
+        std::cout << "Created a new scene transition" << std::endl;
+    }
+
     s_activeSceneIndex = sceneIndex;
+    s_activeScene = destination;
 }
-//ahah

@@ -111,7 +111,6 @@ Mesh::Mesh(Mesh&& other) noexcept
 }
 
 Mesh& Mesh::operator=(Mesh&& other) noexcept {
-	Mesh hello{ std::move(other) } ;
-	hello.swap(*this);
+	Mesh{ std::move(other) }.swap(*this);
 	return *this;
 }

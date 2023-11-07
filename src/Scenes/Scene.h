@@ -4,8 +4,8 @@
 #include <vector>
 #include <functional>
 #include <string> 
-#include <PxPhysicsAPI.h>
 #include <iostream>
+
 class Scene {
 protected:
 
@@ -23,9 +23,12 @@ public:
 using SceneBuildFn = std::function<Scene* ()>;
 using SceneBuilder = std::pair<std::string, SceneBuildFn>;
 
+class SceneTransition;
 
 class SceneManager
 {
+
+
 
 public:
 	
@@ -43,6 +46,7 @@ public:
 
 private:
 
+	static SceneTransition* s_currentTransition;
 	static std::vector<SceneBuilder> s_availableScenes;
 	static size_t s_activeSceneIndex;
 	static Scene* s_activeScene;

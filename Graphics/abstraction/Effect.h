@@ -201,7 +201,7 @@ public:
 	void updateCbuffer(const cbufferParam& data, const std::string& cbuffName) const
 	{
 		D3D11_BUFFER_DESC desc{};
-		desc.ByteWidth = 2 *128 * sizeof(PointLight) ;
+		desc.ByteWidth = sizeof(cbufferParam) ;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 		ID3D11Buffer* buffer;
