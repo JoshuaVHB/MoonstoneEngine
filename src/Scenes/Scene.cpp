@@ -9,7 +9,6 @@ SceneTransition* SceneManager::s_currentTransition = nullptr;
 std::vector<SceneBuilder> SceneManager::s_availableScenes{};
 size_t SceneManager::s_activeSceneIndex		= -1;
 Scene* SceneManager::s_activeScene			= nullptr;
-SceneTransition* SceneManager::transition 	= nullptr;
 
 void SceneManager::onRender() 
 {

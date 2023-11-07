@@ -34,7 +34,7 @@ public:
 	
 	static void onUpdate(float deltaTime);
 	static void onRender();
-	static void onImGuiRender();
+	static bool onImGuiRender();
 
 	static void registerScene(const std::string& name, const SceneBuildFn& provider);
 
