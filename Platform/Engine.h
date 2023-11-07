@@ -71,16 +71,26 @@ public:
 
 	virtual bool animation() { 
 
+		static bool resetDt = false;
 		m_nextTime = m_clock.getTimeCount();
 		float deltaTime = static_cast<float>(m_clock.getTimeBetweenCounts(m_previousTime, m_nextTime));
-
+		if (resetDt)
+		{
+			deltaTime = 0;
+			m_previousTime = m_nextTime;
+			resetDt = false;
+		}
 		if (deltaTime >= 0.01666) {
 
 
 			SceneManager::onUpdate(deltaTime);
 			PhysicsEngine::onUpdate(deltaTime);
 			SceneManager::onRender();
-			SceneManager::onImGuiRender();
+			if (SceneManager::onImGuiRender())
+			{
+				std::cout << "switchedScene" << std::endl;
+				resetDt = true;
+			}
 			ImGui::UpdatePlatformWindows();
 			p_renderingDevice->present();
 			m_previousTime = m_nextTime;

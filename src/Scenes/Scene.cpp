@@ -9,6 +9,7 @@ SceneTransition* SceneManager::s_currentTransition = nullptr;
 std::vector<SceneBuilder> SceneManager::s_availableScenes{};
 size_t SceneManager::s_activeSceneIndex		= -1;
 Scene* SceneManager::s_activeScene			= nullptr;
+SceneTransition* SceneManager::transition 	= nullptr;
 
 void SceneManager::onRender() 
 {
@@ -34,12 +35,13 @@ void SceneManager::onUpdate(float deltaTime)
 	s_activeScene->onUpdate(deltaTime);
 }
 
-void SceneManager::onImGuiRender()
+bool SceneManager::onImGuiRender()
 {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    Scene* currentScene = s_activeScene;
     s_activeScene->onImGuiRender();
 
     ImGui::Begin("Scenes");
@@ -56,6 +58,7 @@ void SceneManager::onImGuiRender()
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    return currentScene != s_activeScene;
 }
 
 void SceneManager::registerScene(const std::string& name, const SceneBuildFn& provider)
