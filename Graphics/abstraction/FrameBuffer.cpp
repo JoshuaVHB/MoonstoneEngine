@@ -106,6 +106,15 @@ FrameBuffer::FrameBuffer(int texCount/*=1*/)
 	}
 
 
+	void FrameBuffer::bindCached() const noexcept
+	{
+#ifdef D3D11_IMPL
+		m_depth.bind();
+		m_renderContext.context->OMSetRenderTargets(m_texCount, m_rtv.data(), m_depth.getView());
+#endif
+
+	}
+
 	ID3D11ShaderResourceView* FrameBuffer::bindUnlitRTV()
 	{
 		m_renderContext.context->OMSetRenderTargets(1, &m_unlitSrv.first, m_depth.getView());

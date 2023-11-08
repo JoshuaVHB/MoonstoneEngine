@@ -37,6 +37,7 @@ public:
 
 	void clear() const noexcept;
 	void bind() const noexcept;
+	void bindCached() const noexcept;
 
 	const std::vector<ID3D11RenderTargetView*>& getRenderTargetViews()		const noexcept { return m_rtv;  }
 	const std::vector<ID3D11ShaderResourceView*>& getShaderResourceViews()	const noexcept { return m_srv;  }

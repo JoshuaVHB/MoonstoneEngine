@@ -120,7 +120,6 @@ public:
 
 	virtual void onRender() override {
 
-		FrameBuffer::unbind();
 		Renderer::clearScreen();
 		m_textRenderer.clear();
 

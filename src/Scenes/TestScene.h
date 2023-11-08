@@ -179,7 +179,7 @@ public:
 			auto SRVLit = fbo.bindUnlitRTV();
 			box.renderSkybox(cam);			
 
-			Renderer::setBackbufferToDefault();
+			fbo.unbind();
 
 			lightPassFx.bindTexture("tex", bb.getTexture());
 			lightPassFx.bindTexture("normal", fbo.getResource(0));
@@ -193,7 +193,6 @@ public:
 		}
 		else {
 
-			FrameBuffer::unbind();
 			Renderer::clearScreen();
 
 			//Renderer::renderAABB(cam, aabb);
