@@ -1,7 +1,19 @@
 #include "physx_collision.h"
-
+#include "../World/TriggerBox.h"
+#include <iostream>
 void Physx_Collision::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
+    for (PxU32 i = 0; i < count; i++) {
+        // Vérifiez si la trigger box est impliquée dans la paire
+        if (pairs[i].triggerActor->is<PxRigidActor>()) {
+            // Récupération des formes de l'acteur
+            try {
+                reinterpret_cast<TriggerBox*>(pairs[i].triggerActor->userData)->onTrigger();
+            }
+            catch (...) {std::cout << "Error onTrigger" << std::endl;
+			}
+        }
+    }
 }
 
 void Physx_Collision::onConstraintBreak(PxConstraintInfo* constraints, PxU32 count)

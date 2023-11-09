@@ -39,8 +39,7 @@ Cloporte::Cloporte()
 	//Set Velocity
 	m_object.setLinearVelocity({ 0.5f,0.5f,0.5f });
 	m_object.setAngularVelocity({ 0.5f,0.5f,0.5f });
-	m_object.setMass(2.5f);
-	m_object.setMaterial(1.f, 0.4f, 0.1f);
+	m_object.setMass(3.f);
 }
 
 void Cloporte::handleInputs() 

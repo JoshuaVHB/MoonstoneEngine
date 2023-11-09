@@ -8,9 +8,9 @@ public:
 		m_actor->setName(id.c_str());
 	}
 
-	StaticObject(PhysicsEngine::FilterGroup::Enum _filterGroup, 
-		PhysicsEngine::FilterGroup::Enum _maskGroup) : PhysicalObject(_filterGroup, _maskGroup) {
-		m_actor = PhysicsEngine::createDynamicActor();
+	StaticObject(group _filterGroup, group _maskGroup)
+		: PhysicalObject(_filterGroup, _maskGroup) {
+		m_actor = PhysicsEngine::createStaticActor();
 		m_actor->setName(id.c_str());
 	}
 

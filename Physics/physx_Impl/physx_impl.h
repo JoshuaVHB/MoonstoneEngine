@@ -4,6 +4,7 @@
 #include <PxPhysicsAPI.h>
 #include <iostream>
 #include "physx_shape.h"
+#include "physx_collision.h"
 using namespace physx;
 
 struct Physx_Impl : public PhysicsEngine::_ImplPhysic
@@ -27,6 +28,7 @@ private:
 	static int currentScene;
 	static ModulePhysics& getModulePhysics();
 
+	Physx_Collision CollisionCallback{};
 private:
 	virtual bool changeScene(int numScene) override;
 	virtual int addScene() override;

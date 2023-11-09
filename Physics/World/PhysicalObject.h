@@ -14,6 +14,9 @@
 
 class PhysicalObject
 {
+public:
+	using fVec3 = PhysicsEngine::fVec3;
+	using group = PhysicsEngine::FilterGroup::Enum;
 protected:
 	static int count;
 	std::string id;
@@ -24,14 +27,13 @@ protected:
 	Mesh* m_mesh = nullptr;
 
 	PhysicsEngine::Actor* m_actor = nullptr;
-	PhysicsEngine::FilterGroup::Enum mFilterGroup 
-		= PhysicsEngine::FilterGroup::eOther;
-	PhysicsEngine::FilterGroup::Enum mMaskGroup 
-		= PhysicsEngine::FilterGroup::eOther;
+	group mFilterGroup
+		= group::eOther;
+	group mMaskGroup
+		= group::eOther;
 
 	PhysicalObject() : id{ std::string("PhysicalObject_") + std::to_string(++count) } {};
-	PhysicalObject(PhysicsEngine::FilterGroup::Enum _filterGroup,
-		PhysicsEngine::FilterGroup::Enum _maskGroup		)
+	PhysicalObject(group _filterGroup,	group _maskGroup)
 		: id{ std::string("PhysicalObject_") + std::to_string(++count) }, 
 			mFilterGroup{ _filterGroup }, mMaskGroup{ _maskGroup }
 	{};
@@ -55,5 +57,6 @@ public:
 		if(m_actor)
 			m_actor->attachShape(*shape);
 	}
+
 };
 #endif // !PHYSICALOBJECT_H

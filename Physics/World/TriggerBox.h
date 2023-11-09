@@ -1,32 +1,24 @@
 #pragma once
 #include "StaticObject.h"
-
+#include <functional>
 
 
 class TriggerBox : public StaticObject
 {
+
+	std::function<void()> m_triggerCallback = std::function<void()>();
+
 public:
-	TriggerBox(PhysicsEngine::FilterGroup::Enum e) : StaticObject(e, 
-		PhysicsEngine::FilterGroup::ePlayer) {
-	};
+	TriggerBox(fVec3 position, fVec3 scale);
 
-	virtual void trigger() {
+	TriggerBox(group typeObject, fVec3 position = fVec3(0,0,0), fVec3 scale = fVec3(1,1,1));
 
-	}
+	virtual void addShape(PxShape* shape);
 
-	virtual void addShape(PxShape* shape) {
-		PxFilterData filterData;
-		filterData.word0 = mFilterGroup;
-		filterData.word1 = mMaskGroup;
-		shape->setQueryFilterData(filterData);
-		shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+	void setPosition(fVec3 pos = fVec3(0, 0, 0));
 
-		
-		if (m_actor)
-			m_actor->attachShape(*shape);
-		shape->release();
-	}
+	void setTriggerCallback(std::function<void()>&& callback);
 
-
+	void onTrigger();
 };
 

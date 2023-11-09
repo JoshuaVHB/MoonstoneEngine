@@ -74,7 +74,9 @@ void Physx_Impl::onInit()
 	physics[currentScene].gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *physics[currentScene].gFoundation, PxTolerancesScale(), true, physics[currentScene].gPvd);
 
 	PxSceneDesc sceneDesc(physics[currentScene].gPhysics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+
+	sceneDesc.gravity = PxVec3(0.0f, -9.81f * 5.f, 0.0f);
+
 	physics[currentScene].gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = physics[currentScene].gDispatcher;
 	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
@@ -82,6 +84,9 @@ void Physx_Impl::onInit()
 	//Physx_Collision* callback = new Physx_Collision();
 	//sceneDesc.simulationEventCallback = callback;
 	physics[currentScene].gScene = physics[currentScene].gPhysics->createScene(sceneDesc);
+
+	physics[currentScene].gScene->setSimulationEventCallback(&CollisionCallback);
+
 
 	PxPvdSceneClient* pvdClient = physics[currentScene].gScene->getScenePvdClient();
 	if (pvdClient)
@@ -111,6 +116,7 @@ void Physx_Impl::cleanupPhysics(bool)
 	}
 	PX_RELEASE(physics[currentScene].gFoundation);
 }
+
 std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3> Physx_Impl::getTransform(std::string id)
 {
 	const PxU32 nbActors = physics[currentScene].gScene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
