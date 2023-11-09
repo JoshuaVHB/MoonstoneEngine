@@ -26,9 +26,35 @@ public:
 		static const float distanceFromPlayer = 25.F;
         auto forward = player.getForward();
         auto pos = player.getPosition();
+        auto gdir = player.getGroundDir();
+
+
+        auto vec_chelou_1 = XMVector3Cross(forward, { 0,1,0 });
+        auto vec_chelou_2 = XMVector3Cross(forward, vec_chelou_1); 
+
+        // le plan (vec_chelou_1 , vec_chelou_2) a pour normale forward;
+        // on projet gdir sur le plan_chelou
+
+        auto proj_x_chelou = XMVectorGetX(XMVector3Dot(gdir, vec_chelou_1));
+        auto proj_y_chelou = XMVectorGetX(XMVector3Dot(gdir, vec_chelou_2));
+
+        // On applique l'arctan pour avoir l'angle
+        static const float MAX_ROLL_ANGLE = 10.F;
+        float old_roll = cam.getRoll();
+        float roll = std::atan2f(proj_y_chelou, proj_x_chelou);
+
+        float computedRoll = std::lerp(
+            old_roll,
+            roll + DirectX::XM_PIDIV2,
+            .05f
+        );
+
+
+        cam.setRoll(computedRoll);//+ DirectX::XM_PIDIV2);
+
         
         DirectX::XMVECTOR camPos = pos - (distanceFromPlayer * forward) + XMVECTOR{0, 8, 0};
-        //camPos = XMVectorAdd(camPos, { 0,distance,0 });
+
         static const float MAX_DISTANCE = 200.f;
         camPos = XMVectorLerp(
             cam.getPosition(), 

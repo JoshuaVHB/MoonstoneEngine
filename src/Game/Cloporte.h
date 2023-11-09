@@ -27,6 +27,7 @@ private:
 
 	DirectX::XMVECTOR m_position	;
 	DirectX::XMVECTOR m_forward		;
+	DirectX::XMVECTOR m_groundDir	;
 	
 
 
@@ -56,6 +57,12 @@ public:
 	[[nodiscard]] BoundingSphere getBoundingSphere() const noexcept { return m_boundingSphere; }
 	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
 	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
+	[[nodiscard]] DirectX::XMVECTOR getGroundDir() const noexcept { return m_groundDir; }
+
+	void setGroundVector(const DirectX::XMVECTOR& val)
+	{
+		m_groundDir = val;
+	}
 
 	void setPosition(float x, float y, float z) {
 		m_object.getTransform().setPosition({x,y,z});

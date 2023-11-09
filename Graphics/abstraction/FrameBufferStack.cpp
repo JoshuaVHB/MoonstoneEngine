@@ -18,10 +18,6 @@ void FrameBufferStack::popFBO()
 		return;
 	}
 
-	unsigned int width, height;
-	width = m_stack.top()->getWidth();
-	height = m_stack.top()->getHeight();
-
 	m_stack.top()->bindCached(); // bind without pushing to the stack
 	std::cout << "Poped a FBO "<< std::endl;
 

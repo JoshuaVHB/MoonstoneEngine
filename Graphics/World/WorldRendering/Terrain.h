@@ -100,6 +100,14 @@ public:
 			Vec{ 0.f, (a - b) * m_params.scaleFactor, 2.f * m_params.xyScale },
 			Vec{ 2.f * m_params.xyScale, (c - d) * m_params.xyScale, 0.f }
 		));
+
+
+		return normal;
+	}
+
+	float getWorldHeightAt(XMVECTOR worldPos)
+	{
+		return m_map.getAt(XMVectorGetX(worldPos) / m_params.xyScale, XMVectorGetZ(worldPos) / m_params.xyScale)* m_params.scaleFactor;
 	}
 
 	const TerrainParams& getParams() const { return m_params; }

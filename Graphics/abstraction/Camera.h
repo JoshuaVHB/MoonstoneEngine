@@ -149,11 +149,13 @@ public:
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Angles
 
-	void setYaw(float yaw)								;
-	void setPitch(float pitch)							;
-	[[nodiscard]] XMVECTOR getAngles()	const noexcept	;
-	[[nodiscard]] float getPitch()		const noexcept	;
-	[[nodiscard]] float getYaw()		const noexcept	;
+	void setYaw(float yaw)								{ m_angles.yaw = yaw;		}
+	void setPitch(float pitch)							{ m_angles.pitch = pitch;	}
+	void setRoll(float roll)							{ m_angles.roll = roll;		}
+	[[nodiscard]] XMVECTOR getAngles()	const noexcept	{ return m_angles.toVec();	}
+	[[nodiscard]] float getPitch()		const noexcept	{ return m_angles.pitch;	}
+	[[nodiscard]] float getYaw()		const noexcept	{ return m_angles.yaw;		}
+	[[nodiscard]] float getRoll()		const noexcept	{ return m_angles.roll;		}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Constructors, move and stuff

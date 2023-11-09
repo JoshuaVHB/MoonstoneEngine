@@ -199,3 +199,10 @@ Mesh MeshManager::loadMeshFromFile(const fs::path& pathToFile) {
 	vertsIndex.clear();
 	return Mesh(vertices, indices, submeshesIndices, mats, submeshesMat);
 }
+
+
+void MeshManager::loadMeshFromFile(const std::string& name, const fs::path& pathToFile) {
+
+	//s_loadedMeshes[name] = std::make_unique<Mesh>(&MeshManager::loadMeshFromFile(pathToFile));
+
+}

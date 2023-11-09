@@ -19,6 +19,7 @@ Cloporte::Cloporte()
 	, accelerationFactor(0.05f), friction(0.1f)
 	, m_position{0, 0, 0, 0}
 	, m_forward {0, 0, 1 , 0}
+	, m_groundDir{0, 1, 0, 0}
 	, currentVelocity{0}
 
 {
