@@ -31,6 +31,17 @@ void DynamicObject::majTransformPhysics()
 	}
 }
 
+void DynamicObject::addShape(PxShape* shape)
+{
+	PxFilterData filterData;
+	filterData.word0 = mFilterGroup;
+	filterData.word1 = mMaskGroup;
+	shape->setQueryFilterData(filterData);
+	
+	if (m_actor)
+		m_actor->attachShape(*shape);
+}
+
 void DynamicObject::setMaxLinearVelocity(float maxLinearVelocity)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
@@ -45,28 +56,32 @@ if (m_actor && m_actor->is<PxRigidDynamic>()) {
 	}
 }
 
-void DynamicObject::setLinearVelocity(PhysicsEngine::fVec3 linearVelocity)
+void DynamicObject::setLinearVelocity(fVec3 linearVelocity)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		m_actor->is<PxRigidDynamic>()->setLinearVelocity(linearVelocity);
 	}
 }
 
-void DynamicObject::setAngularVelocity(PhysicsEngine::fVec3 angularVelocity)
+void DynamicObject::setAngularVelocity(fVec3 angularVelocity)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		m_actor->is<PxRigidDynamic>()->setAngularVelocity(angularVelocity);
 	}
 }
 
-void DynamicObject::addForce(PhysicsEngine::fVec3 force)
+void DynamicObject::addForce(fVec3 force)
 {
+	
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
-		m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
+		PxRigidBodyExt::addForceAtPos(*m_actor->is<PxRigidDynamic>(), force, PxVec3(0.f, 10.f, 0.f));
+		//m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
 	}
+	//m_actor->is<PxRigidDynamic>()->
+	
 }
 
-void DynamicObject::addTorque(PhysicsEngine::fVec3 torque)
+void DynamicObject::addTorque(fVec3 torque)
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		m_actor->is<PxRigidDynamic>()->addTorque(torque);
@@ -87,13 +102,27 @@ void DynamicObject::clearTorque()
 	}
 }
 
-PhysicsEngine::fVec3 DynamicObject::getLinearValocity()
+PhysicalObject::fVec3 DynamicObject::getLinearValocity()
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		return m_actor->is<PxRigidDynamic>()->getLinearVelocity();
 	}
 	return PhysicsEngine::fVec3{};
 }
+
+PhysicalObject::fVec3 DynamicObject::getPosition()
+{
+	return m_actor->getGlobalPose().p;
+}
+
+void DynamicObject::setMass(float mass)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		PxRigidBodyExt::setMassAndUpdateInertia(*m_actor->is<PxRigidDynamic>(), mass);
+	}
+}
+
+
 
 void DynamicObject::displayLinearVelocity()
 {
@@ -116,7 +145,7 @@ void DynamicObject::displayPosition()
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		auto v = m_actor->is<PxRigidDynamic>()->getGlobalPose().p;
 		std::cout << "Position : " << v.x << " " << v.y << " " << v.z << std::endl;
-	}
+	}	
 }
 
 

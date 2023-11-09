@@ -10,11 +10,33 @@
 #include <PxPhysics.h>
 #include <PxPhysicsAPI.h>
 #include "physx_collision.h"
-Physx_Impl::ModulePhysics Physx_Impl::physics = Physx_Impl::ModulePhysics();
+std::vector<Physx_Impl::ModulePhysics> Physx_Impl::physics = { Physx_Impl::ModulePhysics() };
+int Physx_Impl::currentScene = 0;
+
 Physx_Impl::ModulePhysics& Physx_Impl::getModulePhysics()
 {
-	return physics;
+	return physics[currentScene];
 }
+
+bool Physx_Impl::changeScene(int numScene)
+{
+	if (numScene < physics.size())
+	{
+		currentScene = numScene;
+		if (physics[currentScene].gScene == nullptr)
+			onInit();
+		return true;
+	}
+	return false;
+}
+
+int Physx_Impl::addScene()
+{
+	physics.push_back(ModulePhysics());
+	return physics.size() - 1;
+}
+
+
 
 PxFilterFlags CustomFilterShader(
 	PxFilterObjectAttributes attributes0, PxFilterData filterData0,
@@ -43,34 +65,37 @@ PxFilterFlags CustomFilterShader(
 
 void Physx_Impl::onInit()
 {
-	physics.gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, physics.gAllocator, physics.gErrorCallback);
+	physics[currentScene].gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, physics[currentScene].gAllocator, physics[currentScene].gErrorCallback);
 
-	physics.gPvd = PxCreatePvd(*physics.gFoundation);
+	physics[currentScene].gPvd = PxCreatePvd(*physics[currentScene].gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	physics.gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
+	physics[currentScene].gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	physics.gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *physics.gFoundation, PxTolerancesScale(), true, physics.gPvd);
+	physics[currentScene].gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *physics[currentScene].gFoundation, PxTolerancesScale(), true, physics[currentScene].gPvd);
 
-	PxSceneDesc sceneDesc(physics.gPhysics->getTolerancesScale());
-	sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
-	physics.gDispatcher = PxDefaultCpuDispatcherCreate(2);
-	sceneDesc.cpuDispatcher = physics.gDispatcher;
+	PxSceneDesc sceneDesc(physics[currentScene].gPhysics->getTolerancesScale());
+
+	sceneDesc.gravity = PxVec3(0.0f, -9.81f * 5.f, 0.0f);
+
+	physics[currentScene].gDispatcher = PxDefaultCpuDispatcherCreate(2);
+	sceneDesc.cpuDispatcher = physics[currentScene].gDispatcher;
 	sceneDesc.filterShader = PxDefaultSimulationFilterShader;
 	//sceneDesc.filterShader = CustomFilterShader;
 	//Physx_Collision* callback = new Physx_Collision();
 	//sceneDesc.simulationEventCallback = callback;
-	physics.gScene = physics.gPhysics->createScene(sceneDesc);
+	physics[currentScene].gScene = physics[currentScene].gPhysics->createScene(sceneDesc);
 
-	PxPvdSceneClient* pvdClient = physics.gScene->getScenePvdClient();
+	physics[currentScene].gScene->setSimulationEventCallback(&CollisionCallback);
+
+
+	PxPvdSceneClient* pvdClient = physics[currentScene].gScene->getScenePvdClient();
 	if (pvdClient)
 	{
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 	}
-	physics.gMaterial = physics.gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-
-
+	physics[currentScene].gMaterial = physics[currentScene].gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
 	//createVehicule(PxTransform(PxVec3(0, 0, 10.0f)), 10, 2.0f);
 
@@ -79,24 +104,25 @@ void Physx_Impl::onInit()
 void Physx_Impl::cleanupPhysics(bool)
 
 {
-	PX_RELEASE(physics.gScene);
-	PX_RELEASE(physics.gDispatcher);
-	PX_RELEASE(physics.gPhysics);
-	if (physics.gPvd)
+	PX_RELEASE(physics[currentScene].gScene);
+	PX_RELEASE(physics[currentScene].gDispatcher);
+	PX_RELEASE(physics[currentScene].gPhysics);
+	if (physics[currentScene].gPvd)
 	{
-		PxPvdTransport* transport = physics.gPvd->getTransport();
-		physics.gPvd->release();
-		physics.gPvd = NULL;
+		PxPvdTransport* transport = physics[currentScene].gPvd->getTransport();
+		physics[currentScene].gPvd->release();
+		physics[currentScene].gPvd = NULL;
 		PX_RELEASE(transport);
 	}
-	PX_RELEASE(physics.gFoundation);
+	PX_RELEASE(physics[currentScene].gFoundation);
 }
+
 std::pair<PhysicsEngine::fVec3, PhysicsEngine::fVec3> Physx_Impl::getTransform(std::string id)
 {
-	const PxU32 nbActors = physics.gScene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
+	const PxU32 nbActors = physics[currentScene].gScene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
 	std::vector<PxActor*> acteurs(nbActors);
 
-	PxU32 nbActeursTrouves = physics.gScene->getActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC, acteurs.data(), nbActors);
+	PxU32 nbActeursTrouves = physics[currentScene].gScene->getActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC, acteurs.data(), nbActors);
 
 	for (PxU32 i = 0; i < nbActeursTrouves; i++) {
 		PxActor* acteur = acteurs[i];

@@ -45,7 +45,7 @@ private:
 
 
 	// -- Meshes
-	TriggerBox start;
+	std::vector<TriggerBox*> cp;
 
 	Texture m_screenShot;
 
@@ -69,7 +69,6 @@ private:
 public:
 
 	Rush3Scene() :
-		start{PhysicsEngine::FilterGroup::eFinish},
 		clop{}
 	{
 		// -- Import the baseMesh effect
@@ -91,10 +90,18 @@ public:
 		m_terrain.rebuildMesh();
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
-		clop.setPosition(+498.f , + 40.f, +984.f);
-		//clop.setPosition(10,100.f, 10);
+		clop.setPosition(+530.f , + 60.f, +960.f);
 		Renderer::setBackbufferToDefault();
-		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
+
+		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
+			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
+		});
+
+		TriggerBox* checkpoint = new TriggerBox{ PhysicsEngine::fVec3(510.f, 40, 840), PhysicsEngine::fVec3(50, 50, 2) };
+		checkpoint->setTriggerCallback(std::move([]() {
+			std::cout << "Checkpoint reached !" << std::endl;
+			}));
+		cp.push_back(checkpoint);
 	}
 
 
@@ -169,4 +176,8 @@ public:
 
 	}
 
+	~Rush3Scene() {
+		for(auto c : cp)
+			delete c;
+	}
 };

@@ -18,6 +18,8 @@ class PhysicsEngine {
 public:
 	using fVec3 = physx::PxVec3;
 	using Actor = physx::PxRigidActor;
+	using Material = physx::PxMaterial;
+
 	struct HeightMapData {
 		unsigned int width, length;
 		float scaleXZ, scaleY;
@@ -43,16 +45,21 @@ public:
 		friend class PhysicsEngine;		
 
 	protected:
+		virtual bool changeScene(int numScene) = 0;
+		virtual int addScene() = 0;
 		virtual void onInit() = 0;
 		virtual void onUpdate(float deltaTime) = 0;
-		virtual void cleanupPhysics(bool /*interactive*/) = 0;
+		virtual void cleanupPhysics(bool /* float restitution, interactive*/) = 0;
 		virtual std::pair<fVec3, fVec3> getTransform(std::string id) = 0;
 		virtual bool addActor(Actor* actor) = 0;
 		virtual Actor* createStaticActor(const fVec3 position = fVec3{0,0,0}) = 0;
 		virtual Actor* createDynamicActor(const fVec3 position = fVec3{0,0,0}) = 0;
+		virtual Material* createMaterial(float restitution = 0.f, float staticFriction = 0.f, float dynamicFriction = 0.f) = 0;
 		
 	};
 
+	PHYSIC_CALL_IMPL(changeScene);
+	PHYSIC_CALL_IMPL(addScene);
 	PHYSIC_CALL_IMPL(onInit);
 	PHYSIC_CALL_IMPL(onUpdate);
 	PHYSIC_CALL_IMPL(cleanupPhysics);
@@ -60,6 +67,7 @@ public:
 	PHYSIC_CALL_IMPL(addActor);
 	PHYSIC_CALL_IMPL(createStaticActor);
 	PHYSIC_CALL_IMPL(createDynamicActor);
+	PHYSIC_CALL_IMPL(createMaterial);
 
 
 	template<typename _PhysicEngineImplementation>
