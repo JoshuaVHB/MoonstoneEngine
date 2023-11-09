@@ -49,6 +49,11 @@ private:
 
 	Texture m_screenShot;
 
+	// -- Objs and JsonParser
+	JsonParser m_parser{ "res/json/Position.json" };
+	std::vector<FormatJson> m_objs = m_parser.getObjs();
+	std::vector<Mesh> m_meshes{};
+
 
 
 private:
@@ -89,6 +94,7 @@ public:
 		//m_terrain.getParams().scaleFactor = 25;
 		m_terrain.rebuildMesh();
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
+		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
 		clop.setPosition(+530.f , + 60.f, +960.f);
 		Renderer::setBackbufferToDefault();
