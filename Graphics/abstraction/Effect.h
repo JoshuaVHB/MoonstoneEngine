@@ -109,6 +109,21 @@ public:
 	}
 
 	template<size_t floatCount>
+	void pushBack(const char* semanticName)
+	{
+		elems.push_back(
+			D3D11_INPUT_ELEMENT_DESC{
+				semanticName, 0,
+				formats[floatCount - 1],
+				0, stride,
+				D3D11_INPUT_PER_VERTEX_DATA, 0
+			}
+		);
+		stride += 16;
+	}
+
+
+	template<size_t floatCount>
 	void pushBackInstanced(const char* semanticName)
 	{
 
@@ -162,7 +177,10 @@ public:
 	void addNewCBuffer(const std::string& name, uint32_t structSize);
 	void apply() const;
 	void bindTexture(const std::string& uniformName,const ID3D11ShaderResourceView* tex) const;
+	void bindTextureArray(const std::string& uniformName, const std::vector<ID3D11ShaderResourceView*>& tex) const;
 	void bindTexture(const std::string& uniformName, const Texture& tex) const;
+
+	void setUniformVector(const std::string& uniformName, const DirectX::XMVECTOR& value) const;
 
 	template<class ShaderParam>
 	void updateSubresource(const ShaderParam& sp, const std::string& cbuffName) const
@@ -183,7 +201,7 @@ public:
 	void updateCbuffer(const cbufferParam& data, const std::string& cbuffName) const
 	{
 		D3D11_BUFFER_DESC desc{};
-		desc.ByteWidth = 2 *128 * sizeof(PointLight) ;
+		desc.ByteWidth = sizeof(cbufferParam) ;
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 		ID3D11Buffer* buffer;

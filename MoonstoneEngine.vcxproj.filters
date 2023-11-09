@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
+    <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIFrame.cpp" />
     <ClCompile Include="Graphics\abstraction\Camera.cpp" />
     <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
@@ -16,10 +17,17 @@
     <ClCompile Include="Graphics\World\Frustum.cpp" />
     <ClCompile Include="Graphics\World\Material.cpp" />
     <ClCompile Include="Graphics\World\Mesh.cpp" />
+    <ClCompile Include="Graphics\World\WorldRendering\HeightmapBuilder.cpp" />
     <ClCompile Include="Physics\PhysicEngine.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_collision.cpp" />
     <ClCompile Include="Physics\physx_Impl\physx_impl.cpp" />
     <ClCompile Include="Graphics\World\Player.cpp" />
+    <ClCompile Include="Physics\physx_Impl\physx_shape.cpp" />
+    <ClCompile Include="Physics\World\DynamicObject.cpp" />
+    <ClCompile Include="Physics\World\PhysicalHeightMap.cpp" />
     <ClCompile Include="Physics\World\PhysicalObject.cpp" />
+    <ClCompile Include="Physics\World\StaticObject.cpp" />
+    <ClCompile Include="Physics\World\TriggerBox.cpp" />
     <ClCompile Include="Platform\IO\Inputs.cpp" />
     <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
@@ -37,8 +45,10 @@
     <ClCompile Include="Graphics\World\Managers\MeshManager.cpp" />
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
+    <ClCompile Include="Platform\IO\JsonParser.cpp" />
     <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
+    <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_draw.cpp" />
@@ -47,20 +57,16 @@
     <ClCompile Include="Utils\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Utils\vendor\stdafx.cpp" />
-    <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
-    <ClCompile Include="Platform\IO\JsonParser.cpp" />
-    <ClCompile Include="Graphics\World\WorldRendering\HeightmapBuilder.cpp" />
-    <ClCompile Include="Physics\physx_Impl\physx_collision.cpp" />
-    <ClCompile Include="Physics\physx_Impl\physx_shape.cpp" />
-    <ClCompile Include="Physics\World\DynamicObject.cpp" />
-    <ClCompile Include="Physics\World\PhysicalHeightMap.cpp" />
-    <ClCompile Include="Physics\World\StaticObject.cpp" />
-    <ClCompile Include="Physics\World\TriggerBox.cpp" />
+    <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_debug.cpp" />
+    <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_render.cpp" />
+    <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_core.cpp" />
+    <ClCompile Include="src\Scenes\SceneTransition.cpp" />
+    <ClCompile Include="Graphics\abstraction\FrameBufferStack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
+    <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
     <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
@@ -68,8 +74,14 @@
     <ClInclude Include="Graphics\World\Frustum.h" />
     <ClInclude Include="Physics\PhysicEngine.h" />
     <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_collision.h" />
     <ClInclude Include="Physics\physx_Impl\physx_impl.h" />
+    <ClInclude Include="Physics\physx_Impl\physx_shape.h" />
+    <ClInclude Include="Physics\World\DynamicObject.h" />
+    <ClInclude Include="Physics\World\PhysicalHeightMap.h" />
     <ClInclude Include="Physics\World\PhysicalObject.h" />
+    <ClInclude Include="Physics\World\StaticObject.h" />
+    <ClInclude Include="Physics\World\TriggerBox.h" />
     <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
@@ -115,10 +127,11 @@
     <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
+    <ClInclude Include="Platform\IO\JsonParser.h" />
     <ClInclude Include="src\Scenes\Rush3Scene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
-    <ClInclude Include="src\Scenes\Sponza.h" />
+    <ClInclude Include="src\Scenes\UITestScene.h" />
     <ClInclude Include="src\Scenes\TestScene.h" />
     <ClInclude Include="Utils\AABB.h" />
     <ClInclude Include="Utils\Debug.h" />
@@ -126,6 +139,7 @@
     <ClInclude Include="Utils\Timer.h" />
     <ClInclude Include="Utils\Transform.h" />
     <ClInclude Include="Utils\Vec2.h" />
+    <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
     <ClInclude Include="Utils\vendor\imgui\imconfig.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui.h" />
     <ClInclude Include="Utils\vendor\imgui\imgui_impl_dx11.h" />
@@ -134,16 +148,51 @@
     <ClInclude Include="Utils\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="Utils\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="Utils\vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="Utils\vendor\stdafx.h" />
-    <ClInclude Include="Graphics\abstraction\VertexBuffer.h" />
-    <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
-    <ClInclude Include="Platform\IO\JsonParser.h" />
-    <ClInclude Include="Physics\physx_Impl\physx_collision.h" />
-    <ClInclude Include="Physics\physx_Impl\physx_shape.h" />
-    <ClInclude Include="Physics\World\DynamicObject.h" />
-    <ClInclude Include="Physics\World\PhysicalHeightMap.h" />
-    <ClInclude Include="Physics\World\StaticObject.h" />
-    <ClInclude Include="Physics\World\TriggerBox.h" />
+    <ClInclude Include="Utils\vendor\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\abi_macros.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\hash.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\json_custom_base_class.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\call_std\begin.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\call_std\end.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\std_fs.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\string_concat.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\json.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\ordered_map.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="Utils\vendor\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
     <ClInclude Include="Utils\vendor\physx\include\freeglut-windows\freeglut.h" />
     <ClInclude Include="Utils\vendor\physx\include\freeglut-windows\freeglut_ext.h" />
     <ClInclude Include="Utils\vendor\physx\include\freeglut-windows\freeglut_std.h" />
@@ -877,6 +926,13 @@
     <ClInclude Include="Utils\vendor\physx\include\physx\include\vehicle\PxVehicleUtilSetup.h" />
     <ClInclude Include="Utils\vendor\physx\include\physx\include\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="Utils\vendor\physx\include\physx\include\vehicle\PxVehicleWheels.h" />
+    <ClInclude Include="Utils\vendor\rapidobj\rapidobj.hpp" />
+    <ClInclude Include="Utils\vendor\stbi\stb_image.h" />
+    <ClInclude Include="Utils\vendor\stbi\stb_image_write.h" />
+    <ClInclude Include="Utils\vendor\stdafx.h" />
+    <ClInclude Include="src\Scenes\SceneTransition.h" />
+    <ClInclude Include="Graphics\abstraction\FrameBufferStack.h" />
+    <ClInclude Include="Graphics\abstraction\abstraction_core.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
@@ -886,6 +942,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="res\json\Position.json" />
+    <None Include="src\Scenes\Position.json" />
   </ItemGroup>
 </Project>

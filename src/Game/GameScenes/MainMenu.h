@@ -3,15 +3,20 @@
 #include "Scene.h"
 #include "Renderer.h"
 
+#include "abstraction/abstraction_core.h"
+
 
 class MainMenu : public Scene {
 private:
 
-	float r;
+	Texture m_background;
 
 public:
 
-	MainMenu() {}
+	MainMenu()
+	{
+		UIRenderer::attachMouse(wMouse.get());
+	}
 
 
 	virtual void onUpdate(float deltaTime) override {}
@@ -19,10 +24,22 @@ public:
 	virtual void onRender() override {
 
 		Renderer::clearScreen(0, 0, 0, 1);
-
 	}
 
-	virtual void onImGuiRender() override {}
+	virtual void onImGuiRender() override
+	{
+		UIRenderer::clear();
+
+
+		if (UIRenderer::Button(200,200,400,400))
+		{
+			SceneManager::switchToScene("Terrain");
+		}
+
+		UIRenderer::renderUI();
+
+
+	}
 
 
 };

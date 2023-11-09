@@ -40,6 +40,7 @@ void Camera::computeViewMatrix() {
 	m_viewMatrix = m_viewMatrix * XMMatrixTranslationFromVector(-m_position);
 	m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,1,0,1 }, -m_angles.yaw);
 	m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 1,0,0,1 }, -m_angles.pitch);
+	m_viewMatrix = m_viewMatrix * XMMatrixRotationAxis({ 0,0,1,1 }, -m_angles.roll);
 }
 
 Mat Camera::getVPMatrix() { computeVPMatrix(); return m_viewProjMatrix; }
@@ -63,15 +64,6 @@ Mat Camera::getProjMatrix() const { return m_projection->getProjMatrix(); }
 	return XMVector4Normalize(getForward());
 }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// -- Angles
-
-void Camera::setYaw(const float yaw) { m_angles.yaw = yaw; }
-void Camera::setPitch(const float pitch) { m_angles.pitch = pitch; }
-DirectX::XMVECTOR Camera::getAngles() const noexcept { return m_angles.toVec(); }
-float Camera::getPitch() const noexcept { return m_angles.pitch; }
-float Camera::getYaw() const noexcept { return m_angles.yaw; }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// -- Constructors, move and stuff

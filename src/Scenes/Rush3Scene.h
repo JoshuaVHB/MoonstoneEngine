@@ -10,8 +10,7 @@
 #include "../../Physics/World/DynamicObject.h"
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
-
-#include "Platform/IO/JsonParser.h"
+#include "../Game/CameraController.h"
 
 #include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
@@ -48,11 +47,10 @@ private:
 	// -- Meshes
 	TriggerBox start;
 
+	Texture m_screenShot;
 
-	// -- Objs and JsonParser
-	JsonParser m_parser{ "res/json/Position.json" };
-	std::vector<FormatJson> m_objs = m_parser.getObjs();
-	std::vector<Mesh> m_meshes{};
+
+
 private:
 
 	// -- Define constant buffers
@@ -88,16 +86,15 @@ public:
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 		m_terrainEffect.bindInputLayout(testlayout);
 
-
+		//m_terrain.getParams().xyScale = 0.50;
+		//m_terrain.getParams().scaleFactor = 25;
 		m_terrain.rebuildMesh();
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
 		clop.setPosition(+498.f , + 40.f, +984.f);
+		//clop.setPosition(10,100.f, 10);
 		Renderer::setBackbufferToDefault();
-
-		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
-			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
-		});
+		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
 	}
 
 
@@ -105,6 +102,11 @@ public:
 	{
 		m_elapsedTime += deltaTime;
 
+		XMVECTOR groundNormal = (XMVectorGetY(clop.getPosition()) - m_terrain.getWorldHeightAt(clop.getPosition()) < 5.f) 
+			? m_terrain.getNormalAt(clop.getPosition()) 
+			: XMVECTOR{0, 1, 0, 0};
+		
+		clop.setGroundVector(groundNormal);
 		clop.update(deltaTime);
 
 		sp.viewProj = XMMatrixTranspose(currentCamera->getVPMatrix());
@@ -145,29 +147,26 @@ public:
 		}
 
 		Renderer::renderMesh(cam, clop.getMesh(), m_terrainEffect);		
-		m_skybox.renderSkybox(cam);	
-
-		setPosObjs(cam);
+		Renderer::renderDebugLine(cam, clop.getPosition(), clop.getPosition() + (clop.getGroundDir()*2));
+		m_skybox.renderSkybox(cam);		
 
 	}
 
 	virtual void onImGuiRender() override
 	{
-
-
+		static float tmp = 0;
+		ImGui::DragFloat4("angles : ", currentCamera->getAngles().vector4_f32);
+		ImGui::DragFloat3("direction : ", currentCamera->getForwardDir().vector4_f32);
+		ImGui::DragFloat3("player direction : ", clop.getForward().vector4_f32);
+		if (ImGui::DragFloat("roll : ", &tmp, 0.05f))
+		{
+			currentCamera->setRoll(tmp);
+			tmp = std::fmod(tmp, DirectX::XM_PI);
+		}
 		ImGui::Checkbox("Disable AABBs (10 draw calls per box... so slow !)", &m_disableAABBS);
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 
-	}
-
-	void setPosObjs(Camera cam) {
-		for (int i = 0; i < m_objs.size(); i++) {
-			Renderer::renderMesh(cam, m_meshes[i], m_terrainEffect);
-			m_meshes[i].getTransform().setPosition(m_objs[i].positionObj);
-			m_meshes[i].getTransform().setRotation(m_objs[i].forwardObj);
-			m_meshes[i].getTransform().setScale(m_objs[i].scaleObj);
-		}
 	}
 
 };

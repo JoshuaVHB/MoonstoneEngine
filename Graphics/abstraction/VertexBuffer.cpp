@@ -13,7 +13,7 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vertices)
 	{
 #ifdef D3D11_IMPL
 		m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-		m_vertices = vertices;
+		//m_vertices = vertices;
 
 		D3D11_BUFFER_DESC descriptor{};
 		D3D11_SUBRESOURCE_DATA m_initData{};

@@ -134,13 +134,11 @@ DeferredRenderer::DeferredRenderer()
 	{
 		m_gBuffer.bind();
 		renderFn();
+		m_gBuffer.unbind();
 	}
 
 	void DeferredRenderer::combineAndApplyLights(Camera& camera) const
 	{
-
-
-		Renderer::setBackbufferToDefault();
 
 		uploadLights();
 

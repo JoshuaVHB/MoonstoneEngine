@@ -2,46 +2,38 @@
 
 // Uniforms
 
-Texture2D tex; // la texture
+Texture2D whitePixel; // la texture
+Texture2D tex_slots[8];
+
 SamplerState SampleState; // l’état de sampling
 
 struct VSIn
 {
     float4 pos : POSITION;
-    float4 uv : TEXCOORD;
-    float4 col : COLOR;
-    float4 texId : SV
+    float2 uv : TEXCOORD;
 };
 
 // -- VSOUT
 
 struct VSOut
 {
-    float4 Pos : SV_Position;
+    float4 pos : SV_Position;
     float2 uv : TEXCOORD0;
+    int texId : TEXCOORD1;
 };
 
-static const float4 vertices[6] =
-{
-    float4(-1, -1, 0, 0),
-    float4(+1, +1, 1, 1),
-    float4(+1, -1, 1, 0),
-    float4(-1, +1, 0, 1),
-    float4(+1, +1, 1, 1),
-    float4(-1, -1, 0, 0)
-};
 
 ////////////////////
 
 // -- Vertex Shader
 
-VSOut spriteVS(uint id : SV_VertexID)
+VSOut quadVS(VSIn vsin)
 {
     
     VSOut vso;
-    vso.Pos = float4(vertices[id].xy, 0, 1);
-    vso.uv = vertices[id].zw;
-    
+    vso.pos     = float4(vsin.pos.xy, 0, 1);
+    vso.uv      = float2(vsin.uv.x,1- vsin.uv.y);
+    vso.texId = int(vsin.pos.z);
     return vso;
 }
 
@@ -49,14 +41,21 @@ VSOut spriteVS(uint id : SV_VertexID)
 
 // -- Fragment Shader
 
-float4 spritePS(VSOut vs) : SV_Target
+float4 quadPS(VSOut vs) : SV_Target
 {
+    float4 texSample = (0,0,0,1);
     
-    
-    return float4(1, 1, 0, 1);
+    for (int i = 0; i < 8; i++)
+    {
+        if (i==vs.texId)
+        {
+            texSample = tex_slots[i].Sample(SampleState, vs.uv);            
+        }
+
+    }    
+    return texSample;
     
 }
-
 ////////////////////
 
 // -- Technique
@@ -65,8 +64,8 @@ technique11 quad
 {
     pass pass0
     {
-        SetVertexShader(CompileShader(vs_5_0, spriteVS()));
-        SetPixelShader(CompileShader(ps_5_0, spritePS()));
+        SetVertexShader(CompileShader(vs_5_0, quadVS()));
+        SetPixelShader(CompileShader(ps_5_0, quadPS()));
         SetGeometryShader(NULL);
     }
 }

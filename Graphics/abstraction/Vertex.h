@@ -16,3 +16,10 @@ struct SpriteVertex
 	XMVECTOR position;
 	XMVECTOR uv;
 };
+
+struct TexturedSpriteVertex
+{
+	XMVECTOR position;
+	XMVECTOR uv;
+	XMVECTOR texId;
+};

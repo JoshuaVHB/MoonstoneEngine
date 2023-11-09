@@ -117,15 +117,15 @@ public:
 	{
 	public:
 		enum class Type { 
-			LPRESS, LRELEASE,
-			RPRESS, RRELEASE,
+			LDOWN, LPRESS, LRELEASE,
+			RDOWN, RPRESS, RRELEASE,
 			WHEELUP, WHEELDOWN,
 			MOVE, INVALID };
 
 		Event()									noexcept : m_type(Type::INVALID) {}
 		Event(Type type, const Mouse& parent)	noexcept 
 			: m_type(type), x(parent.m_x), y(parent.m_y),
-			  isLeftPressed(parent.m_isLeftPressed), isRightPressed(parent.m_isRightPressed)
+			  isLeftDown(parent.m_isLeftDown), isRightDown(parent.m_isRightDown)
 		{}
 
 		[[nodiscard]] Type getType()			const noexcept { return m_type ; }
@@ -133,13 +133,13 @@ public:
 		[[nodiscard]] std::pair<int, int>	getPos()			const noexcept { return { x,y }; }
 		[[nodiscard]] int					getPosX()			const noexcept { return x; }
 		[[nodiscard]] int					getPosY()			const noexcept { return y; }
-		[[nodiscard]] bool					leftIsPressed()		const noexcept { return isLeftPressed; }
-		[[nodiscard]] bool					rightIsPressed()	const noexcept { return isRightPressed; }
+		[[nodiscard]] bool					leftIsDown()		const noexcept { return isLeftDown; }
+		[[nodiscard]] bool					rightIsDown()		const noexcept { return isRightDown; }
 	private:
 
 		Type m_type;
 		int x{}, y{};
-		bool isLeftPressed=false, isRightPressed=false;
+		bool isLeftDown=false, isRightDown=false;
 
 
 	};
@@ -152,10 +152,13 @@ public:
 	[[nodiscard]] std::pair<int, int>	getPos()			const noexcept { return { m_x,m_y };		}
 	[[nodiscard]] int					getPosX()			const noexcept { return m_x;				}
 	[[nodiscard]] int					getPosY()			const noexcept { return m_y;				}
-	[[nodiscard]] bool					isLeftPressed()		const noexcept { return m_isLeftPressed;	}
+	[[nodiscard]] bool					isLeftDown()		const noexcept { return m_isLeftDown;		}
+	[[nodiscard]] bool					isRightDown()		const noexcept { return m_isRightDown;		}
 	[[nodiscard]] bool					isRightPressed()	const noexcept { return m_isRightPressed;	}
-	[[nodiscard]] bool					isEmpty()			const noexcept { return m_buffer.empty(); }
-	[[nodiscard]] Event					read()					noexcept { 
+	[[nodiscard]] bool					isLeftPressed()		const noexcept { return m_isLeftPressed;	}
+	[[nodiscard]] bool					isEmpty()			const noexcept { return m_buffer.empty();	}
+
+	[[nodiscard]] Event					read()					  noexcept { 
 		if (isEmpty()) return Mouse::Event();
 		Event& e = m_buffer.front();
 		return (m_buffer.pop(), e);
@@ -176,16 +179,39 @@ private:
 	std::queue<Event> m_buffer;
 	std::queue<RawDelta> m_rawDeltas;
 	int m_x, m_y;
+	bool m_isLeftDown, m_isRightDown;
 	bool m_isLeftPressed, m_isRightPressed;
 	bool m_isHidden = false;
 
 public:
 
 	void onMouseMoved	(int x, int y)	{ m_x = x; m_y = y; m_buffer.push(Event(Event::Type::MOVE, *this)); trimBuffer(); }
-	void onLeftPress	(int x, int y)	{ m_isLeftPressed  = true; m_buffer.push(Event(Event::Type::LPRESS, *this)); trimBuffer(); }
-	void onLeftRelease	(int x, int y)	{ m_isLeftPressed  = false; m_buffer.push(Event(Event::Type::LRELEASE, *this)); trimBuffer(); }
-	void onRightPress	(int x, int y)	{ m_isRightPressed	= true; m_buffer.push(Event(Event::Type::RPRESS, *this)); trimBuffer(); }
-	void onRightRelease	(int x, int y)	{ m_isRightPressed	= false; m_buffer.push(Event(Event::Type::RRELEASE, *this)); trimBuffer(); }
+	void onLeftPress	(int x, int y)	{ m_isLeftDown  = true; m_buffer.push(Event(Event::Type::LDOWN, *this)); trimBuffer(); }
+	void onRightPress	(int x, int y)	{ m_isRightDown	= true; m_buffer.push(Event(Event::Type::RDOWN, *this)); trimBuffer(); }
+
+
+	void onLeftRelease	(int x, int y)
+	{
+		if (m_isLeftDown)
+		{
+			m_isLeftPressed = true;
+			m_buffer.push(Event(Event::Type::LPRESS, *this));
+		}
+		m_isLeftDown  = false;
+		m_buffer.push(Event(Event::Type::LRELEASE, *this)); trimBuffer();
+	}
+	void onRightRelease	(int x, int y)
+	{
+		if (m_isRightDown)
+		{
+			m_isRightPressed = true;
+			m_buffer.push(Event(Event::Type::RPRESS, *this));
+		}
+		m_isRightDown	= false;
+		m_buffer.push(Event(Event::Type::RRELEASE, *this)); trimBuffer();
+	}
+
+
 	void onWheelUp		(int x, int y)	{ m_buffer.push(Event(Event::Type::WHEELUP, *this)); trimBuffer();}
 	void onWheelDown	(int x, int y)	{ m_buffer.push(Event(Event::Type::WHEELDOWN, *this)); trimBuffer();}
 	void onRawDelta		(int x, int y)	{ m_rawDeltas.push(RawDelta{x,y}); trimBuffer(); }
@@ -197,6 +223,12 @@ public:
 		while (m_rawDeltas.size() > 16)
 			m_rawDeltas.pop();
 	
+	}
+
+	void clearPress()
+	{
+		m_isLeftPressed = false;
+		m_isRightPressed = false;
 	}
 
 	void enableCursor() { 

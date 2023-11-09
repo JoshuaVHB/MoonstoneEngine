@@ -30,7 +30,6 @@ public:
 	[[nodiscard]] std::vector<Vertex> getVertices() const noexcept { return m_vertices; }
 	void bind() const noexcept;
 
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// -- Constructors, move and stuff
 

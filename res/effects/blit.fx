@@ -4,6 +4,7 @@
 
 Texture2D tex; // la texture
 SamplerState SampleState; // l’état de sampling
+float4 colorShift;
 
 // -- VSOUT
 
@@ -33,6 +34,7 @@ VSOut blitVS(uint id : SV_VertexID)
     VSOut vso;
     vso.Pos = float4(vertices[id].xy, 0, 1);
     vso.uv = vertices[id].zw;
+    vso.uv.y = 1 - vso.uv.y;
     
     return vso;
 }
@@ -45,7 +47,7 @@ float4 blitPS(VSOut vs) : SV_Target
 {
     
     
-    return float4(vs.uv, 0, 1);
+    return tex.Sample(SampleState, vs.uv) * colorShift;
     
 }
 

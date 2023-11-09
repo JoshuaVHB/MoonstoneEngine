@@ -35,7 +35,7 @@ public:
 	{
 		bunny = MeshManager::loadMeshFromFile("res/mesh/bunny.obj");
 
-		MeshManager::feed(&bunny);
+		MeshManager::feed(new Mesh(std::move(bunny)) );
 
 		Renderer::setBackbufferToDefault();
 	}
@@ -73,13 +73,17 @@ public:
 	}
 	virtual void onImGuiRender() override {
 		ImGui::Begin("Debug");
-		bunny.getTransform().showControlWindow();
+		//bunny.getTransform().showControlWindow();
 		ImGui::End();
 		m_player.onImGuiRender();
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();
 	}
 
-
+	~SceneDeferred()
+	{
+		
+		MeshManager::clear();
+	}
 
 };
