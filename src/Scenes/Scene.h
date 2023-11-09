@@ -43,6 +43,7 @@ public:
 	static void registerScene(const std::string& name) { registerScene(name, []() { return new _SceneInstance; }); }
 
 	static void switchToScene(size_t index);
+	static void switchToScene(const std::string& name);
 
 private:
 

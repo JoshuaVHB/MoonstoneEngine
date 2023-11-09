@@ -82,3 +82,22 @@ void SceneManager::switchToScene(size_t sceneIndex)
     s_activeSceneIndex = sceneIndex;
     s_activeScene = destination;
 }
+
+
+
+void SceneManager::switchToScene(const std::string& n)
+{
+    auto it = std::ranges::find_if(s_availableScenes, [&](SceneBuilder p) {return p.first == n; });
+    auto& [name, provider] = *it;
+    Scene* destination = provider();
+
+    if (!s_currentTransition && s_activeScene)
+    {
+        s_currentTransition = new SceneTransition(s_activeScene, destination, TransitionCurve::LINEAR, TransitionType::FADE);
+        s_currentTransition->setDuration(2);
+        std::cout << "Created a new scene transition" << std::endl;
+    }
+
+    s_activeSceneIndex = std::distance(s_availableScenes.begin(), it);
+    s_activeScene = destination;
+}

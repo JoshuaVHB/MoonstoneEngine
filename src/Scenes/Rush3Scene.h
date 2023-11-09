@@ -10,6 +10,7 @@
 #include "../../Physics/World/DynamicObject.h"
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
+#include "../Game/CameraController.h"
 
 #include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
@@ -85,14 +86,15 @@ public:
 		testlayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 		m_terrainEffect.bindInputLayout(testlayout);
 
-		m_terrain.getParams().xyScale = 0.50;
-		m_terrain.getParams().scaleFactor = 25;
+		//m_terrain.getParams().xyScale = 0.50;
+		//m_terrain.getParams().scaleFactor = 25;
 		m_terrain.rebuildMesh();
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
 		clop.setPosition(+498.f , + 40.f, +984.f);
-		clop.setPosition(10,100.f, 10);
+		//clop.setPosition(10,100.f, 10);
 		Renderer::setBackbufferToDefault();
+		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
 	}
 
 
@@ -154,6 +156,8 @@ public:
 	{
 		static float tmp = 0;
 		ImGui::DragFloat4("angles : ", currentCamera->getAngles().vector4_f32);
+		ImGui::DragFloat3("direction : ", currentCamera->getForwardDir().vector4_f32);
+		ImGui::DragFloat3("player direction : ", clop.getForward().vector4_f32);
 		if (ImGui::DragFloat("roll : ", &tmp, 0.05f))
 		{
 			currentCamera->setRoll(tmp);

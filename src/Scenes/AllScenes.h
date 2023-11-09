@@ -6,3 +6,4 @@
 #include "SceneDeferred.h"
 
 #include "src/game/GameScenes/InGame.h"
+#include "src/game/GameScenes/MainMenu.h"

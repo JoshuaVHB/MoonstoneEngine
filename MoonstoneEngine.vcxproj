@@ -232,6 +232,7 @@
     <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
+    <ClInclude Include="Graphics\abstraction\abstraction_core.h" />
     <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
     <ClInclude Include="Graphics\abstraction\FrameBufferStack.h" />

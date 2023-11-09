@@ -19,6 +19,7 @@
 #include "Physics/PhysicEngine.h"
 #include "Physics/physx_Impl/physx_impl.h"
 
+
 void initImgui(HWND hWnd, d3d11_graphics& gfx) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -72,7 +73,8 @@ int main() {
 		SceneManager::registerScene<SceneDeferred>("Deferred");
 		SceneManager::registerScene<InGame>("InGame");
 		SceneManager::registerScene<UITestScene>("UITestScene");
-		SceneManager::switchToScene(4);
+		SceneManager::registerScene<MainMenu>("MainMenu");
+		SceneManager::switchToScene(5);
 
 
 		rMoteur.run();

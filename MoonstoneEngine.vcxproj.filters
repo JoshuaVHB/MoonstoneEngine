@@ -932,6 +932,7 @@
     <ClInclude Include="Utils\vendor\stdafx.h" />
     <ClInclude Include="src\Scenes\SceneTransition.h" />
     <ClInclude Include="Graphics\abstraction\FrameBufferStack.h" />
+    <ClInclude Include="Graphics\abstraction\abstraction_core.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
