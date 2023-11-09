@@ -45,7 +45,7 @@ private:
 
 
 	// -- Meshes
-	std::vector<TriggerBox*> cp;
+	std::vector<TriggerBox> cp;
 
 	Texture m_screenShot;
 
@@ -54,7 +54,7 @@ private:
 	std::vector<FormatJson> m_objs = m_parser.getObjs();
 	std::vector<Mesh> m_meshes{};
 
-
+	TriggerBox* checkpoint;
 
 private:
 
@@ -103,11 +103,11 @@ public:
 			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
 
-		TriggerBox* checkpoint = new TriggerBox{ PhysicsEngine::fVec3(510.f, 40, 840), PhysicsEngine::fVec3(50, 50, 2) };
-		checkpoint->setTriggerCallback(std::move([]() {
+		checkpoint = new TriggerBox{ PhysicsEngine::fVec3(510.f, 40, 840), PhysicsEngine::fVec3(50, 50, 2) };
+		checkpoint->setTriggerCallback([]() -> void {
 			std::cout << "Checkpoint reached !" << std::endl;
-			}));
-		cp.push_back(checkpoint);
+			});
+		cp.emplace_back(*checkpoint);
 	}
 
 
@@ -159,7 +159,7 @@ public:
 			}
 		}
 
-		Renderer::renderMesh(cam, clop.getMesh(), m_terrainEffect);		
+		Renderer::renderMesh(cam, clop.getMesh());		
 		Renderer::renderDebugLine(cam, clop.getPosition(), clop.getPosition() + (clop.getGroundDir()*2));
 		m_skybox.renderSkybox(cam);		
 
@@ -183,7 +183,5 @@ public:
 	}
 
 	~Rush3Scene() {
-		for(auto c : cp)
-			delete c;
 	}
 };

@@ -11,6 +11,7 @@
 class Mesh;
 class Camera;
 class Skybox;
+class Terrain;
 
 struct ID3D11ShaderResourceView;
 
@@ -31,16 +32,18 @@ private:
 	FrameBuffer m_gBuffer;
 
 	Effect m_gPass, m_lightPass, m_VFXPass;
+	Effect m_deferredTerrainFx;
 	LightManager m_lights;
-	ID3D11ShaderResourceView* m_skyboxSRV = nullptr;
+	mutable ID3D11ShaderResourceView* m_skyboxSRV = nullptr;
 
 public:
 
 	void update(Camera& cam);
 	void renderDeferred(const std::function<void()>& renderFn, Camera& cam) const;
 
-	void renderMesh(Camera& cam, const Mesh& mesh);
-	void renderSkybox(Camera& cam, const Skybox& skybox);
+	void renderTerrain(Camera& cam, Terrain& terrain) const;
+	void renderMesh(Camera& cam, const Mesh& mesh)const ;
+	void renderSkybox(Camera& cam, const Skybox& skybox)const;
 
 	void clear() const noexcept { m_gBuffer.clear(); }
 

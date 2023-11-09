@@ -2,8 +2,10 @@
 #include "Camera.h"
 
 #include "Renderer.h"
+#include "World/Frustum.h"
 #include "World/Material.h"
 #include "World/WorldRendering/Skybox.h"
+#include "World/WorldRendering/Terrain.h"
 
 DeferredRenderer::DeferredRenderer()
 	{
@@ -21,10 +23,10 @@ DeferredRenderer::DeferredRenderer()
 		m_gBuffer = FrameBuffer{ 6 };
 
 
-		m_gPass.loadEffectFromFile("res/effects/gPass_2.fx");
-		m_lightPass.loadEffectFromFile("res/effects/lightPass_2.fx");
+		m_gPass.loadEffectFromFile("res/effects/gPass.fx");
+		m_lightPass.loadEffectFromFile("res/effects/lightPass.fx");
+		m_deferredTerrainFx.loadEffectFromFile("res/effects/deferredTerrain.fx");
 		// add vfx pass
-
 
 		//-------------------------------------------------------------------------------------------//
 
@@ -33,17 +35,17 @@ DeferredRenderer::DeferredRenderer()
 		vertexLayout.pushBack<3>(InputLayout::Semantic::Normal);
 		vertexLayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 
-
-
-
 		m_lightPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we need VP and camera pos
 		m_lightPass.addNewCBuffer("lightsBuffer", sizeof(hlsl_GenericLight) * 128); // we need VP and camera pos
 
-		m_gPass.addNewCBuffer("cameraParams", sizeof(XMMATRIX)); // we only need VP matrix
+		m_gPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we only need VP matrix
 		m_gPass.addNewCBuffer("meshParams", sizeof(meshParams));
 
-		m_gPass.bindInputLayout(vertexLayout);
+		m_deferredTerrainFx.addNewCBuffer("meshParams", sizeof(meshParams));
+		m_deferredTerrainFx.addNewCBuffer("cameraParams", sizeof(cameraParams));
 
+		m_gPass.bindInputLayout(vertexLayout);
+		m_deferredTerrainFx.bindInputLayout(vertexLayout);
 
 		//-------------------------------------------------------------------------------------------//
 
@@ -74,20 +76,7 @@ DeferredRenderer::DeferredRenderer()
 		combineAndApplyLights(cam);
 	}
 
-	/* DeferredRenderer m_renderer;
-	 *
-	 *
-	 *	m_renderer.RenderDeferred(
-	 *		[&](){
-	 *
-	 *		};
-	 *
-	 *
-	 *	);
-	 *
-	 */
-
-	void DeferredRenderer::renderMesh(Camera& cam, const Mesh& mesh)
+	void DeferredRenderer::renderMesh(Camera& cam, const Mesh& mesh) const
 	{
 
 		if (!mesh.getMaterials().empty())
@@ -103,7 +92,25 @@ DeferredRenderer::DeferredRenderer()
 		Renderer::renderMesh(cam, mesh, m_gPass);
 	}
 
-	void DeferredRenderer::renderSkybox(Camera& cam, const Skybox& skybox)
+	void DeferredRenderer::renderTerrain(Camera& cam, Terrain& terrain) const
+	{
+
+		m_deferredTerrainFx.updateSubresource(cameraParams{
+			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
+			}, "cameraParams");
+		m_deferredTerrainFx.sendCBufferToGPU("cameraParams");
+		Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+		for (auto&& chunk : terrain.getMesh())
+		{
+			if (f.isOnFrustum(chunk.getBoundingBox()))
+			{
+				Renderer::renderMesh(cam, chunk, m_deferredTerrainFx);
+			}
+		}	
+
+	}
+
+	void DeferredRenderer::renderSkybox(Camera& cam, const Skybox& skybox) const
 	{
 		m_skyboxSRV = m_gBuffer.bindUnlitRTV();
 		skybox.renderSkybox(cam);
@@ -123,7 +130,9 @@ DeferredRenderer::DeferredRenderer()
 	void DeferredRenderer::updateGeometryPass(Camera& cam) const
 	{
 
-		m_gPass.updateSubresource(XMMatrixTranspose(cam.getVPMatrix()), "cameraParams");
+		m_gPass.updateSubresource(cameraParams{
+			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
+			}, "cameraParams");
 		m_gPass.sendCBufferToGPU("cameraParams");
 
 	}

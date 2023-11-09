@@ -36,7 +36,7 @@ void TriggerBox::setPosition(fVec3 pos)
 	m_actor->setGlobalPose(transform);
 }
 
-void TriggerBox::setTriggerCallback(std::function<void()>&& callback)
+void TriggerBox::setTriggerCallback(std::function<void()> callback)
 {
 	m_triggerCallback = callback;
 }

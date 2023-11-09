@@ -2,27 +2,29 @@
 
 // Uniforms
 
-Texture2D tex; // la texture
+Texture2D ambiantOcclusion; // la texture
+Texture2D albedo; // la texture
+Texture2D normalMap; // la texture
+Texture2D roughness; // la texture
+Texture2D specular; // la texture
+
 SamplerState SampleState; // l’état de sampling
 
 
 ////////////////////
 
 // -- Constant buffers 
-cbuffer worldParams
+cbuffer cameraParams
 {
     float4x4 viewProj; // la matrice totale 
-    float4 lightPos; // la position de la source d’éclairage (Point) 
-    float4 cameraPos; // la position de la caméra 
-    
-    float4 sunColor; // la valeur ambiante de l’éclairage 
-    float sunStrength; // la valeur diffuse de l’éclairage
+   // float4 cameraPos; // la position de la caméra     
 }
 
 cbuffer meshParams
 {
     float4x4 worldMat; // matrice de transformation dans le monde
 };
+
 
 /////////////////////
 
@@ -32,9 +34,8 @@ struct VSOut
 {
     float4 Pos : SV_Position;
     float3 Norm : TEXCOORD0;
-    float3 lightDir : TEXCOORD1;
-    float3 camDir : TEXCOORD2;
-    float2 uv : TEXCOORD3;
+    float4 worldPos : TEXCOORD1;
+    float2 uv : TEXCOORD2;
 };
 
 struct PSOut
@@ -42,6 +43,9 @@ struct PSOut
     float4 Normal : SV_Target0; //Normal map
     float4 Diffuse : SV_Target1; //Color
     float4 Position : SV_Target2;
+    float4 Specular : SV_Target3;
+    float4 ambiantOcclusion : SV_Target4;
+    float4 roughness : SV_Target5;
 };
 
 
@@ -49,18 +53,15 @@ struct PSOut
 
 // -- Vertex Shader
 
-VSOut gPassVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOORD)
+VSOut gPassVS(float4 Pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
     float4x4 MVP = mul(worldMat, viewProj);
     VSOut vs_out = (VSOut) 0;
     vs_out.Pos = mul(Pos, MVP);
-    vs_out.Norm = mul(float4(Normale, 0.0f), worldMat).xyz;
-    
-    float3 worldPos = mul(Pos, worldMat).xyz;
-    vs_out.lightDir = lightPos.xyz - worldPos;
-    vs_out.camDir = cameraPos.xyz - worldPos;
-    
+    vs_out.Norm = mul(float4(normal, 0.0f), worldMat).xyz;
+    vs_out.worldPos = mul(Pos, worldMat);
     vs_out.uv = uv;
+    
     return vs_out;
 }
 
@@ -70,30 +71,18 @@ VSOut gPassVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEXCOO
 
 PSOut gPassPS(VSOut vs) : SV_Target
 {
-    float3 N = normalize(vs.Norm);
-    float3 couleur;
-    float3 texSample = tex.Sample(SampleState, vs.uv).rgb;
-    couleur.rgb = texSample;
-    /*
+    float3 outNormal = normalize(vs.Norm);
+    float3 outAlbedo;
+    float3 texSample = albedo.Sample(SampleState, vs.uv).rgb;
+    outAlbedo.rgb = texSample;
 
-    // Normaliser les paramètres 
-    float3 L = normalize(vs.lightDir);
-    float3 V = normalize(vs.camDir);
-    
-    // Valeur de la composante diffuse 
-    float3 sunLight = saturate(dot(N, L));
-    float3 R = normalize(2 * sunLight * N - L);
-    // Puissance de 4 - pour l’exemple
-    float S = pow(saturate(dot(R, L)), 4.f);
-
-    
-    couleur.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, sunLight * sunStrength));
-    couleur += S / 4.f;
-    */
     PSOut pso;
-    pso.Normal = float4(N, 1.0F);
-    pso.Diffuse = float4(couleur, 1.0F);
-    pso.Position = vs.Pos;
+    pso.Normal = float4(outNormal, 1.0F);
+    pso.Diffuse = float4(outAlbedo,1.0);
+    pso.Position = vs.worldPos;
+    pso.Specular = float4(specular.Sample(SampleState, vs.uv).rgb, 1);
+    pso.ambiantOcclusion = float4(ambiantOcclusion.Sample(SampleState, vs.uv).rgb ,1);
+    pso.roughness = float4(roughness.Sample(SampleState, vs.uv).rgb ,1);
     
     return pso;
     
