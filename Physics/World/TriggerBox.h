@@ -9,6 +9,7 @@ class TriggerBox : public StaticObject
 	std::function<void()> m_triggerCallback = std::function<void()>();
 
 public:
+	TriggerBox() = default;
 	TriggerBox(fVec3 position, fVec3 scale);
 
 	TriggerBox(group typeObject, fVec3 position = fVec3(0,0,0), fVec3 scale = fVec3(1,1,1));
@@ -17,7 +18,7 @@ public:
 
 	void setPosition(fVec3 pos = fVec3(0, 0, 0));
 
-	void setTriggerCallback(std::function<void()>&& callback);
+	void setTriggerCallback(std::function<void()> callback);
 
 	void onTrigger();
 };

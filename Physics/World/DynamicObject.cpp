@@ -31,6 +31,16 @@ void DynamicObject::majTransformPhysics()
 	}
 }
 
+void DynamicObject::setTranslation(float x, float y, float z)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->clearForce();
+		m_actor->is<PxRigidDynamic>()->clearTorque();
+
+		m_actor->is<PxRigidDynamic>()->setGlobalPose(PxTransform(PxVec3(x, y, z)));
+	}
+}
+
 void DynamicObject::addShape(PxShape* shape)
 {
 	PxFilterData filterData;
@@ -149,3 +159,10 @@ void DynamicObject::displayPosition()
 }
 
 
+float DynamicObject::getLinearVelocityMag() const noexcept
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		return m_actor->is<PxRigidDynamic>()->getLinearVelocity().magnitude();
+	}
+	return 0.0f;
+}

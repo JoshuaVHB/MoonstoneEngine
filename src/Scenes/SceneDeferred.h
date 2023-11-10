@@ -28,6 +28,10 @@ private:
 	DeferredRenderer m_renderer;
 	TextRenderer m_textRenderer;
 
+	// -- Terrain
+	Terrain m_terrain{ "res/textures/heightmap.png" };
+
+
 public:
 
 	SceneDeferred()
@@ -42,8 +46,13 @@ public:
 
 	void renderFn()
 	{
-		static auto deferredRenderLambda = [&](Camera& cam, const Mesh& mesh)	{	m_renderer.renderMesh(cam, mesh);	};
+		static auto deferredRenderLambda = [&](Camera& cam, const Mesh& mesh)
+		{
+				m_renderer.renderMesh(cam, mesh);
+		};
+
 		MeshManager::render(m_player.getCamera(), deferredRenderLambda);
+		m_renderer.renderTerrain(m_player.getCamera(), m_terrain);
 		m_renderer.renderSkybox(m_player.getCamera(), box);
 	}
 

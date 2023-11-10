@@ -115,7 +115,7 @@ FrameBuffer::FrameBuffer(int texCount/*=1*/)
 
 	}
 
-	ID3D11ShaderResourceView* FrameBuffer::bindUnlitRTV()
+	ID3D11ShaderResourceView* FrameBuffer::bindUnlitRTV() const
 	{
 		m_renderContext.context->OMSetRenderTargets(1, &m_unlitSrv.first, m_depth.getView());
 		return m_unlitSrv.second;

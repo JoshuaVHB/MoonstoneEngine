@@ -26,8 +26,10 @@ public:
 		float	xyScale=1;
 		float	scaleFactor=1;
 		int		chunkSize=0;
-		Vec2<int> chunkCount{ 1,1 };
+		Vec2<int> chunkCount{ 5,5 };
 	};
+
+
 
 private:
 
@@ -83,7 +85,7 @@ public:
 	// might be inaccurate
 	XMVECTOR getNormalAt(XMVECTOR worldPos) const 
 	{
-		return getNormalAt(XMVectorGetX(worldPos)/ m_params.xyScale, XMVectorGetZ(worldPos)/ m_params.xyScale);
+		return getNormalAt(static_cast<int>(XMVectorGetX(worldPos)/ m_params.xyScale), static_cast<int>(XMVectorGetZ(worldPos)/ m_params.xyScale));
 
 	}
 

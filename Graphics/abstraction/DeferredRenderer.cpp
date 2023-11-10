@@ -2,8 +2,10 @@
 #include "Camera.h"
 
 #include "Renderer.h"
+#include "World/Frustum.h"
 #include "World/Material.h"
 #include "World/WorldRendering/Skybox.h"
+#include "World/WorldRendering/Terrain.h"
 
 DeferredRenderer::DeferredRenderer()
 	{
@@ -21,10 +23,10 @@ DeferredRenderer::DeferredRenderer()
 		m_gBuffer = FrameBuffer{ 6 };
 
 
-		m_gPass.loadEffectFromFile("res/effects/gPass_2.fx");
-		m_lightPass.loadEffectFromFile("res/effects/lightPass_2.fx");
+		m_gPass.loadEffectFromFile("res/effects/gPass.fx");
+		m_lightPass.loadEffectFromFile("res/effects/lightPass.fx");
+		m_deferredTerrainFx.loadEffectFromFile("res/effects/deferredTerrain.fx");
 		// add vfx pass
-
 
 		//-------------------------------------------------------------------------------------------//
 
@@ -33,17 +35,17 @@ DeferredRenderer::DeferredRenderer()
 		vertexLayout.pushBack<3>(InputLayout::Semantic::Normal);
 		vertexLayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 
-
-
-
 		m_lightPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we need VP and camera pos
 		m_lightPass.addNewCBuffer("lightsBuffer", sizeof(hlsl_GenericLight) * 128); // we need VP and camera pos
 
-		m_gPass.addNewCBuffer("cameraParams", sizeof(XMMATRIX)); // we only need VP matrix
+		m_gPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we only need VP matrix
 		m_gPass.addNewCBuffer("meshParams", sizeof(meshParams));
 
-		m_gPass.bindInputLayout(vertexLayout);
+		m_deferredTerrainFx.addNewCBuffer("meshParams", sizeof(meshParams));
+		m_deferredTerrainFx.addNewCBuffer("cameraParams", sizeof(cameraParams));
 
+		m_gPass.bindInputLayout(vertexLayout);
+		m_deferredTerrainFx.bindInputLayout(vertexLayout);
 
 		//-------------------------------------------------------------------------------------------//
 
@@ -74,20 +76,7 @@ DeferredRenderer::DeferredRenderer()
 		combineAndApplyLights(cam);
 	}
 
-	/* DeferredRenderer m_renderer;
-	 *
-	 *
-	 *	m_renderer.RenderDeferred(
-	 *		[&](){
-	 *
-	 *		};
-	 *
-	 *
-	 *	);
-	 *
-	 */
-
-	void DeferredRenderer::renderMesh(Camera& cam, const Mesh& mesh)
+	void DeferredRenderer::renderMesh(Camera& cam, const Mesh& mesh) const
 	{
 
 		if (!mesh.getMaterials().empty())
@@ -103,7 +92,33 @@ DeferredRenderer::DeferredRenderer()
 		Renderer::renderMesh(cam, mesh, m_gPass);
 	}
 
-	void DeferredRenderer::renderSkybox(Camera& cam, const Skybox& skybox)
+	void DeferredRenderer::renderTerrain(Camera& cam, Terrain& terrain) const
+	{
+
+		static Texture m_rockTexture{ L"res/textures/rock.dds" };
+		static Texture m_grassTexture{ L"res/textures/seamless.dds" };
+		static Texture m_snow{ L"res/textures/snow.dds" };
+
+		m_deferredTerrainFx.bindTexture("grassTexture", m_grassTexture.getTexture());
+		m_deferredTerrainFx.bindTexture("rockTexture", m_rockTexture.getTexture());
+		m_deferredTerrainFx.bindTexture("snowTexture", m_snow.getTexture());
+
+		m_deferredTerrainFx.updateSubresource(cameraParams{
+			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
+			}, "cameraParams");
+		m_deferredTerrainFx.sendCBufferToGPU("cameraParams");
+		Frustum f = Frustum::createFrustumFromPerspectiveCamera(cam);
+		for (auto&& chunk : terrain.getMesh())
+		{
+			if (f.isOnFrustum(chunk.getBoundingBox()))
+			{
+				Renderer::renderMesh(cam, chunk, m_deferredTerrainFx);
+			}
+		}	
+
+	}
+
+	void DeferredRenderer::renderSkybox(Camera& cam, const Skybox& skybox) const
 	{
 		m_skyboxSRV = m_gBuffer.bindUnlitRTV();
 		skybox.renderSkybox(cam);
@@ -123,7 +138,9 @@ DeferredRenderer::DeferredRenderer()
 	void DeferredRenderer::updateGeometryPass(Camera& cam) const
 	{
 
-		m_gPass.updateSubresource(XMMatrixTranspose(cam.getVPMatrix()), "cameraParams");
+		m_gPass.updateSubresource(cameraParams{
+			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
+			}, "cameraParams");
 		m_gPass.sendCBufferToGPU("cameraParams");
 
 	}
@@ -179,7 +196,23 @@ DeferredRenderer::DeferredRenderer()
 			ImGui::Image((void*)srv, ImVec2(311, 173));
 		}
 		ImGui::Image((void*)m_skyboxSRV, ImVec2(311, 173));
+		
+			
 		ImGui::End();
+		ImGui::Begin("Deferred Controls");
+		static float sunstrenght = 1.f;
+		static float sunPos[4] = {};
+		if (ImGui::DragFloat("Sun strength", &sunstrenght, 0.05f, 0.f, 2.f))
+		{
+			m_deferredTerrainFx.setUniformVector("sunStrength", { sunstrenght });
+		}
+
+		if (ImGui::DragFloat4("Sun pos", &sunPos[0]))
+		{
+			m_deferredTerrainFx.setUniformVector("sunPos", { sunPos[0],sunPos[1] ,sunPos[2] ,sunPos[3] });
+		}
+		ImGui::End();
+		
 		m_lights.showDebugWindow();
 
 	}

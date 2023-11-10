@@ -54,10 +54,12 @@ public:
 	}
 
 
+	[[nodiscard]] const DynamicObject& getObject() const noexcept	{ return m_object; };
 	[[nodiscard]] BoundingSphere getBoundingSphere() const noexcept { return m_boundingSphere; }
-	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
-	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
-	[[nodiscard]] DirectX::XMVECTOR getGroundDir() const noexcept { return m_groundDir; }
+	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept		{ return m_forward; }
+	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept	{ return m_position; }
+	[[nodiscard]] DirectX::XMVECTOR getGroundDir() const noexcept	{ return m_groundDir; }
+	[[nodiscard]] float getMaxVelocity() const noexcept				{ return maxVelocity; }
 
 	void setGroundVector(const DirectX::XMVECTOR& val)
 	{
@@ -65,8 +67,21 @@ public:
 	}
 
 	void setPosition(float x, float y, float z) {
+		m_object.clearForce();
+		m_object.clearTorque();
 		m_object.getTransform().setPosition({x,y,z});
 		m_object.majTransformPhysics();
+	}
+
+	void setTranslation(float x, float y, float z)
+	{
+		m_object.clearForce();
+		m_object.clearTorque();
+		m_object.setTranslation(x, y, z);
+		m_forward={ 0, 0, 1 , 0 };
+		m_groundDir={ 0, 1, 0, 0 };
+		currentVelocity={ 0 };
+		
 	}
 
 private:

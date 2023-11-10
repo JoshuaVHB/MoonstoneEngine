@@ -49,6 +49,6 @@ public:
 	const ID3D11ShaderResourceView* getResource(const int slot = 0) const			{ return m_srv[slot]; }
 	const DepthBuffer& getDepth()									const noexcept	{ return m_depth; }
 
-	ID3D11ShaderResourceView* bindUnlitRTV();
+	ID3D11ShaderResourceView* bindUnlitRTV() const;
 	static void unbind();
 };

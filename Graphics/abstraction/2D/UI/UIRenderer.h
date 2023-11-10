@@ -60,6 +60,7 @@ public:
 		
 		clear();
 		m_renderer->clear();
+		attachedMouse->clearPress();
 
 	}
 

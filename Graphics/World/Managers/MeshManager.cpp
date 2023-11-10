@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#define _XM_NO_INTRINSICS_
 #include <directXmath.h>
 #include <tuple>
 #include <set>
