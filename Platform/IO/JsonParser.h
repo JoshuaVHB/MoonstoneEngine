@@ -32,7 +32,9 @@ public:
 
 	void openFile();
 
-	void updateList(); 
+	void updateList();
+
+	void getCheckpoints(std::vector<FormatJson> & chepointInfos);
 
 	[[nodiscard]] std::vector<FormatJson> getObjs();
 

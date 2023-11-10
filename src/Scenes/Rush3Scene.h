@@ -11,7 +11,7 @@
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/physx_Impl/physx_shape.h"
 #include "../Game/CameraController.h"
-
+#include "../Game/CheckpointController.h"
 #include "../Game/Cloporte.h"
 class Rush3Scene : public Scene {
 
@@ -44,8 +44,6 @@ private:
 	bool m_disableAABBS = true;
 
 
-	// -- Meshes
-	std::vector<TriggerBox*> cp;
 
 	Texture m_screenShot;
 
@@ -54,8 +52,9 @@ private:
 	std::vector<FormatJson> m_objs = m_parser.getObjs();
 	std::vector<Mesh> m_meshes{};
 
-
-
+	// Checkpoints
+	CheckpointController checkpoints;
+	TriggerBox* finish;
 private:
 
 	// -- Define constant buffers
@@ -103,11 +102,25 @@ public:
 			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
 
-		TriggerBox* checkpoint = new TriggerBox{ PhysicsEngine::fVec3(510.f, 40, 840), PhysicsEngine::fVec3(50, 50, 2) };
-		checkpoint->setTriggerCallback(std::move([]() {
-			std::cout << "Checkpoint reached !" << std::endl;
-			}));
-		cp.push_back(checkpoint);
+
+		// -- Import the checkpoint
+		std::vector<FormatJson> checkpointInfos;
+		JsonParser cp_parser{ "res/json/Checkpoints.json" };
+		cp_parser.openFile();
+		cp_parser.getCheckpoints(checkpointInfos);
+		
+		checkpoints.addCheckpointFromJson(checkpointInfos);
+	
+		// -- Set the finish line
+		finish = new TriggerBox{ { 240.f, 55.f, 440.f }, { 1, 30, 45, } };
+		finish->setTriggerCallback([&]() {
+			if(checkpoints.allCheckpointsPassed())
+				std::cout << "You win !" << std::endl;
+			else 
+				std::cout << "You didn't pass all checkpoints !" << std::endl;
+			});
+
+
 	}
 
 
@@ -182,8 +195,4 @@ public:
 
 	}
 
-	~Rush3Scene() {
-		for(auto c : cp)
-			delete c;
-	}
 };

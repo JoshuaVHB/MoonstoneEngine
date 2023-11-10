@@ -62,6 +62,7 @@
     <ClCompile Include="Graphics\Rendering_impl\d3d11_impl_core.cpp" />
     <ClCompile Include="src\Scenes\SceneTransition.cpp" />
     <ClCompile Include="Graphics\abstraction\FrameBufferStack.cpp" />
+    <ClCompile Include="src\Game\CheckpointController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
@@ -933,6 +934,7 @@
     <ClInclude Include="src\Scenes\SceneTransition.h" />
     <ClInclude Include="Graphics\abstraction\FrameBufferStack.h" />
     <ClInclude Include="Graphics\abstraction\abstraction_core.h" />
+    <ClInclude Include="src\Game\CheckpointController.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
@@ -942,6 +944,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="src\Scenes\Position.json" />
+    <None Include="res\json\Position.json" />
   </ItemGroup>
 </Project>

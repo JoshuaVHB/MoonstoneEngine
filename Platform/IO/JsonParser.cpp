@@ -28,6 +28,22 @@ void JsonParser::updateList()
 
 }
 
+void JsonParser::getCheckpoints(std::vector<FormatJson>& checkpointInfos)
+{
+	if (m_json.is_array())
+	{
+		std::for_each(m_json.begin(), m_json.end(), [&](auto& item) {
+			FormatJson obj;
+			obj.positionObj = DirectX::XMVectorSet(item["j_position"]["x"], item["j_position"]["y"], item["j_position"]["z"], item["j_position"]["n"]);
+			obj.scaleObj = DirectX::XMVectorSet(item["j_scale"]["x"], item["j_scale"]["y"], item["j_scale"]["z"], item["j_scale"]["n"]);
+			checkpointInfos.push_back(obj);
+			});
+
+	}
+	else
+		std::cout << "Error: Json file is not an array" << std::endl;
+}
+
 std::vector<FormatJson> JsonParser::getObjs()
 {
 	openFile();

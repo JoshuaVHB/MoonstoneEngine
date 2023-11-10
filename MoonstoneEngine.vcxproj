@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\CheckpointController.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\TextRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIButton.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIElement.cpp" />
@@ -228,6 +229,7 @@
     <None Include="res\json\Position.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\CheckpointController.h" />
     <ClInclude Include="Graphics\abstraction\2D\Font.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIButton.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIElement.h" />
