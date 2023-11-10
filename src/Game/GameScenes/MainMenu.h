@@ -9,9 +9,8 @@
 class MainMenu : public Scene {
 private:
 
-	Texture m_background;
+	Texture m_background{ "res/textures/Menu_screen.dds" };
 
-	
 
 public:
 
@@ -27,6 +26,8 @@ public:
 
 		Renderer::clearScreen(0, 0, 0, 1);
 
+
+		Renderer::blitTexture(m_background, DirectX::XMVECTOR{ 1,1,1,1 });
 		Renderer::writeTextOnScreen("Bugs Balls", -200, 200, 2);
 
 		Renderer::renderText();
