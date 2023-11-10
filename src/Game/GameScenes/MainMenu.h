@@ -9,7 +9,7 @@
 class MainMenu : public Scene {
 private:
 
-	Texture m_background;
+	Texture m_background{ "res/textures/Menu_screen.dds" };
 
 public:
 
@@ -24,20 +24,26 @@ public:
 	virtual void onRender() override {
 
 		Renderer::clearScreen(0, 0, 0, 1);
+
+
+		Renderer::blitTexture(m_background, DirectX::XMVECTOR{ 1,1,1,0.8 });
+		Renderer::writeTextOnScreen("Bugs Balls", -200, 200, 1);
+
+		Renderer::renderText();
 	}
 
 	virtual void onImGuiRender() override
 	{
 		UIRenderer::clear();
-
-
-		if (UIRenderer::Button(200,200,400,400))
+		std::cout << wMouse->isLeftPressed() << std::endl;
+		if (UIRenderer::Button(400, 400, 300, 100))
 		{
 			SceneManager::switchToScene("Terrain");
 		}
 
-		UIRenderer::renderUI();
+		wMouse->clearPress();
 
+		UIRenderer::renderUI();
 
 	}
 

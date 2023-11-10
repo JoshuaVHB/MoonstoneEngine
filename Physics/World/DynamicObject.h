@@ -29,14 +29,17 @@ public:
 
 	void setLinearVelocity(fVec3 linearVelocity);
 	void setAngularVelocity(fVec3 angularVelocity);
+	void setTranslation(float x, float y, float z);
 
 	void addForce(fVec3 force);
 	void addTorque(fVec3 Torque);
 	void clearForce();
 	void clearTorque();
 
-	fVec3 getLinearValocity();	
+	fVec3 getLinearValocity();	//
 	fVec3 getPosition();
+
+	[[nodiscard]] float getLinearVelocityMag() const noexcept;
 
 	void setMass(float mass);
 

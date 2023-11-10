@@ -2,12 +2,8 @@
 #include "../Utils/Singleton.h"
 #include "../Utils/Timer.h"
 #include "../Graphics/d3d11_graphics.h"
-#include <cstdint>
-#include <functional>
 
 #include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
 
 #include "../src/Scenes/Scene.h"
 #include "../Physics/PhysicEngine.h"
@@ -82,7 +78,7 @@ public:
 		}
 		if (deltaTime >= 0.01666) {
 
-
+			
 			SceneManager::onUpdate(deltaTime);
 			PhysicsEngine::onUpdate(deltaTime);
 			SceneManager::onRender();

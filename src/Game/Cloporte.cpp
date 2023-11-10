@@ -138,8 +138,8 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 		if (!tmp)
 		{
 			
-		switchView();
-		tmp = true;
+			switchView();
+			tmp = true;
 		}
 
 	}

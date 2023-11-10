@@ -61,13 +61,23 @@ public:
 	PHYSIC_CALL_IMPL(changeScene);
 	PHYSIC_CALL_IMPL(addScene);
 	PHYSIC_CALL_IMPL(onInit);
-	PHYSIC_CALL_IMPL(onUpdate);
 	PHYSIC_CALL_IMPL(cleanupPhysics);
 	PHYSIC_CALL_IMPL(getTransform);
 	PHYSIC_CALL_IMPL(addActor);
 	PHYSIC_CALL_IMPL(createStaticActor);
 	PHYSIC_CALL_IMPL(createDynamicActor);
 	PHYSIC_CALL_IMPL(createMaterial);
+
+	static auto onUpdate(float deltaTime)
+	{
+		if (!isRunning) return;
+		return implementation->onUpdate(deltaTime);
+	}
+
+	static void setRunningState(bool runPhysics)
+	{
+		isRunning = runPhysics;
+	}
 
 
 	template<typename _PhysicEngineImplementation>
@@ -79,5 +89,6 @@ public:
 
 private:
 
+	static bool isRunning;
 	static std::unique_ptr<_ImplPhysic> implementation;
 };

@@ -202,7 +202,7 @@ DeferredRenderer::DeferredRenderer()
 		ImGui::Begin("Deferred Controls");
 		static float sunstrenght = 1.f;
 		static float sunPos[4] = {};
-		if (ImGui::DragFloat("Sun strength", &sunstrenght, 0.05, 0, 2))
+		if (ImGui::DragFloat("Sun strength", &sunstrenght, 0.05f, 0.f, 2.f))
 		{
 			m_deferredTerrainFx.setUniformVector("sunStrength", { sunstrenght });
 		}
