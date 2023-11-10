@@ -95,6 +95,14 @@ DeferredRenderer::DeferredRenderer()
 	void DeferredRenderer::renderTerrain(Camera& cam, Terrain& terrain) const
 	{
 
+		static Texture m_rockTexture{ L"res/textures/rock.dds" };
+		static Texture m_grassTexture{ L"res/textures/seamless.dds" };
+		static Texture m_snow{ L"res/textures/snow.dds" };
+
+		m_deferredTerrainFx.bindTexture("grassTexture", m_grassTexture.getTexture());
+		m_deferredTerrainFx.bindTexture("rockTexture", m_rockTexture.getTexture());
+		m_deferredTerrainFx.bindTexture("snowTexture", m_snow.getTexture());
+
 		m_deferredTerrainFx.updateSubresource(cameraParams{
 			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
 			}, "cameraParams");
@@ -188,7 +196,23 @@ DeferredRenderer::DeferredRenderer()
 			ImGui::Image((void*)srv, ImVec2(311, 173));
 		}
 		ImGui::Image((void*)m_skyboxSRV, ImVec2(311, 173));
+		
+			
 		ImGui::End();
+		ImGui::Begin("Deferred Controls");
+		static float sunstrenght = 1.f;
+		static float sunPos[4] = {};
+		if (ImGui::DragFloat("Sun strength", &sunstrenght, 0.05, 0, 2))
+		{
+			m_deferredTerrainFx.setUniformVector("sunStrength", { sunstrenght });
+		}
+
+		if (ImGui::DragFloat4("Sun pos", &sunPos[0]))
+		{
+			m_deferredTerrainFx.setUniformVector("sunPos", { sunPos[0],sunPos[1] ,sunPos[2] ,sunPos[3] });
+		}
+		ImGui::End();
+		
 		m_lights.showDebugWindow();
 
 	}

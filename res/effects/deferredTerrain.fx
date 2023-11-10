@@ -18,9 +18,9 @@ SamplerState SampleState; // l’état de sampling
 ////////////////////
 
 
-float4 sunPos = float4(-100.0f, 1000.f, -1000.0f, 1.0f ); // la position de la source d’éclairage (Point) 
+float4 sunPos = float4(100.0f, 1000.f, 10.0f, 1.0f ); // la position de la source d’éclairage (Point) 
 float4 sunColor = float4(1.f, 1.f, .8f, 1.f); // la valeur ambiante de l’éclairage 
-float sunStrength = 0.75f; // la valeur diffuse de l’éclairage
+float4 sunStrength = float4(1,1,1,1); // la valeur diffuse de l’éclairage
 
 // -- Constant buffers 
 
@@ -93,15 +93,15 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     
     // -- Compute specular
     
+
+    
     float3 N = normalize(vs.Norm);
     float3 L = normalize(sunPos - vs.worldPos);
-    float3 V = normalize(cameraPos- vs.worldPos);
+    float3 V = normalize(cameraPos - vs.worldPos);
+    float3 H = normalize(L + V);
+    float diff = saturate(dot(N, L));
+    float S = pow(saturate(dot(H, N)), 4.f);
     
-    // Valeur de la composante diffuse 
-    float3 sunLight = saturate(dot(N, L));
-    float3 R = normalize(2 * sunLight * N - L);
-    // Puissance de 4 - pour l’exemple
-    float S = pow(saturate(dot(R, L)), 4.f);
     
      // -- Compute albedo
     
@@ -109,9 +109,9 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     float3 grassSample = grassTexture.Sample(SampleState, vs.uv).rgb;
     float3 snowSample = snowTexture.Sample(SampleState, vs.uv).rgb;
     
-    float3 baseTexture = lerp(grassSample, snowSample, (vs.worldPos.y) / 50.f);
-    outAlbedo.rgb = lerp(rockSample, baseTexture, smoothstep(0.79, 1, N.y));
-
+    float3 baseTexture = lerp(grassSample, snowSample, (vs.worldPos.y) / 100.f);
+    outAlbedo.rgb = lerp(rockSample, baseTexture, smoothstep(0.79, 1, outNormal.y));
+    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, diff * sunStrength.x));
     // -- Output to RTV
     
     PSOut pso;

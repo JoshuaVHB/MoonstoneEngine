@@ -25,6 +25,8 @@ struct cameraParams
 	DirectX::XMVECTOR cameraPos; // la position de la caméra 
 };
 
+
+
 class DeferredRenderer
 {
 private:

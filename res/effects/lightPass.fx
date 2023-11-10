@@ -92,7 +92,7 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
     float4 diffuse      = albedo.Load(sspos);
     float4 fragnormal   = normal.Load(sspos);
     float4 fragPos      = position.Load(sspos);
-    float specularPixel = max(specular.Load(sspos).a, 0.01);
+    float specularPixel = specular.Load(sspos).x;
     float4 skyBox       = unlitTexture.Load(sspos);
     
         
@@ -100,7 +100,7 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
     
     float3 viewDir = normalize(cameraPos.xyz - fragPos.xyz);
     
-    float3 lighting = diffuse.rgb * 0.1f;
+    float3 lighting = diffuse.rgb * 0.7f;
     //lighting += lights[0].diffuse.rgb;
     
     for (int i = 0; i < 8; ++i)
@@ -122,10 +122,9 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
             
         }
     }   
-    
       
     
-    return float4(lighting, 1.0f);
+    return float4(lighting, 1.0f) + float4(specularPixel * 0.6 * diffuse.rgb, 0.F);
 }
 
 ////////////////////

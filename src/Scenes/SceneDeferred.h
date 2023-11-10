@@ -29,8 +29,8 @@ private:
 	TextRenderer m_textRenderer;
 
 	// -- Terrain
-	const std::filesystem::path path_to_map = "res/textures/heightmap.png";
-	Terrain m_terrain{ path_to_map };
+	Terrain m_terrain{ "res/textures/heightmap.png" };
+
 
 public:
 
@@ -48,11 +48,11 @@ public:
 	{
 		static auto deferredRenderLambda = [&](Camera& cam, const Mesh& mesh)
 		{
-				m_renderer.renderTerrain(cam, m_terrain);
 				m_renderer.renderMesh(cam, mesh);
 		};
 
 		MeshManager::render(m_player.getCamera(), deferredRenderLambda);
+		m_renderer.renderTerrain(m_player.getCamera(), m_terrain);
 		m_renderer.renderSkybox(m_player.getCamera(), box);
 	}
 
