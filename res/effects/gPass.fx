@@ -94,7 +94,6 @@ PSOut gPassPS(VSOut vs) : SV_Target
     outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, diff * sunStrength.x));
     
     
-    
     PSOut pso;
     pso.Normal = float4(outNormal, 1.0F);
     pso.Diffuse = float4(outAlbedo,1.0);

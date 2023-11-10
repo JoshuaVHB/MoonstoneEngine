@@ -104,13 +104,13 @@ public:
 
 	virtual void onImGuiRender() override
 	{
-		/*
+		
 		static float tmp = 0;
 		
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();
-		 */
+		 
 	}
 
 };

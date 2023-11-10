@@ -43,11 +43,13 @@ Texture Texture::toTextureArray(
 	}
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = w;  desc.Height = h;
-	desc.MipLevels = desc.ArraySize = 1;
+	desc.MipLevels = 3;
+	desc.ArraySize = 1;
+	desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 	desc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	desc.SampleDesc.Count = 1;
 	desc.Usage = D3D11_USAGE_IMMUTABLE;
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	desc.ArraySize = static_cast<UINT>(textures.size());
 
 
@@ -58,6 +60,7 @@ Texture Texture::toTextureArray(
 	initData.SysMemSlicePitch = sizeof(Texture);
 
 	renderContext.device->CreateTexture2D(&desc,&initData, &tex);
+
 	return Texture();
 }
 
@@ -68,7 +71,7 @@ Texture::Texture(const std::wstring& path)
 		std::cout << "WARNING : texture" << narrow(path) << " not found. Check for typo !" << std::endl;
 #ifdef D3D11_IMPL
 	m_renderContext = WindowsEngine::getInstance().getGraphics().getContext();
-	DirectX::CreateDDSTextureFromFile(m_renderContext.device, path.c_str(), nullptr, &m_texture);
+	DirectX::CreateDDSTextureFromFile(m_renderContext.device, m_renderContext.context, path.c_str(), nullptr, &m_texture);
 	//reinterpret_cast<ID3D11Texture2D*>(m_texture.Get())->GetDesc(&m_desc);
 #endif
 }
