@@ -33,6 +33,8 @@ void TriggerBox::setPosition(fVec3 pos)
 {
 	PxTransform transform = m_actor->getGlobalPose();
 	transform.p = pos;
+	m_transform.setTranslation(pos.x, pos.y, pos.z);
+
 	m_actor->setGlobalPose(transform);
 }
 
@@ -44,4 +46,9 @@ void TriggerBox::setTriggerCallback(std::function<void()> callback)
 void TriggerBox::onTrigger()
 {
 	m_triggerCallback();
+}
+
+Transform& TriggerBox::getTransform()
+{
+	return m_transform;
 }

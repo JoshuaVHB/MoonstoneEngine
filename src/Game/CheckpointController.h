@@ -7,6 +7,7 @@ struct Checkpoint {
 	TriggerBox* triggerBox;
 	bool passed;
 	int indexCheckpoint;
+	float distGround;
 	~Checkpoint() {
 		delete triggerBox;
 	}
@@ -23,7 +24,7 @@ public:
 		deleteCheckpoints();
 	}
 	
-	void addCheckpoint(PhysicalObject::fVec3 position, PhysicalObject::fVec3 scale);
+	void addCheckpoint(PhysicalObject::fVec3 position, PhysicalObject::fVec3 scale, float distGround = 0.f );
 
 	void addCheckpointFromJson(const std::vector<FormatJson> & checkpointInfos);
 
@@ -35,6 +36,6 @@ public:
 
 	[[nodiscard]] bool allCheckpointsPassed() const;
 
-	[[nodiscard]] Transform&  getPositionLastCP() const { return m_checkpoints[indexLastCP]->triggerBox->getTransform(); }
+	[[nodiscard]] DirectX::XMVECTOR  getPositionLastCP() const;
 };
 
