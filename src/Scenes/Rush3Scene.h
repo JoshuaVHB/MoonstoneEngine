@@ -47,13 +47,6 @@ private:
 	FrameBuffer m_fbo;
 
 
-	Texture m_screenShot;
-
-	// -- Objs and JsonParser
-	JsonParser m_parser{ "res/json/Position.json" };
-	std::vector<FormatJson> m_objs = m_parser.getObjs();
-	std::vector<Mesh> m_meshes{};
-
 	// Checkpoints
 	CheckpointController checkpoints;
 	TriggerBox* finish;
