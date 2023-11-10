@@ -31,6 +31,7 @@ public:
 
 	Skybox(const std::string& path = "res/textures/cosmos.dds") {
 
+		if (!std::filesystem::exists(path)) throw std::runtime_error("No skybox found");
 		m_tex = std::move(TextureCube{ path });
 		m_skyboxPass.loadEffectFromFile("res/effects/skybox.fx");
 		

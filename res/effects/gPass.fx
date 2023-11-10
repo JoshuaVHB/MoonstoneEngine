@@ -74,6 +74,13 @@ VSOut gPassVS(float4 Pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
 
 // -- Fragment Shader
 
+
+float toonify(float diffuse)
+{
+    return smoothstep(-0.05f, +0.05f, diffuse - 0.5f) * diffuse;
+}
+
+
 PSOut gPassPS(VSOut vs) : SV_Target
 {
     float3 outNormal = normalize(vs.Norm);
@@ -91,7 +98,7 @@ PSOut gPassPS(VSOut vs) : SV_Target
     float3 H = normalize(L + V);
     float diff = saturate(dot(N, L));
     float S = pow(saturate(dot(H, N)), 4.f);
-    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, diff * sunStrength.x));
+    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, toonify(diff) * sunStrength.x));
     
     
     PSOut pso;
@@ -100,6 +107,7 @@ PSOut gPassPS(VSOut vs) : SV_Target
     pso.Position = vs.worldPos;
     pso.Specular = float4(specular.Sample(SampleState, vs.uv).rgb, 1) * float4(S, S, S, 1);
     pso.ambiantOcclusion = float4(ambiantOcclusion.Sample(SampleState, vs.uv).rgb ,1);
+    pso.ambiantOcclusion = float4(toonify(diff), toonify(diff), toonify(diff), 1);
     pso.roughness = float4(roughness.Sample(SampleState, vs.uv).rgb ,1);
     
     return pso;

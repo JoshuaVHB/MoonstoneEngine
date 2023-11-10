@@ -126,9 +126,9 @@ public:
 		}
 
 
-		float quadTexId = m_textureMap[&texture];
+		float quadTexId = static_cast<float>(m_textureMap[&texture]);
 
-		TexturedSpriteVertex quadVertices[4];
+		TexturedSpriteVertex quadVertices[4] = {};
 		XMVECTOR positions[4] =
 		{
 				{ (XMVectorGetX(position))/ winSize.first * 2 - 1
@@ -220,7 +220,7 @@ public:
 
 
 
-		WindowsEngine::getInstance().getGraphics().getContext().context->DrawIndexed(m_batchedVertices.size() * 1.5, 0, 0);
+		WindowsEngine::getInstance().getGraphics().getContext().context->DrawIndexed(static_cast<UINT>(m_batchedVertices.size() * 1.5f), 0, 0);
 
 
 		m_batchedVertices.clear();

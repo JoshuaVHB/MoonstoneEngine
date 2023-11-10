@@ -63,6 +63,10 @@ VSOut baseMeshVS(float4 Pos : POSITION, float3 Normale : NORMAL, float2 uv : TEX
 ////////////////////
 
 // -- Fragment Shader
+float toonify(float diffuse)
+{
+    return smoothstep(-0.05f, +0.05f, diffuse) * diffuse;
+}
 
 float4 baseMeshPS(VSOut vs) : SV_Target
 {

@@ -26,7 +26,7 @@ public:
 		Renderer::clearScreen(0, 0, 0, 1);
 
 
-		Renderer::blitTexture(m_background, DirectX::XMVECTOR{ 1,1,1,0.8 });
+		Renderer::blitTexture(m_background, DirectX::XMVECTOR{ 1.f,1.f,1.f,0.8f });
 		Renderer::writeTextOnScreen("Bugs Balls", -200, 200, 1);
 
 		Renderer::renderText();
@@ -35,7 +35,6 @@ public:
 	virtual void onImGuiRender() override
 	{
 		UIRenderer::clear();
-		std::cout << wMouse->isLeftPressed() << std::endl;
 		if (UIRenderer::Button(400, 400, 300, 100))
 		{
 			SceneManager::switchToScene("Terrain");

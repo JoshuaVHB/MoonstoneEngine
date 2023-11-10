@@ -32,7 +32,7 @@ private:
 
 
 	// -- Effect and skybox
-	Skybox  m_skybox;
+	Skybox  m_skybox {"res/textures/garden.dds"};
 
 	// -- Camera
 	Camera* currentCamera = nullptr;
@@ -51,27 +51,13 @@ private:
 	CheckpointController checkpoints;
 	TriggerBox* finish;
 
-private:
+public:
 
-	// -- Define constant buffers
-	struct worldParams {
-		XMMATRIX viewProj;
-		XMVECTOR lightPos;
-		XMVECTOR cameraPos;
-		XMVECTOR sunColor = { 1.f,1.f,.8f,1.f };
-		XMVECTOR sunStrength = { 0.75f };
-	} sp;
-
-	struct meshParams {
-		XMMATRIX worldMat;
-	};
 
 	void MoveToLastCheckpoint() {
 		DirectX::XMVECTOR t = checkpoints.getPositionLastCP();
 		clop.setTranslation(DirectX::XMVectorGetX(t), DirectX::XMVectorGetY(t), DirectX::XMVectorGetZ(t));
 	}
-
-public:
 
 	Rush3Scene() :
 		clop{}
@@ -102,6 +88,8 @@ public:
 		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
 			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
+
+
 
 		MoveToLastCheckpoint();
 			

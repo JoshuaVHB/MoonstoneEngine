@@ -81,6 +81,12 @@ VSOut deferredTerrainVS(float4 Pos : POSITION, float3 normal : NORMAL, float2 uv
 ////////////////////
 
 // -- Fragment Shader
+float toonify(float diffuse)
+{
+   // return step(0.5 - diffuse, diffuse-.5) ;
+    return smoothstep(-0.05f, +0.05f, diffuse-0.5f) * diffuse;
+}
+
 
 PSOut deferredTerrainPS(VSOut vs) : SV_Target
 {
@@ -111,7 +117,7 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     
     float3 baseTexture = lerp(grassSample, snowSample, (vs.worldPos.y) / 100.f);
     outAlbedo.rgb = lerp(rockSample, baseTexture, smoothstep(0.79, 1, outNormal.y));
-    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, diff * sunStrength.x));
+    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, toonify(diff) * sunStrength.x));
     // -- Output to RTV
     
     PSOut pso;
@@ -120,6 +126,7 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     pso.Position = vs.worldPos;
     pso.Specular = float4(S, S, S, 1);
     pso.ambiantOcclusion = float4(ambiantOcclusion.Sample(SampleState, vs.uv).rgb, 1);
+    pso.ambiantOcclusion = float4(toonify(diff), toonify(diff), toonify(diff), 1);
     pso.roughness = float4(roughness.Sample(SampleState, vs.uv).rgb, 1);
     
     return pso;

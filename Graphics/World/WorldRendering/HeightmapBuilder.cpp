@@ -45,7 +45,7 @@ Mesh HeightmapBuilder::buildChunk(const Heightmap& map, Vec2<int> chunkPos, Vec2
 
 			// 1.3 -> Compute UVs
 
-			Vec uv = { (float)x/10, (float)y/10 };
+			Vec uv = { (float)x/30, (float)y/30 };
 			v.uv = uv;
 
 			vertices.push_back(v);

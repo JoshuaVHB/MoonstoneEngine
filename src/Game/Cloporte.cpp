@@ -15,7 +15,7 @@ CameraController controller;
 
 Cloporte::Cloporte()
 	: m_object{ PhysicsEngine::FilterGroup::ePlayer, PhysicsEngine::FilterGroup::eAll }
-	, m_speed(0), maxVelocity(25.0f)
+	, m_speed(0), maxVelocity(10.0f)
 	, accelerationFactor(0.05f), friction(0.2f)
 	, m_position{0, 0, 0, 0}
 	, m_forward {0, 0, 1 , 0}
