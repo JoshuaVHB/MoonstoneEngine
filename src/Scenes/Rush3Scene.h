@@ -69,6 +69,7 @@ private:
 	void MoveToLastCheckpoint() {
 		DirectX::XMVECTOR t = checkpoints.getPositionLastCP();
 		clop.setTranslation(DirectX::XMVectorGetX(t), DirectX::XMVectorGetY(t), DirectX::XMVectorGetZ(t));
+		clop.setForward(checkpoints.getDirectionLastCP());
 	}
 
 	void EndGame() {
@@ -106,7 +107,8 @@ public:
 		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
 			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
-
+		
+		
 		MoveToLastCheckpoint();
 			
 		UIRenderer::attachMouse(wMouse.get());
@@ -138,6 +140,8 @@ public:
 		m_elapsedTime += deltaTime;
 		Camera& cam = *currentCamera;
 
+		DirectX::XMVECTOR pos = clop.getPosition();
+
 		// Get the ground normal if we are close to the ground
 		XMVECTOR groundNormal = (XMVectorGetY(clop.getPosition()) - m_terrain.getWorldHeightAt(clop.getPosition()) < 5.f) 
 			? m_terrain.getNormalAt(clop.getPosition()) 
@@ -152,6 +156,7 @@ public:
 
 	virtual void onRender() override {
 
+		DirectX::XMVECTOR pos = clop.getPosition();
 		// Get our target camera
 		Renderer::clearScreen();
 		Renderer::clearText();

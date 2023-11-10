@@ -30,11 +30,12 @@ public:
         auto pos = player.getPosition();
         auto gdir = player.getGroundDir();
 
-
+        
         cam.setRoll(computeCameraRoll(player, cam));//+ DirectX::XM_PIDIV2);
+
         float h = std::clamp(computeCameraHeight(player, cam), -30.f, 30.f);
-        
-        
+
+
         DirectX::XMVECTOR camPos = pos - (distanceFromPlayer * forward) + XMVECTOR{0, -h, 0}; //??
 
         static const float MAX_DISTANCE = 20.f;

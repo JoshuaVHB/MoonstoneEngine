@@ -36,6 +36,7 @@ void JsonParser::getCheckpoints(std::vector<FormatJson>& checkpointInfos)
 			FormatJson obj;
 			obj.positionObj = DirectX::XMVectorSet(item["j_position"]["x"], item["j_position"]["y"], item["j_position"]["z"], item["j_position"]["n"]);
 			obj.scaleObj = DirectX::XMVectorSet(item["j_scale"]["x"], item["j_scale"]["y"], item["j_scale"]["z"], item["j_scale"]["n"]);
+			obj.forwardObj = DirectX::XMVectorSet(item["j_forward"]["x"], item["j_forward"]["y"], item["j_forward"]["z"], item["j_forward"]["n"]);
 			checkpointInfos.push_back(obj);
 			});
 
