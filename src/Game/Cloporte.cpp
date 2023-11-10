@@ -18,7 +18,7 @@ Cloporte::Cloporte()
 	, m_speed(0), maxVelocity(50.0f)
 	, accelerationFactor(1.0), friction(0.2f)
 	, m_position{0, 0, 0, 0}
-	, m_forward {0, 0, 1 , 0}
+	, m_forward {0, 0, -1 , 0}
 	, m_groundDir{0, 1, 0, 0}
 	, currentVelocity{0}
 
@@ -134,6 +134,8 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 		m_forward = XMVector3Rotate(m_forward, XMQuaternionRotationAxis({ 0.f,1.f,0.f }, 0.05f));
 
 	}
+	 
+	
 	// stupid workaround
 	static bool tmp = false;
 	if (wKbd->isKeyPressed(VK_SPACE))

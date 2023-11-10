@@ -46,5 +46,7 @@ public:
 	void displayAngularVelocity();
 
 	void displayPosition();
+
+	void setNewPos(float x, float y, float z);
 };
 

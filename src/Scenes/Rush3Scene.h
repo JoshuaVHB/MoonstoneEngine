@@ -26,6 +26,7 @@ private:
 
 	Cloporte clop;
 	float m_speed = 0.0f;
+	float m_time = 0.0f;
 
 	// -- Terrain
 	const std::filesystem::path path_to_map = "res/textures/heightmap2.png";
@@ -54,12 +55,16 @@ private:
 	// -- Meshes
 	std::vector<TriggerBox*> cp;
 
-	Texture m_screenShot;
-
 	// -- Objs and JsonParser
 	JsonParser m_parser{ "res/json/Position.json" };
 	std::vector<FormatJson> m_objs = m_parser.getObjs();
 	std::vector<Mesh> m_meshes{};
+
+	//Pause
+	bool m_isPaused = false;
+	bool m_hasEscBeenReleased = false;
+	FrameBuffer m_fbo;
+	Texture m_screenShot;
 
 
 
@@ -103,7 +108,7 @@ public:
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
 		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
-		clop.setPosition(+530.f , + 60.f, +960.f);
+		clop.setPosition(+530.f , + 40.f, +960.f);
 		Renderer::setBackbufferToDefault();
 
 		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
@@ -119,10 +124,32 @@ public:
 		UIRenderer::attachMouse(wMouse.get());
 	}
 
+	void handleInputsMenu(float deltaTime) {
+		Vec delta{};
+
+		Keyboard::Event e = wKbd->readKey();
+	}
+
+	void handleKeyboardInputsMenu() {
+			////Quitter le jeu
+			//PostQuitMessage(0);
+
+		if (!wKbd->isKeyPressed(VK_ESCAPE)) m_hasEscBeenReleased = true;
+		if (wKbd->isKeyPressed(VK_ESCAPE) && m_hasEscBeenReleased)
+		{
+			m_hasEscBeenReleased = false;
+			m_isPaused = !m_isPaused;
+		}
+	}
+
 
 	virtual void onUpdate(float deltaTime) override
 	{
+		handleKeyboardInputsMenu();
+		if (m_isPaused) return;
+
 		m_elapsedTime += deltaTime;
+		m_time += deltaTime;
 
 		XMVECTOR groundNormal = (XMVectorGetY(clop.getPosition()) - m_terrain.getWorldHeightAt(clop.getPosition()) < 5.f) 
 			? m_terrain.getNormalAt(clop.getPosition()) 
@@ -160,30 +187,41 @@ public:
 		m_terrainEffect.bindTexture("snowTexture", m_snow.getTexture());
 
 		// Clear and render objects
+		if (m_isPaused) m_fbo.bind();
+
 		Renderer::clearScreen();
 		for (auto&& chunk : m_terrain.getMesh())
 		{			
 			if (f.isOnFrustum(chunk.getBoundingBox()))
 			{
 				Renderer::renderMesh(cam, chunk, m_terrainEffect);
-				if (!m_disableAABBS) Renderer::renderAABB(cam, chunk.getBoundingBox());
+				//if (!m_disableAABBS) Renderer::renderAABB(cam, chunk.getBoundingBox());
 			}
 		}
 
 		Renderer::renderMesh(cam, clop.getMesh(), m_terrainEffect);		
-		Renderer::renderDebugLine(cam, clop.getPosition(), clop.getPosition() + (clop.getGroundDir()*2));
 		m_skybox.renderSkybox(cam);		
 
 		// Vitesse
 		Renderer::writeTextOnScreen(std::string("Fasts/h : ") + std::to_string(static_cast<int>((m_speed/clop.getMaxVelocity())*100)), 400, -350, 1);
 
 		// Timer
-		if ( m_elapsedTime < 60)
+		if (m_time < 60)
 			//Afficher le temps en secondes et ms
-			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_elapsedTime)%60) + std::string("s ") + std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) + std::string("ms"), -715, -350, 1);
+			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_time)%60) + std::string("s ") + std::to_string(static_cast<int>(m_time * 1000) % 1000) + std::string("ms"), -715, -350, 1);
 		else
 			//Afficher le temps en minutes et secondes et ms
-			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_elapsedTime) / 60) + std::string("m ") + std::to_string(static_cast<int>(m_elapsedTime) % 60) + std::string("s ") + std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) + std::string("ms"), -700, -350, 1);
+			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_time) / 60) + std::string("m ") + std::to_string(static_cast<int>(m_time) % 60) + std::string("s ") + std::to_string(static_cast<int>(m_time * 1000) % 1000) + std::string("ms"), -700, -350, 1);
+
+		if (m_isPaused)
+		{
+			m_fbo.unbind();
+			Renderer::setBackbufferToDefault();
+
+			m_screenShot = Texture(m_fbo.getResource(0));
+			Renderer::blitTexture(m_screenShot, DirectX::XMVECTOR{ 1,1,0,0.5 });
+			Renderer::writeTextOnScreen("Pause", 0, 0, 1);
+		}
 
 		Renderer::renderText();
 	}
@@ -207,8 +245,9 @@ public:
 		{
 			if (wMouse->isLeftPressed())
 			{
-				clop.setPosition(+530.f, +60.f, +960.f);
-				m_elapsedTime = 0;
+				clop.setNewPos(+530.f, +40.f, +960.f);
+
+				m_time = 0;
 			}
 		}
 

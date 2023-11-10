@@ -70,6 +70,10 @@ public:
 		m_object.majTransformPhysics();
 	}
 
+	void setNewPos(float x, float y, float z) {
+		m_object.setNewPos(x, y, z);
+	}
+
 private:
 	void handleKeyboardInputs(float deltaTime);
 

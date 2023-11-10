@@ -22,12 +22,14 @@ void DynamicObject::setTransform(Transform& _transform)
 void DynamicObject::majTransformPhysics()
 {
 	if (m_actor) {
-		Transform t = m_mesh->getTransform();
+		Transform& t = m_mesh->getTransform();
 		auto pos_Render = t.getTranslation();
 		auto ang_Render = t.getAngles();
 		PhysicsEngine::fVec3 position{ DirectX::XMVectorGetX(pos_Render),  DirectX::XMVectorGetY(pos_Render),  DirectX::XMVectorGetZ(pos_Render) };
 		PhysicsEngine::fVec3 rotation{ DirectX::XMVectorGetX(ang_Render),  DirectX::XMVectorGetY(ang_Render),  DirectX::XMVectorGetZ(ang_Render) };
 		m_actor->setGlobalPose(PxTransform(position, PxQuat(rotation.x, rotation.y, rotation.z, 1)));
+		fVec3 pos = m_actor->getGlobalPose().p;
+		std::cout << "Position : " << pos.x << " " << pos.y << " " << pos.z << std::endl;
 	}
 }
 
@@ -154,6 +156,16 @@ void DynamicObject::displayPosition()
 		auto v = m_actor->is<PxRigidDynamic>()->getGlobalPose().p;
 		std::cout << "Position : " << v.x << " " << v.y << " " << v.z << std::endl;
 	}	
+}
+
+void DynamicObject::setNewPos(float x, float y, float z)
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		m_actor->is<PxRigidDynamic>()->clearForce();
+		m_actor->is<PxRigidDynamic>()->clearTorque();
+
+		m_actor->is<PxRigidDynamic>()->setGlobalPose(PxTransform(PxVec3(x, y, z)));
+	}
 }
 
 
