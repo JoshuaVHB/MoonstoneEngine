@@ -13,15 +13,22 @@
 #include "../Game/CameraController.h"
 
 #include "../Game/Cloporte.h"
+
+#include "Renderer.h"
+#include "abstraction/Texture.h"
+#include "abstraction/2D/Renderer2D.h"
+#include "abstraction/2D/UI/UIRenderer.h"
+
 class Rush3Scene : public Scene {
 
 
 private:
 
 	Cloporte clop;
+	float m_speed = 0.0f;
 
 	// -- Terrain
-	const std::filesystem::path path_to_map = "res/textures/heightmap.png";
+	const std::filesystem::path path_to_map = "res/textures/heightmap2.png";
 	Terrain m_terrain{ path_to_map };
 	Vec		centerPoint; // for camera target
 	Texture m_rockTexture{ L"res/textures/rock.dds" };
@@ -39,7 +46,7 @@ private:
 
 	// -- hot reload of the heightmap
 	std::filesystem::file_time_type lastTime,  ftime = std::filesystem::last_write_time(path_to_map);
-	float m_elapsedTime = 0;
+	float m_elapsedTime = 0.0f;
 
 	bool m_disableAABBS = true;
 
@@ -108,6 +115,8 @@ public:
 			std::cout << "Checkpoint reached !" << std::endl;
 			}));
 		cp.push_back(checkpoint);
+
+		UIRenderer::attachMouse(wMouse.get());
 	}
 
 
@@ -136,6 +145,8 @@ public:
 			ftime = lastTime;
 		}
 
+		m_speed = clop.getObject().getLinearVelocityMag();
+
 	}
 
 	virtual void onRender() override {
@@ -163,10 +174,24 @@ public:
 		Renderer::renderDebugLine(cam, clop.getPosition(), clop.getPosition() + (clop.getGroundDir()*2));
 		m_skybox.renderSkybox(cam);		
 
+		// Vitesse
+		Renderer::writeTextOnScreen(std::string("Fasts/h : ") + std::to_string(static_cast<int>((m_speed/clop.getMaxVelocity())*100)), 400, -350, 1);
+
+		// Timer
+		if ( m_elapsedTime < 60)
+			//Afficher le temps en secondes et ms
+			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_elapsedTime)%60) + std::string("s ") + std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) + std::string("ms"), -715, -350, 1);
+		else
+			//Afficher le temps en minutes et secondes et ms
+			Renderer::writeTextOnScreen(std::string("Time : ") + std::to_string(static_cast<int>(m_elapsedTime) / 60) + std::string("m ") + std::to_string(static_cast<int>(m_elapsedTime) % 60) + std::string("s ") + std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) + std::string("ms"), -700, -350, 1);
+
+		Renderer::renderText();
 	}
 
 	virtual void onImGuiRender() override
 	{
+		UIRenderer::clear();
+
 		static float tmp = 0;
 		ImGui::DragFloat4("angles : ", currentCamera->getAngles().vector4_f32);
 		ImGui::DragFloat3("direction : ", currentCamera->getForwardDir().vector4_f32);
@@ -177,6 +202,21 @@ public:
 			tmp = std::fmod(tmp, DirectX::XM_PI);
 		}
 		ImGui::Checkbox("Disable AABBs (10 draw calls per box... so slow !)", &m_disableAABBS);
+
+		if (UIRenderer::Button(0, 0, 100, 50))
+		{
+			if (wMouse->isLeftPressed())
+			{
+				clop.setPosition(+530.f, +60.f, +960.f);
+				m_elapsedTime = 0;
+			}
+		}
+
+		wMouse->clearPress();
+
+		UIRenderer::renderUI();
+
+
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 

@@ -73,8 +73,6 @@ public:
 		m_baseMeshEffect.addNewCBuffer("worldParams", sizeof(worldParams)); // For camera, light, colors...
 		m_baseMeshEffect.addNewCBuffer("meshParams", sizeof(meshParams)); // For model matrix basically
 
-
-
 		// -- Specify how the input vertices are layered
 		InputLayout testlayout;
 		testlayout.pushBack<3>(InputLayout::Semantic::Position);
@@ -122,6 +120,7 @@ public:
 
 		Camera& currentCam = m_player.getCurrentCamera();
 
+
 		if(deferredRendering)
 		{
 			m_renderer.clear();
@@ -141,7 +140,9 @@ public:
 		}
 
 		if (tmp) m_textRenderer.writeTextOnScreen("You have pressed on the button", 100, 100, 1);
+
 		m_textRenderer.render();
+
 	}
 
 	virtual void onImGuiRender() override

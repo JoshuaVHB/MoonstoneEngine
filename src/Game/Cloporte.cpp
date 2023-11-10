@@ -15,8 +15,8 @@ CameraController controller;
 
 Cloporte::Cloporte()
 	: m_object{ PhysicsEngine::FilterGroup::ePlayer, PhysicsEngine::FilterGroup::eAll }
-	, m_speed(0), maxVelocity(25.0f)
-	, accelerationFactor(0.05f), friction(0.2f)
+	, m_speed(0), maxVelocity(50.0f)
+	, accelerationFactor(1.0), friction(0.2f)
 	, m_position{0, 0, 0, 0}
 	, m_forward {0, 0, 1 , 0}
 	, m_groundDir{0, 1, 0, 0}
@@ -34,8 +34,8 @@ Cloporte::Cloporte()
 	m_boundingSphere = BoundingSphere(m_position, XMVectorGetX(m_object.getTransform().getScale()));
 
 	//Set max velocity
-	//m_object.setMaxLinearVelocity(maxVelocity);
-	m_object.setMaxAngularVelocity(100.0f);
+	m_object.setMaxLinearVelocity(maxVelocity);
+	m_object.setMaxAngularVelocity(500.0f);
 
 	//Set Velocity
 	m_object.setLinearVelocity({ 0.5f,0.5f,0.5f });
@@ -82,7 +82,7 @@ void Cloporte::updatePosition(float deltaTime)
 	
 	m_object.getTransform().getPosition() = XMVectorAdd(m_object.getTransform().getPosition(), m_forward * currentVelocity * deltaTime);
 	m_position = m_object.getTransform().getPosition();
-	currentVelocity *= 0.9 ;
+	currentVelocity *= 0.9f ;
 	m_object.updateTransform();
 
 }
@@ -96,22 +96,25 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 		//float dx = std::clamp(XMVectorGetX(m_velocity) + accelerationFactor * XMVectorGetX(m_forward), 0.f, maxVelocity);
 		//float dz = std::clamp(XMVectorGetZ(m_velocity) + accelerationFactor * XMVectorGetZ(m_forward), 0.f, maxVelocity);
 
-		PhysicsEngine::fVec3 linearVelocity = m_object.getLinearValocity();
+		PhysicsEngine::fVec3 linearVelocity = m_object.getLinearVelocity();
 		//linearVelocity.normalize();
 		PhysicsEngine::fVec3 forward { XMVectorGetX(m_forward), XMVectorGetY(m_forward), XMVectorGetZ(m_forward) };
 		physx::PxVec3 rotationAxis = forward.cross(m_object.getPosition());
 
-		m_object.addTorque(-rotationAxis * 10);
-		m_object.addForce(forward * 10 );
+		m_object.addTorque(-rotationAxis * 5);
+		//m_object.addForce(forward * accelerationFactor);
 
 	}
 
 	if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('s')) )
 	{
-		PhysicsEngine::fVec3 linearVelocity = m_object.getLinearValocity();
+		PhysicsEngine::fVec3 linearVelocity = m_object.getLinearVelocity();
 		//linearVelocity.normalize();
 		PhysicsEngine::fVec3 forward { XMVectorGetX(m_forward), XMVectorGetY(m_forward), XMVectorGetZ(m_forward) };
-		m_object.addForce(-forward * accelerationFactor);
+		physx::PxVec3 rotationAxis = forward.cross(m_object.getPosition());
+
+		m_object.addTorque(rotationAxis * 5);
+		//m_object.addForce(-forward * accelerationFactor);
 		//float dx = std::clamp(XMVectorGetX(m_velocity) + accelerationFactor * -XMVectorGetX(m_forward), 0.f, maxVelocity);
 		//float dz = std::clamp(XMVectorGetZ(m_velocity) + accelerationFactor * -XMVectorGetZ(m_forward), 0.f, maxVelocity);
 		//m_velocity = XMVectorSetX(m_velocity, dx);
@@ -148,6 +151,12 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 	{
 		tmp = false;
 
+	}
+
+	if (wKbd->keyIsEmpty())
+	{
+		m_object.clearForce();
+		m_object.clearTorque();
 	}
 
 }

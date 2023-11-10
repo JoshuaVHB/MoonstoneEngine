@@ -53,11 +53,12 @@ public:
 		return *(m_object.getMesh()); 
 	}
 
-
+	[[nodiscard]] DynamicObject getObject() const noexcept { return m_object; };
 	[[nodiscard]] BoundingSphere getBoundingSphere() const noexcept { return m_boundingSphere; }
 	[[nodiscard]] DirectX::XMVECTOR getForward() const noexcept { return m_forward; }
 	[[nodiscard]] DirectX::XMVECTOR getPosition() const noexcept { return m_position; }
 	[[nodiscard]] DirectX::XMVECTOR getGroundDir() const noexcept { return m_groundDir; }
+	[[nodiscard]] float getMaxVelocity() const noexcept { return maxVelocity; }
 
 	void setGroundVector(const DirectX::XMVECTOR& val)
 	{

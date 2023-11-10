@@ -7,7 +7,7 @@
 inline float smoothstep(float a, float b, float x)
 {
     float t = std::clamp((x - a) / (b - a), 0.F, 1.f );
-    return t * t * (3.0 - (2.0 * t));
+    return t * t * (3.0f - (2.0f * t));
 }
 
 class CameraController

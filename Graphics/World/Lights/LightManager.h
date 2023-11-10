@@ -189,7 +189,7 @@ public:
 			{
 				case 'P':
 					{						
-						int tmpIndex = currentItemIndex - 0;
+					int tmpIndex = static_cast<int>(currentItemIndex) - 0;
 						//ImGui::DragFloat3(("Position ##" +	std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].position.vector4_f32[0]);
 						//ImGui::DragFloat3(("Range ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].range.vector4_f32[0]);
 						//ImGui::DragFloat(("falloff ##" + std::to_string(tmpIndex)).c_str(), &m_point[tmpIndex].falloff);

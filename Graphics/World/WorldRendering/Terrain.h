@@ -23,8 +23,8 @@ public:
 	struct TerrainParams {
 
 		int		width = 0, height=0;
-		float	xyScale=1;
-		float	scaleFactor=1;
+		float	xyScale=1.0f;
+		float	scaleFactor=1.0f;
 		int		chunkSize=0;
 		Vec2<int> chunkCount{ 1,1 };
 	};
@@ -83,7 +83,7 @@ public:
 	// might be inaccurate
 	XMVECTOR getNormalAt(XMVECTOR worldPos) const 
 	{
-		return getNormalAt(XMVectorGetX(worldPos)/ m_params.xyScale, XMVectorGetZ(worldPos)/ m_params.xyScale);
+		return getNormalAt(static_cast<int>(XMVectorGetX(worldPos) / m_params.xyScale), static_cast<int>(XMVectorGetZ(worldPos) / m_params.xyScale));
 
 	}
 
@@ -107,7 +107,7 @@ public:
 
 	float getWorldHeightAt(XMVECTOR worldPos) const
 	{
-		return m_map.getAt(XMVectorGetX(worldPos) / m_params.xyScale, XMVectorGetZ(worldPos) / m_params.xyScale)* m_params.scaleFactor;
+		return m_map.getAt(static_cast<int>(XMVectorGetX(worldPos) / m_params.xyScale), static_cast<int>(XMVectorGetZ(worldPos) / m_params.xyScale)) * m_params.scaleFactor;
 	}
 
 	const TerrainParams& getParams() const { return m_params; }

@@ -11,6 +11,8 @@ private:
 
 	Texture m_background;
 
+	
+
 public:
 
 	MainMenu()
@@ -24,17 +26,25 @@ public:
 	virtual void onRender() override {
 
 		Renderer::clearScreen(0, 0, 0, 1);
+
+		Renderer::writeTextOnScreen("Bugs Balls", -200, 200, 2);
+
+		Renderer::renderText();
 	}
 
 	virtual void onImGuiRender() override
 	{
 		UIRenderer::clear();
 
-
-		if (UIRenderer::Button(200,200,400,400))
+		if (UIRenderer::Button(600,600,300,100))
 		{
-			SceneManager::switchToScene("Terrain");
+			if (wMouse->isLeftPressed())
+			{
+				SceneManager::switchToScene("Terrain");
+			}
 		}
+
+		wMouse->clearPress();
 
 		UIRenderer::renderUI();
 

@@ -74,7 +74,7 @@ void DynamicObject::addForce(fVec3 force)
 {
 	
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
-		PxRigidBodyExt::addForceAtPos(*m_actor->is<PxRigidDynamic>(), force, PxVec3(0.f, 10.f, 0.f));
+		PxRigidBodyExt::addForceAtPos(*m_actor->is<PxRigidDynamic>(), force, PxVec3(0.f, 10.f, 0.f), PxForceMode::eIMPULSE);
 		//m_actor->is<PxRigidDynamic>()->addForce(force/**0.15*/); //Facteur pour limiter la force pour arriver assez lentement a la maxLinearVelocity
 	}
 	//m_actor->is<PxRigidDynamic>()->
@@ -102,7 +102,7 @@ void DynamicObject::clearTorque()
 	}
 }
 
-PhysicalObject::fVec3 DynamicObject::getLinearValocity()
+PhysicalObject::fVec3 DynamicObject::getLinearVelocity()
 {
 	if (m_actor && m_actor->is<PxRigidDynamic>()) {
 		return m_actor->is<PxRigidDynamic>()->getLinearVelocity();
@@ -113,6 +113,14 @@ PhysicalObject::fVec3 DynamicObject::getLinearValocity()
 PhysicalObject::fVec3 DynamicObject::getPosition()
 {
 	return m_actor->getGlobalPose().p;
+}
+
+float DynamicObject::getLinearVelocityMag()
+{
+	if (m_actor && m_actor->is<PxRigidDynamic>()) {
+		return m_actor->is<PxRigidDynamic>()->getLinearVelocity().magnitude();
+	}
+	return 0.0f;
 }
 
 void DynamicObject::setMass(float mass)

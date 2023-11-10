@@ -35,8 +35,10 @@ public:
 	void clearForce();
 	void clearTorque();
 
-	fVec3 getLinearValocity();	
+	fVec3 getLinearVelocity();	
 	fVec3 getPosition();
+
+	[[nodiscard]] float getLinearVelocityMag();
 
 	void setMass(float mass);
 
