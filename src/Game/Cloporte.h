@@ -81,6 +81,8 @@ public:
 		m_forward={ 0, 0, 1 , 0 };
 		m_groundDir={ 0, 1, 0, 0 };
 		currentVelocity={ 0 };
+		m_object.setLinearVelocity({ 0,0,0 });
+		m_object.setAngularVelocity({ 0,0,0 });
 		
 	}
 

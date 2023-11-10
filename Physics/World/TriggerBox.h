@@ -7,7 +7,7 @@ class TriggerBox : public StaticObject
 {
 
 	std::function<void()> m_triggerCallback = std::function<void()>();
-
+	Transform m_transform;
 public:
 	TriggerBox() = default;
 	TriggerBox(fVec3 position, fVec3 scale);
@@ -21,5 +21,7 @@ public:
 	void setTriggerCallback(std::function<void()> callback);
 
 	void onTrigger();
+
+	virtual Transform& getTransform() override;
 };
 

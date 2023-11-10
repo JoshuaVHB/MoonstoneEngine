@@ -1,10 +1,13 @@
 #include "CheckpointController.h"
 #include <algorithm>
 #include <ranges>
-void CheckpointController::addCheckpoint(PhysicalObject::fVec3 position, PhysicalObject::fVec3 scale)
+
+void CheckpointController::addCheckpoint(PhysicalObject::fVec3 position, PhysicalObject::fVec3 scale, float distGround)
 {
 	Checkpoint* cp = new Checkpoint{};
 	cp->indexCheckpoint = m_checkpoints.size();
+	cp->distGround = distGround;
+
 	cp->triggerBox = new TriggerBox{ position, scale };
 	cp->triggerBox->setTriggerCallback(std::move([cp, this]() {
 		if(!cp->passed)
@@ -24,7 +27,7 @@ void CheckpointController::addCheckpointFromJson(const std::vector<FormatJson>& 
 			PhysicalObject::fVec3 position{ DirectX::XMVectorGetX(infos.positionObj),  DirectX::XMVectorGetY(infos.positionObj),  DirectX::XMVectorGetZ(infos.positionObj) };
 			PhysicalObject::fVec3 scale = { DirectX::XMVectorGetX(infos.scaleObj),  DirectX::XMVectorGetY(infos.scaleObj),  DirectX::XMVectorGetZ(infos.scaleObj) };
 
-			addCheckpoint(position, scale);
+			addCheckpoint(position, scale, DirectX::XMVectorGetW(infos.positionObj));
 		});
 }
 
@@ -48,4 +51,10 @@ void CheckpointController::deleteCheckpoints()
 bool CheckpointController::allCheckpointsPassed() const
 {
 	return std::all_of(m_checkpoints.begin(), m_checkpoints.end(), [](const Checkpoint* cp) { return cp->passed; });
+}
+
+DirectX::XMVECTOR CheckpointController::getPositionLastCP() const
+{
+	DirectX::XMVECTOR pos = m_checkpoints[indexLastCP]->triggerBox->getTransform().getPosition(); 
+	return DirectX::XMVectorSet(DirectX::XMVectorGetX(pos), DirectX::XMVectorGetY(pos) - m_checkpoints[indexLastCP]->distGround, DirectX::XMVectorGetZ(pos), 0);
 }

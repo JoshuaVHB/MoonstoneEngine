@@ -66,38 +66,44 @@ private:
 		XMMATRIX worldMat;
 	};
 
+	void MoveToLastCheckpoint() {
+		DirectX::XMVECTOR t = checkpoints.getPositionLastCP();
+		clop.setTranslation(DirectX::XMVectorGetX(t), DirectX::XMVectorGetY(t), DirectX::XMVectorGetZ(t));
+	}
+
 public:
 
 	Rush3Scene() :
 		clop{}
 	{
-	
+		// -- Import the checkpoint
+		std::vector<FormatJson> checkpointInfos;
+		JsonParser cp_parser{ "res/json/Checkpoints.json" };
+		cp_parser.openFile();
+		cp_parser.getCheckpoints(checkpointInfos);
+
+		checkpoints.addCheckpointFromJson(checkpointInfos);
+
+		// -- Set the finish line
+		finish = new TriggerBox{ { 240.f, 55.f, 440.f }, { 1, 30, 45, } };
+		finish->setTriggerCallback([&]() {
+			if (checkpoints.allCheckpointsPassed())
+				std::cout << "You win !" << std::endl;
+			else
+				std::cout << "You didn't pass all checkpoints !" << std::endl;
+			});
+
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
 		CameraController::setTerrain(static_cast<const Terrain*>(&m_terrain));
 		currentCamera = &clop.getCurrentCamera();		
-		clop.setPosition(+530.f , + 60.f, +960.f);
+		
 		Renderer::setBackbufferToDefault();
 
 		std::for_each(m_objs.begin(), m_objs.end(), [&](FormatJson& obj) {
 			m_meshes.push_back(MeshManager::loadMeshFromFile(obj.pathObj));
 		});
 
-		// -- Import the checkpoint
-		std::vector<FormatJson> checkpointInfos;
-		JsonParser cp_parser{ "res/json/Checkpoints.json" };
-		cp_parser.openFile();
-		cp_parser.getCheckpoints(checkpointInfos);
-		
-		checkpoints.addCheckpointFromJson(checkpointInfos);
-	
-		// -- Set the finish line
-		finish = new TriggerBox{ { 240.f, 55.f, 440.f }, { 1, 30, 45, } };
-		finish->setTriggerCallback([&]() {
-			if(checkpoints.allCheckpointsPassed())
-				std::cout << "You win !" << std::endl;
-			else 
-				std::cout << "You didn't pass all checkpoints !" << std::endl;
-			});
+		MoveToLastCheckpoint();
 			
 		UIRenderer::attachMouse(wMouse.get());
 	}
@@ -114,9 +120,7 @@ public:
 
 		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('r')))
 		{
-
-			clop.setTranslation(+530.f, +40.f, +960.f);
-			m_elapsedTime = 0;
+			MoveToLastCheckpoint();
 		}
 	}
 

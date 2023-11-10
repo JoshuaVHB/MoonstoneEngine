@@ -45,7 +45,7 @@ public:
 	virtual void setMesh(Mesh* mesh);
 
 	virtual void updateTransform() = 0;
-	Transform& getTransform() { return m_mesh->getTransform(); }	
+	virtual Transform& getTransform() { static Transform t{};  return (m_mesh != nullptr) ? m_mesh->getTransform() : t; }
 	
 	std::string& getId() { return id; }
 
