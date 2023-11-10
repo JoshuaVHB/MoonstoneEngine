@@ -4,7 +4,9 @@
 void CheckpointController::addCheckpoint(PhysicalObject::fVec3 position, PhysicalObject::fVec3 scale)
 {
 	Checkpoint* cp = new Checkpoint{};
-	cp->indexCheckpoint = m_checkpoints.size();
+	cp->indexCheckpoint = static_cast<int>(m_checkpoints.size());
+	cp->distGround = distGround;
+	cp->passed = cp->indexCheckpoint == 0;
 	cp->triggerBox = new TriggerBox{ position, scale };
 	cp->triggerBox->setTriggerCallback(std::move([cp, this]() {
 		if(!cp->passed)
