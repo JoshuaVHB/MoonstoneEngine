@@ -31,14 +31,14 @@ Mesh HeightmapBuilder::buildChunk(const Heightmap& map, Vec2<int> chunkPos, Vec2
 
 			// 1.2 -> Compute the normal
 			float a, b, c, d;
-			a = ((y + 1) < height) ? map.getAt(x, y + 1) : XMVectorGetY(v.position);
-			b = ((y - 1) >= 0) ? map.getAt(x, y - 1) : XMVectorGetY(v.position);
-			c = ((x + 1) < width) ? map.getAt(x + 1, y) : XMVectorGetY(v.position);
-			d = ((x - 1) >= 0) ? map.getAt(x - 1, y) : XMVectorGetY(v.position);
+			a = ((y + 1) < height) ? map.getAt(x, y + 1) :	XMVectorGetY(v.position);
+			b = ((y - 1) >= 0) ? map.getAt(x, y - 1) :		XMVectorGetY(v.position);
+			c = ((x + 1) < width) ? map.getAt(x + 1, y) :	XMVectorGetY(v.position);
+			d = ((x - 1) >= 0) ? map.getAt(x - 1, y) :		XMVectorGetY(v.position);
 
 			Vec normal = XMVector4Normalize(XMVector3Cross(
 				Vec{ 0.f, (a - b) * height_factor, 2.f * xy_scale },
-				Vec{ 2.f * xy_scale, (c - d) * xy_scale, 0.f }
+				Vec{ 2.f * xy_scale, (c - d) * height_factor, 0.f }
 			));
 
 			v.normal = Vec{ normal };
@@ -47,7 +47,6 @@ Mesh HeightmapBuilder::buildChunk(const Heightmap& map, Vec2<int> chunkPos, Vec2
 
 			Vec uv = { (float)x/30, (float)y/30 };
 			v.uv = uv;
-
 			vertices.push_back(v);
 		}
 

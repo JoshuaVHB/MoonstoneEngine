@@ -12,6 +12,10 @@ Texture2D grassTexture; // la texture
 Texture2D rockTexture; // la texture
 Texture2D snowTexture; // la texture
 
+Texture2D snow_normal; // la texture
+Texture2D grass_normal; // la texture
+Texture2D rock_normal; // la texture
+
 SamplerState SampleState; // l’état de sampling
 
 
@@ -106,8 +110,7 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     float3 V = normalize(cameraPos - vs.worldPos);
     float3 H = normalize(L + V);
     float diff = saturate(dot(N, L));
-    float S = pow(saturate(dot(H, N)), 4.f);
-    
+    float S = pow(saturate(dot(H, N)), 7.f);
     
      // -- Compute albedo
     
@@ -115,13 +118,20 @@ PSOut deferredTerrainPS(VSOut vs) : SV_Target
     float3 grassSample = grassTexture.Sample(SampleState, vs.uv).rgb;
     float3 snowSample = snowTexture.Sample(SampleState, vs.uv).rgb;
     
-    float3 baseTexture = lerp(grassSample, snowSample, (vs.worldPos.y) / 100.f);
-    outAlbedo.rgb = lerp(rockSample, baseTexture, smoothstep(0.79, 1, outNormal.y));
-    outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, toonify(diff) * sunStrength.x));
+    float grassSnowLerp = vs.worldPos.y / 50.f;
+    float baseRockLerp = smoothstep(0.30, 1, outNormal.y);
+    
+    outNormal *= lerp(grass_normal.Sample(SampleState, vs.uv).rgb, snow_normal.Sample(SampleState, vs.uv).rgb, grassSnowLerp);
+    outNormal = lerp(rock_normal.Sample(SampleState, vs.uv).rgb, outNormal, baseRockLerp);
+    
+    float3 baseTexture = lerp(grassSample, snowSample, grassSnowLerp);
+    outAlbedo.rgb = lerp(rockSample, baseTexture, baseRockLerp);
+    S = step(0.90f, S); // not sure about this
+    //outAlbedo.rgb *= lerp(float3(0.09, 0.09, 0.09), sunColor.rgb, max(.1, toonify(saturate(dot(outNormal, L))) * sunStrength.x));
     // -- Output to RTV
     
     PSOut pso;
-    pso.Normal = float4(outNormal, 1.0F);
+    pso.Normal = float4(N, 1.0F);
     pso.Diffuse = float4(outAlbedo, 1.0);
     pso.Position = vs.worldPos;
     pso.Specular = float4(S, S, S, 1);

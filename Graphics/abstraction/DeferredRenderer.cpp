@@ -98,10 +98,16 @@ DeferredRenderer::DeferredRenderer()
 		static Texture m_rockTexture{ L"res/textures/rock.dds" };
 		static Texture m_grassTexture{ L"res/textures/seamless.dds" };
 		static Texture m_snow{ L"res/textures/snow.dds" };
+		static Texture m_rockTexture_normal{ L"res/textures/rock_normal.dds" };
+		static Texture m_grassTexture_normal{ L"res/textures/grass_normal.dds" };
+		static Texture m_snow_normal{ L"res/textures/snow_normal.dds" };
 
 		m_deferredTerrainFx.bindTexture("grassTexture", m_grassTexture.getTexture());
 		m_deferredTerrainFx.bindTexture("rockTexture", m_rockTexture.getTexture());
 		m_deferredTerrainFx.bindTexture("snowTexture", m_snow.getTexture());
+		m_deferredTerrainFx.bindTexture("snow_normal", m_snow_normal.getTexture());
+		m_deferredTerrainFx.bindTexture("grass_normal", m_grassTexture_normal.getTexture());
+		m_deferredTerrainFx.bindTexture("rock_normal", m_rockTexture_normal.getTexture());
 
 		m_deferredTerrainFx.updateSubresource(cameraParams{
 			XMMatrixTranspose(cam.getVPMatrix()), cam.getPosition()
@@ -204,12 +210,12 @@ DeferredRenderer::DeferredRenderer()
 		static float sunPos[4] = {};
 		if (ImGui::DragFloat("Sun strength", &sunstrenght, 0.05f, 0.f, 2.f))
 		{
-			m_deferredTerrainFx.setUniformVector("sunStrength", { sunstrenght });
+			m_lightPass.setUniformVector("sunStrength", { sunstrenght });
 		}
 
-		if (ImGui::DragFloat4("Sun pos", &sunPos[0]))
+		if (ImGui::DragFloat4("Sun dir", &sunPos[0]))
 		{
-			m_deferredTerrainFx.setUniformVector("sunPos", { sunPos[0],sunPos[1] ,sunPos[2] ,sunPos[3] });
+			m_lightPass.setUniformVector("sunDir", { sunPos[0],sunPos[1] ,sunPos[2] ,sunPos[3] });
 		}
 		ImGui::End();
 		

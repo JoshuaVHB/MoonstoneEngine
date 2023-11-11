@@ -19,6 +19,11 @@ cbuffer cameraParams
 }
 
 
+float4 sunPos = float4(100.0f, 1000.f, 10.0f, 1.0f); // la position de la source d’éclairage (Point) 
+float3 sunDir = normalize(float3(100.0f, 100.f, 10.0f)); // la position de la source d’éclairage (Point) 
+float4 sunColor = float4(1.f, 1.f, .6f, 1.f); // la valeur ambiante de l’éclairage 
+float4 sunStrength = float4(1, 1, 1, 1); // la valeur diffuse de l’éclairage
+
 int LIGHT_COUNT = 128;
 struct Light
 {
@@ -84,6 +89,19 @@ VSOut lightPassVS(uint id : SV_VertexID)
 
 /////////////////////
 
+float toonify(float diffuse)
+{
+    return smoothstep(-0.05f, +0.05f, diffuse - 0.5f) * diffuse;
+}
+
+
+float3 computeSunDiffuseLight(float3 normal)
+{
+    
+    return lerp(float3(0.19, 0.19, 0.19), sunColor.rgb, max(.3, toonify(saturate(dot(normal, sunDir))) * sunStrength.x));
+
+}
+
 
 // -- Fragment Shader
 
@@ -100,7 +118,8 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
     
     float3 viewDir = normalize(cameraPos.xyz - fragPos.xyz);
     
-    float3 lighting = diffuse.rgb * 0.7f;
+    float3 lighting = diffuse.rgb * 0.3F;
+    lighting += sunColor * 0.4 * smoothstep(-0.1f, 0.1f, saturate(dot(fragnormal, normalize(sunDir))) - 0.65f);
     //lighting += lights[0].diffuse.rgb;
     
     for (int i = 0; i < 8; ++i)
@@ -124,7 +143,7 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
     }   
       
     
-    return float4(lighting, 1.0f) + float4(specularPixel * 0.6 * diffuse.rgb, 0.F);
+    return float4(lighting, 1.0f) + float4(specularPixel * 0.4 * diffuse.rgb * float3(1,1,1), 0.F);
 }
 
 ////////////////////
