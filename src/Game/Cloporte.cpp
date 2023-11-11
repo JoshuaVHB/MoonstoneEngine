@@ -59,13 +59,14 @@ void Cloporte::draw(Camera& cam)
 void Cloporte::update(float deltaTime)
 {
 	//computeForward();
-	handleKeyboardInputs(deltaTime);
+
+	if( m_handleInputs ) handleKeyboardInputs(deltaTime);
 	updatePosition(deltaTime);
 	m_boundingSphere.origin = m_position;
 	//getCurrentCamera().setPosition(
 	//	XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
-	CameraController::computeThirdPersonPosition(*this, m_thirdPerson);
-	CameraController::computeFirstPersonPosition(*this, m_firstPerson);
+	if (m_handleInputs) CameraController::computeThirdPersonPosition(*this, m_thirdPerson);
+	if (m_handleInputs) CameraController::computeFirstPersonPosition(*this, m_firstPerson);
 
 	getCurrentCamera().updateCam();
 

@@ -50,6 +50,7 @@ private:
 	// Checkpoints
 	CheckpointController checkpoints;
 	TriggerBox* finish;
+	bool isGameOver = false;
 
 public:
 
@@ -62,7 +63,15 @@ public:
 
 	void EndGame() {
 		if(checkpoints.allCheckpointsPassed())
+		{
 			std::cout << "You win !" << std::endl;
+			currentCamera = &clop.getThirdPersonCam();
+			currentCamera->setPosition({230,100,400});
+			currentCamera->lookAt(clop.getPosition());
+			currentCamera->updateCam();
+			clop.setPlayable(false);
+			isGameOver = true;
+		}
 		else 
 			std::cout << "You need to pass all checkpoint !" << std::endl;
 	}
@@ -106,7 +115,7 @@ public:
 	void handleKeyboardInputsMenu() {
 
 		if (!wKbd->isKeyPressed(VK_ESCAPE)) m_hasEscBeenReleased = true;
-		if (wKbd->isKeyPressed(VK_ESCAPE) && m_hasEscBeenReleased)
+		if (wKbd->isKeyPressed(VK_ESCAPE) && m_hasEscBeenReleased && !isGameOver)
 		{
 			m_hasEscBeenReleased = false;
 			m_isPaused = !m_isPaused;
@@ -115,6 +124,13 @@ public:
 
 		if (wKbd->isKeyPressed(Keyboard::letterCodeFromChar('r')))
 		{
+			clop.setPlayable(true);
+			if (isGameOver) {
+				isGameOver = false;
+				checkpoints.resetAllCheckpoints();
+				currentCamera->updateCam();
+				m_elapsedTime = 0;
+			}
 			MoveToLastCheckpoint();
 		}
 	}
@@ -126,8 +142,9 @@ public:
 		PhysicsEngine::setRunningState(!m_isPaused);
 		if (m_isPaused) return;
 
-		m_elapsedTime += deltaTime;
+		if (!isGameOver) m_elapsedTime += deltaTime;
 		Camera& cam = *currentCamera;
+
 
 		DirectX::XMVECTOR pos = clop.getPosition();
 
@@ -135,7 +152,12 @@ public:
 		XMVECTOR groundNormal = (XMVectorGetY(clop.getPosition()) - m_terrain.getWorldHeightAt(clop.getPosition()) < 5.f) 
 			? m_terrain.getNormalAt(clop.getPosition()) 
 			: XMVECTOR{0, 1, 0, 0};
-		
+
+		if (isGameOver)
+		{
+			currentCamera->lookAt(clop.getPosition());
+		}
+
 		clop.setGroundVector(groundNormal);
 		clop.update(deltaTime);
 		m_renderer.update(cam);
@@ -154,7 +176,7 @@ public:
 		const auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
 
 		// Clear and render objects
-		if (m_isPaused) m_fbo.bind();
+		if (m_isPaused || isGameOver) m_fbo.bind();
 		m_renderer.clear();
 		m_renderer.renderDeferred([&]() -> void
 		{
@@ -166,13 +188,15 @@ public:
 
 
 
-		if (m_isPaused)
+		if (m_isPaused || isGameOver)
 		{
 			m_fbo.unbind();
 			Renderer::setBackbufferToDefault();
 			m_screenShot = Texture(m_fbo.getResource(0));
 			Renderer::blitTexture(m_screenShot, DirectX::XMVECTOR{ 1,1,1,0.5 });
-			Renderer::writeTextOnScreen("Pause", 0, 0, 1);
+
+			if (isGameOver)			Renderer::writeTextOnScreen("YOU WIN !!!!!!!!!!", 0, 0, 1);
+			if (m_isPaused)			Renderer::writeTextOnScreen("Pause", 0, 0, 1);
 		}
 
 
@@ -181,42 +205,24 @@ public:
 	virtual void onImGuiRender() override
 	{
 
-		Renderer::writeTextOnScreen(
-			std::string("Fasts/h : ") + std::to_string(static_cast<int>((clop.getObject().getLinearVelocityMag() / clop.getMaxVelocity()) * 100)),
-			300, -300, 1);
+		std::stringstream speedText{}, timeText{};
+		const auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
+		
+		speedText << "Fasts/h " << static_cast<int>((clop.getObject().getLinearVelocityMag() / clop.getMaxVelocity()) * 100);
+		timeText << "Time : " << static_cast<int>(m_elapsedTime / 60) << "m " << static_cast<int>(m_elapsedTime) % 60 << "s " << static_cast<int>(m_elapsedTime * 1000) % 1000 << "ms";
 
-		// Timer
-		if (m_elapsedTime < 60)
-			//Afficher le temps en secondes et ms
-			Renderer::writeTextOnScreen(
-				std::string("Time : ") + std::to_string(static_cast<int>(m_elapsedTime) % 60)
-				+ std::string("s ")
-				+ std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) + std::string("ms"),
-				-615, -300, 1);
-		else
-			//Afficher le temps en minutes et secondes et ms
-			Renderer::writeTextOnScreen(std::string("Time : ") +
-				std::to_string(static_cast<int>(m_elapsedTime) / 60) + std::string("m ") +
-				std::to_string(static_cast<int>(m_elapsedTime) % 60) + std::string("s ") +
-				std::to_string(static_cast<int>(m_elapsedTime * 1000) % 1000) +
-				std::string("ms"),
-				-600, -300, 1);
+		Renderer::writeTextOnScreen(speedText.str(), (winSize.first / 2)-300, -(winSize.second / 2) + 50, 1);
+		Renderer::writeTextOnScreen(timeText.str(),-(winSize.first / 2), - (winSize.second/2)+50, 1);
 
 		Renderer::renderText();
-		if (UIRenderer::Button(0, 0, 100, 50))
-		{
-	
-			clop.setTranslation(+530.f, +40.f, +960.f);
-			m_elapsedTime = 0;
-			
-		}
 		UIRenderer::renderUI();
 		static float tmp = 0;
-		
+
+#ifdef _DEBUG
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();
-		 
+#endif
 	}
 
 };

@@ -47,7 +47,7 @@ private:
 
 	std::vector<Texture*> m_textureArray;
 	std::unordered_map<const Texture*, int> m_textureMap;
-	std::array<const Texture*, 8> m_textures;
+	std::array<const Texture*, 8> m_textures = {nullptr,nullptr ,nullptr ,nullptr ,nullptr ,nullptr ,nullptr ,nullptr };
 
 	Texture m_whitePixel{1,1};
 	int currentSlot = 0;
@@ -132,7 +132,7 @@ public:
 		XMVECTOR positions[4] =
 		{
 				{ (XMVectorGetX(position))/ winSize.first * 2 - 1
-						, -2 * (XMVectorGetY(position) / winSize.second) +1
+						, -2 * (XMVectorGetY(position) / winSize.second) + 1
 						, quadTexId },
 
 
@@ -151,10 +151,10 @@ public:
 
 		XMVECTOR uv[4] =
 		{
-			{0,0},
-				{1,0},
-				{1,1},
-				{0,1}
+			{0,1},
+			{1,1},
+			{1,0},
+			{0,0}
 		};
 
 
@@ -167,11 +167,6 @@ public:
 	}
 
 
-	void renderBatched()
-	{
-		std::vector<ID3D11ShaderResourceView*> srvs;
-		srvs.reserve(8);		
-	}
 
 
 	void BeginBatch() {

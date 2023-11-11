@@ -42,9 +42,11 @@ void CheckpointController::validAllCheckpoints()
 
 void CheckpointController::resetAllCheckpoints()
 {
-	for (Checkpoint* cp : m_checkpoints)
-		cp->passed = false;
+	for (Checkpoint* cp : m_checkpoints) cp->passed = false;
+	m_checkpoints[0]->passed = true;
+	indexLastCP = 0;
 }
+
 
 void CheckpointController::deleteCheckpoints()
 {

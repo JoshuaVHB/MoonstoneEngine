@@ -116,3 +116,21 @@ void direct3D11_impl::renderText()
 {
 	m_textRenderer.render();
 }
+
+
+void direct3D11_impl::startBatching2D()
+{
+	m_quadRenderer.BeginBatch();
+}
+void direct3D11_impl::renderQuadOnScreen(DirectX::XMVECTOR position, DirectX::XMVECTOR size, const Texture& texture, DirectX::XMVECTOR uvoffset)
+{
+	m_quadRenderer.batchQuad(position, size, texture, uvoffset);
+}
+void direct3D11_impl::endBatching2D()
+{
+	m_quadRenderer.EndBatch();
+}
+void direct3D11_impl::renderBatch2D()
+{
+	m_quadRenderer.Flush();
+}

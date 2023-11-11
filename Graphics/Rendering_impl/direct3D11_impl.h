@@ -20,6 +20,8 @@
 
 #include <vector>
 
+#include "abstraction/2D/Renderer2D.h"
+
 struct direct3D11_impl : public Renderer::_Impl {
 
 private:
@@ -38,6 +40,7 @@ private:
 	size_t verticesCount = 0;
 	size_t triangleCount = 0;
 	TextRenderer m_textRenderer;
+	Renderer2D m_quadRenderer;
 
 
 public:
@@ -77,6 +80,13 @@ private:
 	virtual void blitTexture(const Texture&, const DirectX::XMVECTOR& colorShift = {1,1,1,1}) override;
 	virtual void writeTextOnScreen(const std::string& text, int screenX, int screenY, float scale) override;
 	virtual void renderText() override ;
+
+	virtual void startBatching2D() override;
+	virtual void renderQuadOnScreen(
+		DirectX::XMVECTOR position, DirectX::XMVECTOR size,
+		const Texture& texture, DirectX::XMVECTOR uvoffset = { 0,0,0,0 }) override;
+	virtual void endBatching2D() override;
+	virtual void renderBatch2D() override;
 
 	// ~~~~~~~~~~ DEBUG
 

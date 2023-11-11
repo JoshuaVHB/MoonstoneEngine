@@ -41,11 +41,12 @@ public:
         static const float MAX_DISTANCE = 20.f;
         camPos = XMVectorLerp(
             cam.getPosition(), 
-            camPos, 
-            smoothstep(0, MAX_DISTANCE, XMVectorGetX(XMVector3Length(camPos - cam.getPosition())))
+            camPos, 0.05f
+            //smoothstep(0, MAX_DISTANCE, XMVectorGetX(XMVector3Length(camPos - cam.getPosition())))
             );
 
         cam.setPosition(camPos);
+
         cam.lookAt(pos);
         cam.updateCam();
 

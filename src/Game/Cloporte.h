@@ -28,7 +28,8 @@ private:
 	DirectX::XMVECTOR m_position	;
 	DirectX::XMVECTOR m_forward		;
 	DirectX::XMVECTOR m_groundDir	;
-	
+
+	bool m_handleInputs = true;
 
 
 public:
@@ -41,6 +42,8 @@ public:
 	void updatePosition(float deltaTime);
 
 	Camera& getCurrentCamera() noexcept { return *m_currentCam; }
+	Camera& getThirdPersonCam() noexcept { return m_thirdPerson; }
+	Camera& getFirstPersonCam() noexcept { return m_firstPerson; }
 
 	void switchView() noexcept
 	{
@@ -61,6 +64,8 @@ public:
 	[[nodiscard]] DirectX::XMVECTOR getGroundDir() const noexcept	{ return m_groundDir; }
 	[[nodiscard]] float getMaxVelocity() const noexcept				{ return maxVelocity; }
 
+
+	void setPlayable(bool canPlay) { m_handleInputs = canPlay; }
 	void setGroundVector(const DirectX::XMVECTOR& val)
 	{
 		m_groundDir = val;

@@ -71,6 +71,11 @@ public:
 		virtual void writeTextOnScreen(const std::string& text, int screenX, int screenY, float scale) = 0;
 		virtual void renderText() = 0;
 
+		virtual void startBatching2D()=0;
+		virtual void renderQuadOnScreen(DirectX::XMVECTOR , DirectX::XMVECTOR , const Texture& , DirectX::XMVECTOR = { 0,0,0,0 })=0;
+		virtual void endBatching2D()=0;
+		virtual void renderBatch2D()=0;
+
 		// -- Debug
 
 		virtual void renderAABB(Camera& camera, const AABB&) = 0;
@@ -92,6 +97,15 @@ public:
 	CALL_IMPL(renderPBRMesh) ;
 	CALL_IMPL(renderAABB) ;
 	CALL_IMPL(renderDebugPerspectiveCameraOutline)	;
+
+	// no args
+	CALL_IMPL(startBatching2D);
+	// DirectX::XMVECTOR position, DirectX::XMVECTOR size, const Texture& texture, DirectX::XMVECTOR uvoffset = { 0,0,0,0 }
+	CALL_IMPL(renderQuadOnScreen);
+	// no args
+	CALL_IMPL(endBatching2D);
+	// no args
+	CALL_IMPL(renderBatch2D);
 
 	CALL_IMPL(showImGuiDebugData)					;
 	CALL_IMPL(setBackbufferToDefault)				;
