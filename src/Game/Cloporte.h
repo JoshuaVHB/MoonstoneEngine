@@ -69,8 +69,12 @@ public:
 	void setPosition(float x, float y, float z) {
 		m_object.clearForce();
 		m_object.clearTorque();
-		m_object.getTransform().setPosition({x,y,z});
+		m_object.getTransform().setTranslation(x,y,z);
 		m_object.majTransformPhysics();
+		m_position = DirectX::XMVECTOR{ x,y,z, 1 };
+		
+		auto pos = m_object.getTransform().getPosition();
+
 	}
 
 	void setTranslation(float x, float y, float z)
@@ -78,12 +82,21 @@ public:
 		m_object.clearForce();
 		m_object.clearTorque();
 		m_object.setTranslation(x, y, z);
+		m_object.getTransform().setTranslation(x, y, z);
 		m_forward={ 0, 0, 1 , 0 };
 		m_groundDir={ 0, 1, 0, 0 };
 		currentVelocity={ 0 };
 		m_object.setLinearVelocity({ 0,0,0 });
 		m_object.setAngularVelocity({ 0,0,0 });
+		m_position = DirectX::XMVECTOR{ x,y,z, 1 };
+
+
+		auto pos = m_object.getTransform().getPosition();
 		
+	}
+
+	void setForward(DirectX::XMVECTOR forward) {
+		m_forward = forward;
 	}
 
 private:

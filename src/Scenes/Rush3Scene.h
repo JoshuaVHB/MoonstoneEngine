@@ -57,7 +57,17 @@ public:
 	void MoveToLastCheckpoint() {
 		DirectX::XMVECTOR t = checkpoints.getPositionLastCP();
 		clop.setTranslation(DirectX::XMVectorGetX(t), DirectX::XMVectorGetY(t), DirectX::XMVectorGetZ(t));
+		clop.setForward(checkpoints.getDirectionLastCP());
 	}
+
+	void EndGame() {
+		if(checkpoints.allCheckpointsPassed())
+			std::cout << "You win !" << std::endl;
+		else 
+			std::cout << "You need to pass all checkpoint !" << std::endl;
+	}
+
+public:
 
 	Rush3Scene() :
 		clop{}
@@ -73,10 +83,7 @@ public:
 		// -- Set the finish line
 		finish = new TriggerBox{ { 240.f, 55.f, 440.f }, { 1, 30, 45, } };
 		finish->setTriggerCallback([&]() {
-			if (checkpoints.allCheckpointsPassed())
-				std::cout << "You win !" << std::endl;
-			else
-				std::cout << "You didn't pass all checkpoints !" << std::endl;
+				EndGame();
 			});
 
 		phm.setTerrain(static_cast<const Terrain*>(&m_terrain));
@@ -122,6 +129,8 @@ public:
 		m_elapsedTime += deltaTime;
 		Camera& cam = *currentCamera;
 
+		DirectX::XMVECTOR pos = clop.getPosition();
+
 		// Get the ground normal if we are close to the ground
 		XMVECTOR groundNormal = (XMVectorGetY(clop.getPosition()) - m_terrain.getWorldHeightAt(clop.getPosition()) < 5.f) 
 			? m_terrain.getNormalAt(clop.getPosition()) 
@@ -136,6 +145,7 @@ public:
 
 	virtual void onRender() override {
 
+		DirectX::XMVECTOR pos = clop.getPosition();
 		// Get our target camera
 		Renderer::clearScreen();
 		Renderer::clearText();
