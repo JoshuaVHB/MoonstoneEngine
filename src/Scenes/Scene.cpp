@@ -27,7 +27,7 @@ void SceneManager::onUpdate(float deltaTime)
             s_currentTransition->release();
             delete s_currentTransition;
             s_currentTransition = nullptr;
-			std::cout << "Finished scene transition" << std::endl;
+			//std::cout << "Finished scene transition" << std::endl;
         }
         return;
     }

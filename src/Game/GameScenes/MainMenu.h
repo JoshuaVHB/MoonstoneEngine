@@ -45,9 +45,9 @@ public:
 		const auto size = 500;
 		const auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
 		UIRenderer::clear();
-		if (UIRenderer::Button((winSize.first / 2.f)-150, 400, 300, 100))
+		if (UIRenderer::Button((winSize.first / 2.f)-150, 400, 300, 100) || wKbd->isKeyPressed(VK_SPACE))
 		{
-			SceneManager::switchToScene("Terrain");
+			SceneManager::switchToScene("Game");
 		}
 
 		wMouse->clearPress();

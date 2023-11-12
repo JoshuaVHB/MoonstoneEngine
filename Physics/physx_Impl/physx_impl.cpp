@@ -33,7 +33,7 @@ bool Physx_Impl::changeScene(int numScene)
 int Physx_Impl::addScene()
 {
 	physics.push_back(ModulePhysics());
-	return physics.size() - 1;
+	return static_cast<int>(physics.size()) - 1;
 }
 
 

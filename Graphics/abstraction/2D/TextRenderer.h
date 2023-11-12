@@ -1,7 +1,14 @@
 #pragma once
 
-#include "Sprite.h"
 
+#define _XM_NO_INTRINSICS_
+#include <directXMath.h>
+
+#include "../Platform/WindowsEngine.h"
+#include "abstraction/Effect.h"
+#include "abstraction/Texture.h"
+
+using namespace DirectX;
 
 class TextRenderer {
 

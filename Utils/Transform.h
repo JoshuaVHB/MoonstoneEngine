@@ -60,20 +60,19 @@ public:
 		_scale[2] = XMVectorGetZ(scale);
 	}
 
-	const XMVECTOR& getTranslation() const noexcept {
+	[[nodiscard]] const XMVECTOR& getTranslation() const noexcept {
 		return translation;
 	}
-	const XMVECTOR& getAngles() const noexcept {
-		XMVECTOR ang{};
-		ang = XMVectorSet(angles[0], angles[1], angles[2], 0);
-		return ang;
+
+	[[nodiscard]] XMVECTOR getAngles() const noexcept {
+		return XMVectorSet(angles[0], angles[1], angles[2], 0);
 	}
 
-	XMVECTOR getScale() noexcept {
+	XMVECTOR getScale() const noexcept {
 		return XMVECTOR{ _scale[0], _scale[1], _scale[2] };
 	}
 
-	XMMATRIX getTransformationMatrix() const noexcept
+	[[nodiscard]] XMMATRIX getTransformationMatrix() const noexcept
 	{
 		XMVECTOR origin = { 0,0,0,1 };
 		auto rotation = XMQuaternionRotationRollPitchYaw(angles[0], angles[1], angles[2]);

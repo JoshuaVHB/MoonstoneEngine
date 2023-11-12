@@ -9,7 +9,6 @@
     <ClCompile Include="Graphics\abstraction\DeferredRenderer.cpp" />
     <ClCompile Include="Graphics\abstraction\DepthBuffer.cpp" />
     <ClCompile Include="Graphics\abstraction\FrameBuffer.cpp" />
-    <ClCompile Include="Graphics\Blit.cpp" />
     <ClCompile Include="Graphics\d3d11_graphics.cpp" />
     <ClCompile Include="Graphics\abstraction\Effect.cpp" />
     <ClCompile Include="Graphics\abstraction\Texture.cpp" />
@@ -29,12 +28,9 @@
     <ClCompile Include="Physics\World\StaticObject.cpp" />
     <ClCompile Include="Physics\World\TriggerBox.cpp" />
     <ClCompile Include="Platform\IO\Inputs.cpp" />
-    <ClCompile Include="src\Game\GameLogic.cpp" />
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Renderer2D.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
     <ClCompile Include="Graphics\abstraction\IndexBuffer.cpp" />
@@ -67,7 +63,6 @@
     <ClInclude Include="Graphics\abstraction\2D\UI\UIFrame.h" />
     <ClInclude Include="Graphics\abstraction\DeferredRenderer.h" />
     <ClInclude Include="Graphics\abstraction\DepthBuffer.h" />
-    <ClInclude Include="Graphics\Blit.h" />
     <ClInclude Include="Graphics\World\Frustum.h" />
     <ClInclude Include="Physics\PhysicEngine.h" />
     <ClInclude Include="Physics\physx_Impl\PhysicEngine_Impl.h" />
@@ -79,15 +74,11 @@
     <ClInclude Include="Physics\World\PhysicalObject.h" />
     <ClInclude Include="Physics\World\StaticObject.h" />
     <ClInclude Include="Physics\World\TriggerBox.h" />
-    <ClInclude Include="src\Game\GameLogic.h" />
     <ClInclude Include="src\Game\CameraController.h" />
     <ClInclude Include="src\Game\Cloporte.h" />
     <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="Graphics\abstraction\2D\Renderer2D.h" />
-    <ClInclude Include="Graphics\abstraction\2D\Sprite.h" />
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
-    <ClInclude Include="Graphics\abstraction\2D\UI\Layer.h" />
-    <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
     <ClInclude Include="Graphics\abstraction\Camera.h" />
     <ClInclude Include="Graphics\abstraction\FrameBuffer.h" />
@@ -117,12 +108,10 @@
     <ClInclude Include="Platform\IO\Inputs.h" />
     <ClInclude Include="Platform\WindowsEngine.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="src\Game\GameScenes\EndScreen.h" />
-    <ClInclude Include="src\Game\GameScenes\InGame.h" />
     <ClInclude Include="src\Game\GameScenes\MainMenu.h" />
     <ClInclude Include="src\Scenes\AllScenes.h" />
     <ClInclude Include="Platform\IO\JsonParser.h" />
-    <ClInclude Include="src\Scenes\Rush3Scene.h" />
+    <ClInclude Include="src\Scenes\GameScene.h" />
     <ClInclude Include="src\Scenes\Scene.h" />
     <ClInclude Include="src\Scenes\SceneDeferred.h" />
     <ClInclude Include="src\Scenes\UITestScene.h" />
@@ -931,6 +920,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="Effects11d.lib" />
+    <Library Include="Effects11.lib" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MoonstoneEngine.rc" />

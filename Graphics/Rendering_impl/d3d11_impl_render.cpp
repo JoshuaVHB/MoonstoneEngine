@@ -81,6 +81,7 @@ void direct3D11_impl::renderPBRMesh(Camera& camera, const Mesh& mesh, const Mate
 
 	pbrMeshEffect.apply();
 	mesh.draw();
+	pbrMeshEffect.unbindResources();
 }
 
 // todo make this more clear
@@ -91,6 +92,7 @@ void direct3D11_impl::renderCubemap(Camera& camera, const Mesh& mesh, const Effe
 	context->IASetInputLayout(effect.getVertexLayout());
 	effect.apply();
 	mesh.draw();
+	effect.unbindResources();
 
 
 }

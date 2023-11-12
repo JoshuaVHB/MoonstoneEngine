@@ -60,6 +60,7 @@ public:
 		m_skyboxPass.apply();
 		
 		Renderer::renderCubemap(camera, m_mesh, m_skyboxPass);
+		m_skyboxPass.unbindResources();
 	}
 
 };

@@ -15,8 +15,8 @@ CameraController controller;
 
 Cloporte::Cloporte()
 	: m_object{ PhysicsEngine::FilterGroup::ePlayer, PhysicsEngine::FilterGroup::eAll }
-	, m_speed(0), maxVelocity(10.0f)
-	, accelerationFactor(0.05f), friction(0.2f)
+	, maxVelocity(10.0f)
+	, accelerationFactor(0.05f)
 	, m_position{0, 0, 0, 0}
 	, m_forward {0, 0, 1 , 0}
 	, m_groundDir{0, 1, 0, 0}
@@ -43,38 +43,23 @@ Cloporte::Cloporte()
 	m_object.setMass(3.f);
 }
 
-void Cloporte::handleInputs() 
+
+void Cloporte::switchView() noexcept
 {
-
-	Vec delta{};
-
-	Keyboard::Event e = wKbd->readKey();
-
-	
-
+	if (m_currentCam == &m_thirdPerson) m_currentCam = &m_firstPerson;
+	else m_currentCam = &m_thirdPerson;
 }
-void Cloporte::draw(Camera& cam)
-{
-}
+
 void Cloporte::update(float deltaTime)
 {
-	//computeForward();
 
 	if( m_handleInputs ) handleKeyboardInputs(deltaTime);
 	updatePosition(deltaTime);
 	m_boundingSphere.origin = m_position;
-	//getCurrentCamera().setPosition(
-	//	XMVectorAdd(m_position,{ -20 * XMVectorGetX(m_forward) ,5,-20* XMVectorGetZ(m_forward)}));
 	if (m_handleInputs) CameraController::computeThirdPersonPosition(*this, m_thirdPerson);
 	if (m_handleInputs) CameraController::computeFirstPersonPosition(*this, m_firstPerson);
 
 	getCurrentCamera().updateCam();
-
-	//Afficher vitesse 
-	//m_object.displayLinearVelocity();
-
-	//Afficher position
-	//m_object.displayPosition();
 
 }
 
@@ -148,5 +133,32 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 		tmp = false;
 
 	}
+
+}
+
+
+void Cloporte::setTranslation(float x, float y, float z)
+{
+	m_object.clearForce();
+	m_object.clearTorque();
+	m_object.setTranslation(x, y, z);
+	m_object.getTransform().setTranslation(x, y, z);
+	m_forward = { 0, 0, 1 , 0 };
+	m_groundDir = { 0, 1, 0, 0 };
+	currentVelocity = { 0 };
+	m_object.setLinearVelocity({ 0,0,0 });
+	m_object.setAngularVelocity({ 0,0,0 });
+	m_position = DirectX::XMVECTOR{ x,y,z, 1 };
+
+	auto pos = m_object.getTransform().getPosition();
+
+}
+void Cloporte::setPosition(float x, float y, float z) {
+	m_object.clearForce();
+	m_object.clearTorque();
+	m_object.getTransform().setTranslation(x, y, z);
+	m_object.majTransformPhysics();
+	m_position = DirectX::XMVECTOR{ x,y,z, 1 };
+	auto pos = m_object.getTransform().getPosition();
 
 }

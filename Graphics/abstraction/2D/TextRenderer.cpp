@@ -1,5 +1,6 @@
 #include "TextRenderer.h"
-
+#include "Font.h"
+#include "abstraction/Vertex.h"
 
 void TextRenderer::clear()
 {
@@ -153,6 +154,9 @@ void TextRenderer::render() const {
 	m_spriteEffect.apply();
 	m_renderContext.context->DrawInstanced(6, 
 		static_cast<UINT>(m_instanceCount), 0, 0);
+
+	m_spriteEffect.unbindResources();
+
 }
 
 TextRenderer:: ~TextRenderer()

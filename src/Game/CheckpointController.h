@@ -3,6 +3,7 @@
 #include "../../Physics/World/TriggerBox.h"
 #include "../../Physics/World/PhysicalObject.h"
 #include "../../Platform/IO/JsonParser.h"
+
 struct Checkpoint {
 	TriggerBox* triggerBox;
 	bool passed;

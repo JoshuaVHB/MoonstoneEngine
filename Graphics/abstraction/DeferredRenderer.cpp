@@ -143,6 +143,7 @@ DeferredRenderer::DeferredRenderer()
 			}
 		}	
 
+		m_deferredTerrainFx.unbindResources();
 	}
 
 	void DeferredRenderer::renderSkybox(Camera& cam, const Skybox& skybox) const

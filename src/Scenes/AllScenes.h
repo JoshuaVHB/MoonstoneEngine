@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TestScene.h"
-#include "Rush3Scene.h"
+#include "GameScene.h"
 #include "UITestScene.h"
 #include "SceneDeferred.h"
 

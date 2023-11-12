@@ -14,9 +14,9 @@ DepthBuffer::DepthBuffer(ID3D11Device* _device, ID3D11DeviceContext* _context)
 
 DepthBuffer::~DepthBuffer()
 {
-	//DX_RELEASE(m_state)
-	//DX_RELEASE(m_depthStencil)
-	//DX_RELEASE(m_depthTexture)
+	DX_RELEASE(m_state)
+	DX_RELEASE(m_depthStencil)
+	DX_RELEASE(m_depthTexture)
 }
 
 void DepthBuffer::swap(DepthBuffer& other) noexcept

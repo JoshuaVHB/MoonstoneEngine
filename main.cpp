@@ -71,13 +71,13 @@ int main() {
 		initImgui(rMoteur.getHwnd(), gfx);
 		Renderer::setImplementation<direct3D11_impl>();
 
-		SceneManager::registerScene<TestScene>("TEST");
-		SceneManager::registerScene<Rush3Scene>("Terrain");
-		SceneManager::registerScene<SceneDeferred>("Deferred");
-		SceneManager::registerScene<InGame>("InGame");
-		SceneManager::registerScene<UITestScene>("UITestScene");
+		//SceneManager::registerScene<TestScene>("TEST");
+		//SceneManager::registerScene<SceneDeferred>("Deferred");
+		//SceneManager::registerScene<InGame>("InGame");
+		//SceneManager::registerScene<UITestScene>("UITestScene");
 		SceneManager::registerScene<MainMenu>("MainMenu");
-		SceneManager::switchToScene(5);
+		SceneManager::registerScene<GameScene>("Game");
+		SceneManager::switchToScene(0);
 
 
 		rMoteur.run();
