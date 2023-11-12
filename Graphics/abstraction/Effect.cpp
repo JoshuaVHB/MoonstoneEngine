@@ -128,7 +128,7 @@ Effect::Effect()
 	void Effect::bindTextureArray(const std::string& uniformName, const std::vector<ID3D11ShaderResourceView*>& tex) const
 	{
 		if (tex.empty()) return;
-		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResourceArray((ID3D11ShaderResourceView**)(tex.data()),0, tex.size());
+		m_effect->GetVariableByName(uniformName.c_str())->AsShaderResource()->SetResourceArray((ID3D11ShaderResourceView**)(tex.data()),0, static_cast<uint32_t>(tex.size()));
 	}
 
 	void Effect::bindTexture(const std::string& uniformName, const Texture& tex) const
@@ -146,5 +146,6 @@ Effect::Effect()
 	void Effect::sendCBufferToGPU(const std::string& cbuffName) const
 	{
 		ID3DX11EffectConstantBuffer* pCB = m_effect->GetConstantBufferByName(cbuffName.c_str());
-		pCB->SetConstantBuffer(m_constantBuffers.at(cbuffName)); 
+		pCB->SetConstantBuffer(m_constantBuffers.at(cbuffName));
+		DX_RELEASE(pCB);
 	}

@@ -109,7 +109,11 @@ public:
 
 	float getWorldHeightAt(XMVECTOR worldPos) const
 	{
-		return m_map.getAt(XMVectorGetX(worldPos) / m_params.xyScale, XMVectorGetZ(worldPos) / m_params.xyScale)* m_params.scaleFactor;
+		return m_map.getAt(
+			static_cast<int>(XMVectorGetX(worldPos) / m_params.xyScale), 
+			static_cast<int>(XMVectorGetZ(worldPos) / m_params.xyScale))
+
+		* m_params.scaleFactor;
 	}
 
 	const TerrainParams& getParams() const { return m_params; }

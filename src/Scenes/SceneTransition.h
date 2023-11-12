@@ -104,7 +104,6 @@ public:
 		originTextureFBO.clear();
 		endTextureFBO.clear();
 		// return true when transition is done
-		std::cout << currentTime << std::endl;
 		return currentTime < timeDuration;
 	}
 

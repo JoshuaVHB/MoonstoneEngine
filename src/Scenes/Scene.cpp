@@ -44,6 +44,7 @@ bool SceneManager::onImGuiRender()
     Scene* currentScene = s_activeScene;
     s_activeScene->onImGuiRender();
 
+#ifdef _DEBUG
     ImGui::Begin("Scenes");
     for (size_t i = 0; i < s_availableScenes.size(); i++) {
         auto& [name, provider] = s_availableScenes[i];
@@ -55,7 +56,7 @@ bool SceneManager::onImGuiRender()
         }
     }
     ImGui::End();
-
+#endif
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     return currentScene != s_activeScene;

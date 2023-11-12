@@ -16,7 +16,7 @@ void CheckpointController::addCheckpoint(PhysicalObject::fVec3 position, Physica
 		{
 			cp->passed = true;
 			indexLastCP = cp->indexCheckpoint;
-			std::cout << "Checkpoint " << cp->indexCheckpoint << " passed" << std::endl;
+			//std::cout << "Checkpoint " << cp->indexCheckpoint << " passed" << std::endl;
 		}
 		}));
 	m_checkpoints.push_back(cp);

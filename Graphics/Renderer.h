@@ -29,6 +29,7 @@ class Material;
 class Texture;
 struct AABB;
 struct ID3D11DepthStencilView;
+class DeferredRenderer;
 
 /// Renderer class :
 /// 
@@ -75,6 +76,7 @@ public:
 		virtual void renderQuadOnScreen(DirectX::XMVECTOR , DirectX::XMVECTOR , const Texture& , DirectX::XMVECTOR = { 0,0,0,0 })=0;
 		virtual void endBatching2D()=0;
 		virtual void renderBatch2D()=0;
+
 
 		// -- Debug
 

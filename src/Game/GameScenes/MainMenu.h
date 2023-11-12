@@ -36,6 +36,7 @@ public:
 		Renderer::endBatching2D();
 		Renderer::renderBatch2D();
 
+		Renderer::writeTextOnScreen("Click to play", - size/2+120 ,-115, 1);
 		Renderer::renderText();
 	}
 
@@ -44,7 +45,7 @@ public:
 		const auto size = 500;
 		const auto winSize = WindowsEngine::getInstance().getGraphics().getWinSize();
 		UIRenderer::clear();
-		if (UIRenderer::Button((winSize.first / 2.f)-150, 550, 300, 100))
+		if (UIRenderer::Button((winSize.first / 2.f)-150, 400, 300, 100))
 		{
 			SceneManager::switchToScene("Terrain");
 		}

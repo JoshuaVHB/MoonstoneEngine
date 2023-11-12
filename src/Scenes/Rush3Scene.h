@@ -52,6 +52,9 @@ private:
 	TriggerBox* finish;
 	bool isGameOver = false;
 
+	std::vector<TriggerBox*> m_borders;
+	bool m_isInBound = true;
+
 public:
 
 
@@ -108,6 +111,24 @@ public:
 
 
 		MoveToLastCheckpoint();
+
+		float scale = m_terrain.getParams().xyScale;
+		float length = m_terrain.getParams().height * scale;
+		float width = m_terrain.getParams().width * scale;
+		float height = m_terrain.getHeightmap().getMaxHeight() * m_terrain.getParams().scaleFactor;
+
+		m_borders.push_back(new TriggerBox{ PhysicalObject::fVec3{ length / 2.f, -1.f, width / 2.f}, PhysicalObject::fVec3{length, 1.f, width} });
+		m_borders.push_back(new TriggerBox{ PhysicalObject::fVec3{0.f, height / 2.f, width / 2.f}, PhysicalObject::fVec3{ 1.f, 1.5f * height, width / 1.5f} });
+		m_borders.push_back(new TriggerBox{ PhysicalObject::fVec3{length / 2.f, height / 2.f, 0.f}, PhysicalObject::fVec3{ length / 1.5f, 1.5f * height, 1.f} });
+		m_borders.push_back(new TriggerBox{ PhysicalObject::fVec3{length, height / 2.f, width / 2.f}, PhysicalObject::fVec3{ 1.f, 1.5f * height, width / 1.5f} });
+		m_borders.push_back(new TriggerBox{ PhysicalObject::fVec3{length / 2.f, height / 2.f, width}, PhysicalObject::fVec3{ length / 1.5f, 1.5f * height, 1.f} });
+
+
+		std::ranges::for_each(m_borders, [&](TriggerBox* border) {
+			border->setTriggerCallback([&]() {
+				m_isInBound = false;
+				});
+			});
 			
 		UIRenderer::attachMouse(wMouse.get());
 	}
@@ -142,7 +163,16 @@ public:
 		PhysicsEngine::setRunningState(!m_isPaused);
 		if (m_isPaused) return;
 
+
+		if (!m_isInBound)
+		{
+			MoveToLastCheckpoint();
+			m_isInBound = true;
+		}
+
 		if (!isGameOver) m_elapsedTime += deltaTime;
+
+		currentCamera = &clop.getCurrentCamera();
 		Camera& cam = *currentCamera;
 
 
@@ -222,6 +252,9 @@ public:
 		m_terrain.showDebugWindow();
 		Renderer::showImGuiDebugData();
 		m_renderer.showDebugWindow();
+		ImGui::Begin("InGame scene debug");
+		ImGui::Text("X : %f   Y : %f    Z : %f", XMVectorGetX(clop.getPosition()), XMVectorGetY(clop.getPosition()), XMVectorGetZ(clop.getPosition()));
+		ImGui::End();
 #endif
 	}
 

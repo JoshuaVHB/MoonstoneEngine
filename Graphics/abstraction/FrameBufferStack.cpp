@@ -6,7 +6,6 @@
 void FrameBufferStack::pushFBO(const FrameBuffer* fbo)
 {
 	m_stack.push(fbo);
-	//std::cout << "Pushed a new FBO of size " << fbo->getRenderTargetViews().size() << std::endl;
 }
 
 void FrameBufferStack::popFBO()
@@ -19,7 +18,6 @@ void FrameBufferStack::popFBO()
 	}
 
 	m_stack.top()->bindCached(); // bind without pushing to the stack
-	std::cout << "Poped a FBO "<< std::endl;
 
 }
 

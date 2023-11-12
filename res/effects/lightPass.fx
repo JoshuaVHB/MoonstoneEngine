@@ -24,7 +24,7 @@ float3 sunDir = normalize(float3(100.0f, 100.f, 10.0f)); // la position de la so
 float4 sunColor = float4(1.f, 1.f, .6f, 1.f); // la valeur ambiante de l’éclairage 
 float4 sunStrength = float4(1, 1, 1, 1); // la valeur diffuse de l’éclairage
 
-int LIGHT_COUNT = 128;
+int LIGHT_COUNT = 32;
 struct Light
 {
     float4 direction; // For directional lights and spotlight
@@ -44,9 +44,10 @@ struct Light
 
 cbuffer lightsBuffer
 {
-    Light lights[128];
+    Light lights[32];
     
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -122,12 +123,12 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
     lighting += sunColor * 0.4 * smoothstep(-0.1f, 0.1f, saturate(dot(fragnormal, normalize(sunDir))) - 0.65f);
     //lighting += lights[0].diffuse.rgb;
     
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < LIGHT_COUNT; ++i)
     {
-      //  if (lights[i].isOn <= 1.0f) continue;
+        if (lights[i].isOn < 1.0f) continue;
         float dist = length(lights[i].position.rgb - fragPos.rgb);
         // diffuse
-        if (dist < lights[i].radius)
+        //if (dist < lights[i].radius)
         {
         
                 // diffuse
@@ -135,7 +136,7 @@ float4 lightPassPS(float4 sspos : SV_Position) : SV_Target
             float3 ds = max(dot(fragnormal.xyz, lightDir), 0.0) * diffuse * lights[i].diffuse;
             
             
-            float attenuation = 1.0 / (dist * dist);
+            float attenuation = 1.0 / (dist);
             ds *= attenuation;
             lighting += ds;
             

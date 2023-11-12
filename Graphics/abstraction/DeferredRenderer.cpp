@@ -7,6 +7,11 @@
 #include "World/WorldRendering/Skybox.h"
 #include "World/WorldRendering/Terrain.h"
 
+struct lightStruct
+{
+	std::vector<hlsl_GenericLight> lights;
+}static s_lights;
+
 DeferredRenderer::DeferredRenderer()
 	{
 		/*	Normal
@@ -36,7 +41,7 @@ DeferredRenderer::DeferredRenderer()
 		vertexLayout.pushBack<2>(InputLayout::Semantic::Texcoord);
 
 		m_lightPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we need VP and camera pos
-		m_lightPass.addNewCBuffer("lightsBuffer", sizeof(hlsl_GenericLight) * 128); // we need VP and camera pos
+		m_lightPass.addNewCBuffer("lightsBuffer", sizeof(hlsl_GenericLight) * 32); // we need VP and camera pos
 
 		m_gPass.addNewCBuffer("cameraParams", sizeof(cameraParams)); // we only need VP matrix
 		m_gPass.addNewCBuffer("meshParams", sizeof(meshParams));
@@ -51,11 +56,27 @@ DeferredRenderer::DeferredRenderer()
 
 
 		m_lights.addPointlight(PointLight{
-			Vec{5,5,5,5},
-			Vec{0,10,0,0},
-			Vec{0,1,1,0},
-			Vec{1,1,1,0},
-			0.4f, true
+			Vec{10,10,10,0},
+			Vec{530,80,960,5},
+			Vec{0,1,0,0},
+			Vec{0,1,0,0},
+			10.f, true
+			});
+
+		m_lights.addPointlight(PointLight{
+			Vec{10,10,10,0},
+			Vec{0,80,0,5},
+			Vec{1,0,0,0},
+			Vec{1,0,0,0},
+		10.f, true
+			});
+
+		m_lights.addPointlight(PointLight{
+		Vec{10,10,10,0},
+		Vec{1000,-60,500},
+		Vec{0,0,1,0},
+		Vec{0,0,1,0},
+	10.f, true
 			});
 
 	}
@@ -182,11 +203,10 @@ DeferredRenderer::DeferredRenderer()
 
 	void DeferredRenderer::uploadLights() const
 	{
-		std::vector<hlsl_GenericLight> toUpload;
-		toUpload = m_lights.convertLights();
-		toUpload.resize(128);
 
-		m_lightPass.updateSubresource(toUpload.data()[0], "lightsBuffer");
+		s_lights.lights = m_lights.convertLights();
+
+		m_lightPass.updateSubresource(s_lights.lights.data()[0], "lightsBuffer");
 		m_lightPass.sendCBufferToGPU("lightsBuffer");
 	}
 

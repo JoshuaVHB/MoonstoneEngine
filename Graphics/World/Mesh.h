@@ -79,11 +79,7 @@ public:
 	Mesh(Mesh&& other) noexcept;
 	Mesh& operator=(Mesh&& other) noexcept;
 
-	~Mesh()
-	{
-
-		std::cout << "killed the mesh" << std::endl;
-	};
+	~Mesh() = default;
 
 
 };

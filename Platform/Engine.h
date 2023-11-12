@@ -82,9 +82,8 @@ public:
 			SceneManager::onUpdate(deltaTime);
 			PhysicsEngine::onUpdate(deltaTime);
 			SceneManager::onRender();
-			if (SceneManager::onImGuiRender())
+			if (SceneManager::onImGuiRender()) // < returns true if we switch scene
 			{
-				std::cout << "switchedScene" << std::endl;
 				resetDt = true;
 			}
 			ImGui::UpdatePlatformWindows();

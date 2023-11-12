@@ -208,7 +208,6 @@ LRESULT CALLBACK WindowsEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam, 
 		break;
 	case WM_KEYDOWN:
 		if (!(lParam & 0x40000000) || wKbd->autorepeatIsEnable()) {
-			std::cout << wParam << std::endl;
  			wKbd->onKeyPressed(static_cast<unsigned char>(wParam));
 		}
 		break;

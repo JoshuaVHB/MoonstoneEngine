@@ -119,7 +119,9 @@ public:
 				static_cast<uint32_t>(dl.type)
 			});
 		}
-
+		int size = static_cast<int>(res.size());
+		for (int i = 0; i < 32 - size;++i) 
+			res.push_back(hlsl_GenericLight{});
 		return res;
 		
 	}
@@ -146,6 +148,7 @@ public:
 		return res;
 	}
 
+	std::vector<PointLight>& getPointLights() { return m_point; }
 
 public:
 

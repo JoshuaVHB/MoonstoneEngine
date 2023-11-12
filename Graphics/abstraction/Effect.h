@@ -194,6 +194,8 @@ public:
 	{
 		if (!m_constantBuffers.contains(cbuffName)) throw std::runtime_error("Couldn't find cbuffer name " + cbuffName);
 		m_renderContext.context->UpdateSubresource(m_constantBuffers.at(cbuffName), 0, nullptr, &sp, size, 0);
+
+
 	}
 
 

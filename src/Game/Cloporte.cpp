@@ -83,7 +83,7 @@ void Cloporte::updatePosition(float deltaTime)
 	
 	m_object.getTransform().getPosition() = XMVectorAdd(m_object.getTransform().getPosition(), m_forward * currentVelocity * deltaTime);
 	m_position = m_object.getTransform().getPosition();
-	currentVelocity *= 0.9 ;
+	currentVelocity *= 0.9f ;
 	m_object.updateTransform();
 
 }
@@ -137,12 +137,10 @@ void Cloporte::handleKeyboardInputs(float deltaTime)
 	if (wKbd->isKeyPressed(VK_SPACE))
 	{
 		if (!tmp)
-		{
-			
+		{			
 			switchView();
 			tmp = true;
 		}
-
 	}
 
 	if (!wKbd->isKeyPressed(VK_SPACE))

@@ -41,17 +41,20 @@ void shutdownImgui(){
 	ImGui::DestroyContext();
 }
 
-//int APIENTRY _tWinMain(
-//	HINSTANCE hInstance,
-//	HINSTANCE hPrevInstance,
-//	LPTSTR    lpCmdLine,
-//	int       nCmdShow)
-//{
-//	UNREFERENCED_PARAMETER(hPrevInstance);
-//	UNREFERENCED_PARAMETER(lpCmdLine);
-//	UNREFERENCED_PARAMETER(nCmdShow);
+#ifdef NDEBUG
+int APIENTRY _tWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPTSTR    lpCmdLine,
+	int       nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(nCmdShow);
 
+#else
 int main() {
+#endif
 	try
 	{
 

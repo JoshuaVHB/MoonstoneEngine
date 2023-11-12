@@ -33,10 +33,7 @@
     <ClCompile Include="src\Game\CameraController.cpp" />
     <ClCompile Include="src\Game\Cloporte.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Renderer2D.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\Billboard.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\Quad.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\Sprite.cpp" />
-    <ClCompile Include="Graphics\abstraction\2D\TextureAtlas.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\LayerStack.cpp" />
     <ClCompile Include="Graphics\abstraction\2D\UI\UIRenderer.cpp" />
     <ClCompile Include="Graphics\Renderer.cpp" />
@@ -46,7 +43,6 @@
     <ClCompile Include="Platform\IO\DDSTextureLoader11.cpp" />
     <ClCompile Include="Platform\WindowsEngine.cpp" />
     <ClCompile Include="Platform\IO\JsonParser.cpp" />
-    <ClCompile Include="src\Scenes\mess.cpp" />
     <ClCompile Include="src\Scenes\Scene.cpp" />
     <ClCompile Include="Graphics\abstraction\VertexBuffer.cpp" />
     <ClCompile Include="Utils\vendor\imgui\imgui.cpp" />
@@ -88,11 +84,8 @@
     <ClInclude Include="src\Game\Cloporte.h" />
     <ClInclude Include="d3dx11effect.h" />
     <ClInclude Include="Graphics\abstraction\2D\Renderer2D.h" />
-    <ClInclude Include="Graphics\abstraction\2D\Billboard.h" />
-    <ClInclude Include="Graphics\abstraction\2D\Quad.h" />
     <ClInclude Include="Graphics\abstraction\2D\Sprite.h" />
     <ClInclude Include="Graphics\abstraction\2D\TextRenderer.h" />
-    <ClInclude Include="Graphics\abstraction\2D\TextureAtlas.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\Layer.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\LayerStack.h" />
     <ClInclude Include="Graphics\abstraction\2D\UI\UIRenderer.h" />
